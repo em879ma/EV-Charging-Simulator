@@ -1,0 +1,13 @@
+# Credentials
+.acn_token
+*.token
+
+# macOS / editor files
+.DS_Store
+**/.DS_Store
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Python caches
+__pycache__/
+*.py[cod]

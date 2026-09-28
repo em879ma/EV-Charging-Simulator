@@ -1,0 +1,11 @@
+{
+  "office001": {
+    "records": 1683,
+    "pages": 17,
+    "api_totals_seen": [
+      1683
+    ],
+    "duplicate_ids": 0,
+    "endpoint": "https://ev.caltech.edu/api/v1/sessions/office001"
+  }
+}

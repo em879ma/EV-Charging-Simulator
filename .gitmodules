@@ -1,0 +1,3 @@
+[submodule "ACN-Data-Static"]
+	path = ACN-Data-Static
+	url = https://github.com/tongxin-li/ACN-Data-Static.git

@@ -1,0 +1,51 @@
+{
+  "caltech": {
+    "downloaded_records": 23200,
+    "api_total": 31424,
+    "saved_pages": 232,
+    "missing_pages": 83,
+    "first_missing_pages": [
+      233,
+      234,
+      235,
+      236,
+      237,
+      238,
+      239,
+      240,
+      241,
+      242
+    ],
+    "complete": false,
+    "duplicate_ids": 0
+  },
+  "jpl": {
+    "downloaded_records": 16700,
+    "api_total": 33638,
+    "saved_pages": 167,
+    "missing_pages": 170,
+    "first_missing_pages": [
+      96,
+      97,
+      98,
+      99,
+      100,
+      173,
+      174,
+      175,
+      176,
+      177
+    ],
+    "complete": false,
+    "duplicate_ids": 0
+  },
+  "office001": {
+    "downloaded_records": 1683,
+    "api_total": 1683,
+    "saved_pages": 17,
+    "missing_pages": 0,
+    "first_missing_pages": [],
+    "complete": true,
+    "duplicate_ids": 0
+  }
+}
