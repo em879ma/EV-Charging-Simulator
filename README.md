@@ -6,6 +6,7 @@ IOE 474 project using ACN-Data charging-session records for preprocessing, explo
 
 - `codespace/preprocess.ipynb`: preprocessing and modeling diagnostics.
 - `raw_acn/`: downloaded ACN session tables, download status, and download script.
+- `codespace/unobserved_behavior/`: Person C, variables the simulator needs that ACN-Data does not observe (synthesis table, evidence, samplers). See its README.
 - `ACN-Data-Static/`: upstream static ACN time-series dataset, tracked as a Git submodule.
 
 ## Clone with the static dataset
