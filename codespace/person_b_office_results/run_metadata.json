@@ -1,0 +1,87 @@
+{
+  "audit": {
+    "input": "/Users/alexshang/Desktop/EV-Charing-Simulator/raw_acn/office/all_sessions.csv",
+    "siteID": "0019",
+    "site_rows": 1683,
+    "duplicate_id_rows": 0,
+    "missing_or_nonfinite_rows": 0,
+    "nonpositive_dwell_rows": 0,
+    "nonpositive_energy_rows": 0,
+    "retained_rows": 1683,
+    "note": "Exclusion reasons may overlap. Positive-session target; no tail trimming."
+  },
+  "splits": {
+    "train": {
+      "rows": 1286,
+      "observed_dates": 329,
+      "first_date": "2019-03-25",
+      "last_date": "2020-09-21",
+      "day_type_counts": {
+        "Weekday": 1284,
+        "Weekend": 2
+      }
+    },
+    "validation": {
+      "rows": 168,
+      "observed_dates": 110,
+      "first_date": "2020-09-22",
+      "last_date": "2021-03-24",
+      "day_type_counts": {
+        "Weekday": 165,
+        "Weekend": 3
+      }
+    },
+    "test": {
+      "rows": 229,
+      "observed_dates": 110,
+      "first_date": "2021-03-25",
+      "last_date": "2021-09-13",
+      "day_type_counts": {
+        "Weekday": 227,
+        "Weekend": 2
+      }
+    }
+  },
+  "selected_configurations": {
+    "independent": {},
+    "independent_empirical": {},
+    "conditional_pairs": {
+      "bins": 6
+    },
+    "circular_neighbors": {
+      "neighbors": 50
+    },
+    "joint_kde": {
+      "bandwidth": 0.5
+    },
+    "gaussian_copula": {},
+    "session_bootstrap": {},
+    "calendar_bootstrap": {
+      "half_life": 90
+    }
+  },
+  "seeds": [
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209
+  ],
+  "daily_count_mode": "oracle_test_counts",
+  "refit": "train + validation",
+  "recommended_by_validation": "calendar_bootstrap",
+  "validation": "Two expanding-window folds, equal-weight scores, three seeds per fold",
+  "evaluation_status": "Exploratory: this holdout was inspected in the previous development round; reserve fresh data for final claims",
+  "versions": {
+    "numpy": "2.2.4",
+    "pandas": "2.2.3",
+    "scipy": "1.15.3",
+    "matplotlib": "3.10.1"
+  },
+  "target": "positive dwell and delivered energy; observed plug-in sessions"
+}

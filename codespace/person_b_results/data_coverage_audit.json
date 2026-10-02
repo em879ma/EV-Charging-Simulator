@@ -1,0 +1,64 @@
+{
+  "static_time_series_counts": {
+    "caltech/California_Garage_01": 31860,
+    "caltech/California_Garage_02": 15589,
+    "caltech/LIGO_01": 229,
+    "caltech/N_Wilson_Garage_01": 6299,
+    "caltech/S_Wilson_Garage_01": 2703,
+    "jpl/Arroyo_Garage_01": 27723,
+    "office_01/Parking_Lot_01": 1474
+  },
+  "static_total_files": 85877,
+  "api_snapshot_status": {
+    "caltech": {
+      "downloaded_records": 23200,
+      "api_total": 31424,
+      "saved_pages": 232,
+      "missing_pages": 83,
+      "first_missing_pages": [
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241,
+        242
+      ],
+      "complete": false,
+      "duplicate_ids": 0
+    },
+    "jpl": {
+      "downloaded_records": 16700,
+      "api_total": 33638,
+      "saved_pages": 167,
+      "missing_pages": 170,
+      "first_missing_pages": [
+        96,
+        97,
+        98,
+        99,
+        100,
+        173,
+        174,
+        175,
+        176,
+        177
+      ],
+      "complete": false,
+      "duplicate_ids": 0
+    },
+    "office001": {
+      "downloaded_records": 1683,
+      "api_total": 1683,
+      "saved_pages": 17,
+      "missing_pages": 0,
+      "first_missing_pages": [],
+      "complete": true,
+      "duplicate_ids": 0
+    }
+  },
+  "interpretation": "Static file counts do not prove API-session completeness or byte integrity. These are distinct snapshots. Model reads entire specified session table, not static time series."
+}
