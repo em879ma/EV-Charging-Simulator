@@ -1,23 +1,64 @@
-"""Fit ProModel input distributions from the Caltech ACN sessions (post-2018-11 paid regime)."""
+"""Fit ProModel input distributions from the Caltech ACN sessions (post-2018-11 paid regime).
+
+Usage: python fit_acn.py acn_fits.json [--end YYYY-MM-DD | --end none]
+"""
+import argparse
+import datetime as dt
 import json
+import os
 import sys
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from scipy import stats
 
-sys.path.insert(0, str(__import__('pathlib').Path(__file__).resolve().parents[1]))
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / 'codespace'))
 from unobserved_behavior.data import load_sessions  # noqa: E402
+
+# COVID-19 closures emptied the garage from mid-March 2020: weekday plug-ins fell from about 37 a day
+# (to 2020-03-06) to 4 in the week of 2020-03-16 and under 1 in April; monthly sessions went 847
+# (2020-02), 381, 24 (2020-04). No sessions were recorded from 2020-08-04 to 2020-11-17. From then to the
+# end of the data (2021-09) use was 8-22% of the earlier monthly level until 2021-02 and about two thirds
+# by 2021-08, the Level-2 ports had a median stay of about 3 h instead of 5-6 h, and a new fast charger
+# (2-39-81-4550) took a third of the sessions. The model is for normal operation, so the fit stops
+# before March 2020.
+FIT_END = '2020-03-01'
+
+
+def end_date(text):
+    if text.lower() == 'none':
+        return None
+    try:
+        return dt.date.fromisoformat(text)
+    except ValueError:
+        raise argparse.ArgumentTypeError('expected YYYY-MM-DD or none, got %r' % text)
+
+
+parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+parser.add_argument('output')
+parser.add_argument('--end', type=end_date, default=FIT_END,
+                    help='first local day left out of the fit (default %(default)s); "none" keeps every day')
+args = parser.parse_args()
+end = args.end
 
 df = load_sessions()
 post = df[(df.regime == 'post_2018-11') & df.valid_interval].copy()
 post['claimed'] = post['has_input']
+data_last_day = post['date_local'].max()
+after_end = int((post['date_local'] >= end).sum()) if end else 0
+# drop the last partial day of the download
+post = post[post['date_local'] < data_last_day]
+if end:
+    post = post[post['date_local'] < end]
+if post.empty:
+    raise SystemExit('No post-2018-11 sessions before --end %s' % end)
 first_day, last_day = post['date_local'].min(), post['date_local'].max()
-# drop the last partial day of the snapshot
-post = post[post['date_local'] < last_day]
-last_day = post['date_local'].max()
-out = {'data': {'source': df.attrs['source'], 'garage': 'California Garage 01 (site 0002, cluster %s, %d stations)' % (df.attrs['cluster'], df.station_id.nunique()), 'regime': 'post_2018-11 (paid charging)', 'first_day': str(first_day),
-                'last_day': str(last_day), 'sessions': int(len(post)), 'claimed_share': round(post.claimed.mean(), 4)}}
+out = {'data': {'source': os.path.relpath(df.attrs['source'], REPO_ROOT), 'garage': 'California Garage 01 (site 0002, cluster %s, %d stations)' % (df.attrs['cluster'], post.station_id.nunique()), 'regime': 'post_2018-11 (paid charging)', 'first_day': str(first_day),
+                'last_day': str(last_day), 'sessions': int(len(post)), 'claimed_share': round(post.claimed.mean(), 4),
+                'window_end_exclusive': str(end) if end else None, 'data_last_day': str(data_last_day),
+                'sessions_left_out_after_window': after_end}}
 
 # ---------- daily counts (calendar days, zeros included) ----------
 days = pd.DataFrame({'date': pd.date_range(first_day, last_day, freq='D')})
@@ -36,6 +77,12 @@ for name, g in days.groupby('weekend'):
         'negbin_r': round(r, 2) if r else None,
         'promodel_poisson_gamma': 'P(G(%.2f, %.3f))' % (r, m / r) if r else None}
 out['daily_arrivals'] = daily
+pre = df[(df.regime == 'pre_2018-11') & df.valid_interval]
+pre_days = pd.date_range(pre['date_local'].min(), pre['date_local'].max(), freq='D')
+pre_n = pre.groupby('date_local').size().reindex(pre_days.date, fill_value=0)
+pre_weekday = pre_n[pre_days.dayofweek < 5].mean()
+out['weekday_arrivals_before_after_pricing'] = {'pre_2018-11_mean': round(pre_weekday, 2), 'post_mean': daily['weekday']['mean'],
+                                                'ratio': round(daily['weekday']['mean'] / pre_weekday, 2)}
 
 # ---------- arrival time-of-day profile ----------
 prof = {}
@@ -72,6 +119,11 @@ def fit_all(x):
 
 d = post[(post.dwell_h > 0) & (post.dwell_h <= 24)].copy()
 out['dwell_excluded_over_24h_share'] = round(1 - len(d) / len(post[post.dwell_h > 0]), 4)
+# share staying over 4 h (ACN has no time limit), for the move-after-charge compliance estimate
+stays = post[post.dwell_h > 0]
+over4 = stays.dwell_h > 4
+out['share_dwell_over_4h'] = {'all': round(over4.mean(), 3),
+                              'claimed_weekday': round(over4[stays.claimed & ~stays.is_weekend].mean(), 3)}
 wk_bins = [0, 7, 9, 11, 14, 24]
 wk_lbl = ['00-07', '07-09', '09-11', '11-14', '14-24']
 we_bins = [0, 11, 24]
@@ -124,9 +176,10 @@ monthly_ports = post.groupby('month_local').station_id.nunique()
 out['ports_in_service_by_month'] = {'min': int(monthly_ports.min()), 'max': int(monthly_ports.max()),
                                     'median': float(monthly_ports.median())}
 
-json.dump(out, open(sys.argv[1], 'w'), indent=1, default=float)
-print(json.dumps({k: out[k] for k in ['data', 'daily_arrivals', 'user_class', 'ports_in_service_by_month',
-                                     'spearman_dwell_kwh_claimed', 'dwell_excluded_over_24h_share']}, indent=1, default=float))
+json.dump(out, open(args.output, 'w'), indent=1, default=float)
+print(json.dumps({k: out[k] for k in ['data', 'daily_arrivals', 'weekday_arrivals_before_after_pricing', 'user_class',
+                                     'ports_in_service_by_month', 'spearman_dwell_kwh_claimed', 'dwell_excluded_over_24h_share',
+                                     'share_dwell_over_4h']}, indent=1, default=float))
 for sec in ['dwell_hours', 'energy_delivered_kwh']:
     print('\n==', sec)
     for k, v in out[sec].items():

@@ -24,6 +24,35 @@ dep = A['announced_departure_error_min']['quantiles']
 rat = A['requested_over_delivered_energy']['quantiles']
 uc = A['user_class']
 req = A['requested_energy_kwh']
+req_ln = req['fits']['lognorm']
+win = A['data']
+long4 = A['share_dwell_over_4h']
+ASENSIO_WITHIN_4H = 0.887  # Asensio et al. 2022: sessions ending within the 4 free hours
+gamma = '%.2f–%.2f' % tuple(sorted(1 - (1 - ASENSIO_WITHIN_4H) / x for x in long4.values()))
+pricing = A['weekday_arrivals_before_after_pricing']
+dep_median = ('%.0f' % dep['50']).replace('-', '−')
+download = '**部分下载**' if 'PARTIAL' in win['source'] else '**完整下载**'
+if win['window_end_exclusive'] == '2020-03-01':
+    window_note = (f"只拟合 2020-03-01 之前的会话：此后 COVID 停课，车库用量骤降，到数据结束还没恢复，"
+                   f"之后的 {win['sessions_left_out_after_window']:,} 个会话没有用（`fit_acn.py --end` 可改）。")
+elif win['window_end_exclusive']:
+    window_note = (f"只拟合 {win['window_end_exclusive']} 之前的会话（`fit_acn.py --end` 设定），"
+                   f"之后的 {win['sessions_left_out_after_window']:,} 个会话没有用。")
+else:
+    window_note = '拟合用到数据的最后一个完整日，包括 2020 年 3 月以后 COVID 停课、用量骤降的时期。'
+
+
+def to_total(values, total, nd):
+    """Round to nd decimals and put the rounding residual on the largest entry, so a row sums to total."""
+    vals = [round(v, nd) for v in values]
+    i = vals.index(max(vals))
+    vals[i] = round(vals[i] + total - sum(vals), nd)
+    return vals
+
+
+prof = {k: to_total(v, 100, 2) for k, v in prof.items()}  # ProModel arrival cycles must total 100 %
+uc_shares = dict(zip(['repeat', 'one_time', 'unclaimed'], to_total(
+    [uc['claimed_repeat_user_share_of_sessions'], uc['claimed_one_time_user_share_of_sessions'], uc['unclaimed_share_of_sessions']], 1, 3)))
 
 md = f"""# ProModel 输入补充表（初稿）
 
@@ -32,7 +61,7 @@ md = f"""# ProModel 输入补充表（初稿）
 ## 先看这里
 
 **来源标注**
-- **ACN 拟合**：用 Caltech ACN 数据直接拟合，**只用大停车场 California Garage 01**（集群 0039，54 个桩）的会话。范围是 2018-11-01 收费之后的时期，{A['data']['first_day']} 至 {A['data']['last_day']}，{A['data']['sessions']:,} 个会话。目前用的是**部分下载**，完整数据到了以后要重跑 `fit_acn.py`。
+- **ACN 拟合**：用 Caltech ACN 数据直接拟合，**只用大停车场 California Garage 01**（集群 0039，54 个桩）的会话。范围是 2018-11-01 收费之后的时期，{win['first_day']} 至 {win['last_day']}，{win['sessions']:,} 个会话。数据是{download}（到 {win['data_last_day']}）；{window_note}
 - **ACN 推导**：从 ACN 数据算出来，但不是直接拟合分布。
 - **文献（已核实）**：调研者打开了原文并抄录原句。
 - **文献（仅摘要）**：原文打不开，只在搜索结果摘要里看到，使用前要再核对。
@@ -58,7 +87,7 @@ md = f"""# ProModel 输入补充表（初稿）
 | aEnergyDelivered | 已送电量 | 初始为 0，每个时间步累加 | 设计规则 |
 | aMaxRate | 车辆自身最大功率 | 离散分布：3.27 kW 概率 0.515，6.43 kW 概率 0.485，上限是接口的 6.66 kW | ACN 推导（电流曲线 n=198，R12） |
 | aCompatibility | 接口兼容性 | Caltech 全部是 J1772 Level-2，**全部兼容，基线可以不用这个属性**。多站点或多接口类型时再启用 | ACN（站点配置） |
-| aUserClass | 用户类型 | 离散分布：**登记的回头客 {uc['claimed_repeat_user_share_of_sessions']:.3f}**；登记的一次性用户 {uc['claimed_one_time_user_share_of_sessions']:.3f}；**未登记 {uc['unclaimed_share_of_sessions']:.3f}**（收费后被 30 分钟规则截断，电量单独建模，见 3.4） | ACN 拟合 |
+| aUserClass | 用户类型 | 离散分布：**登记的回头客 {uc_shares['repeat']:.3f}**；登记的一次性用户 {uc_shares['one_time']:.3f}；**未登记 {uc_shares['unclaimed']:.3f}**（收费后被 30 分钟规则截断，电量单独建模，见 3.4） | ACN 拟合 |
 | aPatience | 最长愿意等多久 | 基线：等到自己的离开时刻为止（虚拟排队名单，R03）。"没耐心"情景：`G(1.70, 25.8)` 分钟，均值 43.8、标准差 33.6，扫描均值 15–60 分钟 | 文献（已核实）：Wang et al. 2024（中国高速公路快充的问卷，**可迁移性弱**）。分布形状是我们的假设 |
 | aOutcome | 结果 | full / partial / abandoned / balked / lost / interrupted | 设计规则 |
 
@@ -66,9 +95,9 @@ md = f"""# ProModel 输入补充表（初稿）
 
 | Attribute | 含义 | 分布或规则 | 来源 |
 |---|---|---|---|
-| aEnergyReq | 用户**报的**需求电量（第一次填报） | `L(19.15, 14.76)` kWh（ln X ~ N(2.719, 0.683)，KS 0.09）。也可以用 aEnergyNeed × 比值，比值的分位数见附录 B | ACN 拟合 |
-| aDepAnnounced | 用户**报的**离开时刻 | = aDeparture + 误差，误差按经验分位数抽（附录 B），中位数 −41 分钟，即大多数人比报的走得晚 | ACN 拟合（R10） |
-| aComply | 是否遵守充完即挪车 | 伯努利分布：只有规则时 γ=0.6（**假设**，扫描 0.2–1.0）；4 小时免费、之后约 $1/h 的收费情景：γ≈0.82–0.84（扫描 0.75–0.95） | 规则情景：假设。收费情景：推导，见 3.6 |
+| aEnergyReq | 用户**报的**需求电量（第一次填报） | `{req_ln['promodel'].split(' [')[0]}` kWh（{req_ln['promodel'].split('; ')[1]}，KS {req_ln['ks']:.3f}）。也可以用 aEnergyNeed × 比值，比值的分位数见附录 B | ACN 拟合 |
+| aDepAnnounced | 用户**报的**离开时刻 | = aDeparture + 误差，误差按经验分位数抽（附录 B），中位数 {dep_median} 分钟，即大多数人比报的走得晚 | ACN 拟合（R10） |
+| aComply | 是否遵守充完即挪车 | 伯努利分布：只有规则时 γ=0.6（**假设**，扫描 0.2–1.0）；4 小时免费、之后约 $1/h 的收费情景：γ≈{gamma}（扫描 0.75–0.95） | 规则情景：假设。收费情景：推导，见 3.6 |
 | aMoveDelay | 遵守者收到"充完"通知后多久挪车 | 宽限期 15 分钟，加上 `L(24.7, 32.4)` 分钟（中位数 15，ln σ=1.0）；扫描中位数 5–60 | 假设（R07） |
 | aOverstay | 不遵守者超出时限多久 | `L(73.1, 195.9)` 分钟（ln X ~ N(3.24, 1.45)，中位数 25.5），截断在本人的离开时刻 | 文献推导：Asensio et al. 2022 的公开数据，n=378 |
 | aRetry | 被挡后是否再来 | 伯努利分布 p=0（基线），扫描 0–0.5；回来的间隔 `E(150)` 分钟 | 假设（R04） |
@@ -142,7 +171,7 @@ KS 大于 0.1 的组改用经验表：用 User Distribution，选 Continuous 和
 | 排队名单的通知响应 | 对数正态 | 中位数 10 分钟，ln σ=0.8，超出保留时间就失去名额 | 保留时间来自文献；响应时间是假设 |
 | 只发"充完"通知、没有规则 | 不额外建模 | 等同于 ACN 基线 | 文献（已核实）：Lee 2021a 提到大多数车本来就会通知车主充完 |
 | 只有规则时的遵守率 | 伯努利分布 | γ=0.6（扫描 0.2–1.0） | **假设，H1 的关键参数**。要报告收益随 γ 变化的曲线和临界值 |
-| 有收费时的遵守率 | 伯努利分布 | γ≈0.82–0.84 | 推导：Asensio 2022 数据里，88.7% 的会话在 4 小时内结束（免费 4 小时，之后收费）；ACN 没有时限时，超过 4 小时的占 63–71%。由 γ ≈ 1 − 0.113/0.63~0.71 算出。**不是因果估计，而且是另一家公司的数据** |
+| 有收费时的遵守率 | 伯努利分布 | γ≈{gamma} | 推导：Asensio 2022 数据里，{ASENSIO_WITHIN_4H:.1%} 的会话在 4 小时内结束（免费 4 小时，之后收费）；ACN 没有时限时，超过 4 小时的占 {long4['all']:.0%}（全部会话）到 {long4['claimed_weekday']:.0%}（已登记的工作日会话）。由 γ ≈ 1 − {1 - ASENSIO_WITHIN_4H:.3f}/{long4['all']:.2f}~{long4['claimed_weekday']:.2f} 算出。**不是因果估计，而且是另一家公司的数据** |
 | 不遵守者超时多久 | 对数正态 | `L(73.1, 195.9)` 分钟 | 推导：Asensio 公开数据 n=378 |
 | 代客挪车 | 均匀分布加单次成本 | `U(17.5, 12.5)` 分钟（即 5–30），每次 $0.44 | 成本：Zeng 2019 案例里的设定值，不是实测。时长是假设，可能偏乐观 |
 | 被挡后再来 | 伯努利分布加指数分布 | p=0；`E(150)` 分钟 | 假设 |
@@ -171,7 +200,7 @@ KS 大于 0.1 的组改用经验表：用 User Distribution，选 Continuous 和
 | 输入 | 取值 | 来源 |
 |---|---|---|
 | 需求倍数 | 0.8–1.5 | proposal |
-| 收费对到达量的影响 | **首选 ACN 自身的数据**：收费前后工作日从 78.7 降到 38.6 次/天（×0.49）。参照：Palo Alto 公共 L2 收费后下降 30–43%（×0.57–0.70，未经同行评审） | ACN 推导；文献 |
+| 收费对到达量的影响 | **首选 ACN 自身的数据**：收费前后工作日从 {pricing['pre_2018-11_mean']:.1f} 降到 {pricing['post_mean']:.1f} 次/天（×{pricing['ratio']:.2f}）。参照：Palo Alto 公共 L2 收费后下降 30–43%（×0.57–0.70，未经同行评审） | ACN 推导；文献 |
 | 年增长率 | 每年 10–33%；33% 是美国 EV 保有量 2018–2024 的年均增长率 | 文献（已核实）：IEA。10% 是假设 |
 
 ---
@@ -187,7 +216,7 @@ KS 大于 0.1 的组改用经验表：用 User Distribution，选 Continuous 和
 | 可靠性损失 | vA, 故障间隔, 维修时长, aSessionFail |
 
 ## 5. 还需要确认或补充的
-1. **数据是部分下载**：完整数据到了以后重跑 `fit_acn.py`，所有 "ACN 拟合" 的数字都会更新。
+1. **拟合窗口**：{window_note}另外，引自 Person C 表（R 编号）的数字，例如约 30% 的会话拔枪时还没充完（R11）、aMaxRate 的两档功率（R12），还是部分下载时算的，重跑 `unobserved_behavior.build_table` 以后才会更新。
 2. **ProModel 语法**：`L()` 的参数含义、`U()` 的半宽写法、`P(G())` 能不能嵌套，都要在 ProModel 里实际测一次。
 3. **L2 的维修时长、Level-2 的故障率**：没有找到能打开的原文，目前都是假设。
 4. **CAPEX 和网络费**：沿用之前核实过的 R18，这次没能重新打开原文。
