@@ -202,7 +202,7 @@ def to_jsonable(obj):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--sessions", default=None, help="session file (default: raw_acn/caltech_sessions_PARTIAL.json)")
+    parser.add_argument("--sessions", default=None, help="session file (default: raw_acn/caltech_sessions.json if present, else caltech_sessions_PARTIAL.json)")
     parser.add_argument("--site", default="0002")
     parser.add_argument("--timeseries", choices=["auto", "fetch", "skip"], default="auto",
                         help="auto: reuse the saved time-series sample if present, else download")

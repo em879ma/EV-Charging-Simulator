@@ -3,7 +3,8 @@
 Input priority
 --------------
 1. A cleaned session table from Person A (``clean_sessions.parquet`` or ``.csv``), passed with ``path=``.
-2. The raw API export ``raw_acn/caltech_sessions_PARTIAL.json`` (default).
+2. The raw API export ``raw_acn/caltech_sessions.json`` (default once the complete download is in
+   the repo; until then ``raw_acn/caltech_sessions_PARTIAL.json``).
 
 The raw API export keeps every user-input version. Connection-time decisions (for example an
 earliest-departure-first scheduler) may only use the FIRST version, so both the first and the
@@ -20,7 +21,8 @@ import numpy as np
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_RAW = REPO_ROOT / "raw_acn" / "caltech_sessions_PARTIAL.json"
+_COMPLETE_RAW = REPO_ROOT / "raw_acn" / "caltech_sessions.json"
+DEFAULT_RAW = _COMPLETE_RAW if _COMPLETE_RAW.exists() else REPO_ROOT / "raw_acn" / "caltech_sessions_PARTIAL.json"
 LOCAL_TZ = "America/Los_Angeles"
 
 # Caltech ACN (siteID 0002, cluster 0039): 54 EVSEs appear in the session records.

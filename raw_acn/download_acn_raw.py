@@ -2,8 +2,10 @@
 
 Python standard library only. Raw HTTP pages are retained for provenance.
 Run with --token-file /path/to/.acn_token --output /path/to/raw_acn
+(or set the ACN_API_TOKEN environment variable instead of --token-file)
 """
 import argparse
+import os
 import base64
 import csv
 import json
@@ -27,14 +29,14 @@ class NoRedirect(HTTPRedirectHandler):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--token-file', type=Path, required=True)
+    parser.add_argument('--token-file', type=Path, help='file holding the ACN API token (default: ACN_API_TOKEN env var)')
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--sites', nargs='+', default=['caltech', 'jpl', 'office001'],
                         choices=['caltech', 'jpl', 'office001'])
     args = parser.parse_args()
-    token = args.token_file.read_text().strip()
+    token = (args.token_file.read_text() if args.token_file else os.environ.get('ACN_API_TOKEN', '')).strip()
     if not token:
-        raise SystemExit('Token file is empty')
+        raise SystemExit('No token: pass --token-file or set ACN_API_TOKEN')
     authorization = 'Basic ' + base64.b64encode((token + ':').encode()).decode()
     opener = build_opener(NoRedirect())
     args.output.mkdir(parents=True, exist_ok=True)
