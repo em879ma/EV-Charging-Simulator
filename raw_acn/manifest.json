@@ -1,0 +1,38 @@
+{
+  "caltech": {
+    "records": 31424,
+    "api_total": 31424,
+    "complete": true,
+    "mode": "windows",
+    "file": "caltech_sessions.json",
+    "endpoint": "https://ev.caltech.edu/api/v1/sessions/caltech",
+    "downloaded_utc": "2026-10-10T19:14:27Z",
+    "pages": 400,
+    "problem_months": {},
+    "repeated_ids_dropped": 0
+  },
+  "jpl": {
+    "records": 33638,
+    "api_total": 33638,
+    "complete": true,
+    "mode": "windows",
+    "file": "jpl_sessions.json",
+    "endpoint": "https://ev.caltech.edu/api/v1/sessions/jpl",
+    "downloaded_utc": "2026-10-10T19:30:45Z",
+    "pages": 424,
+    "problem_months": {},
+    "repeated_ids_dropped": 0
+  },
+  "office001": {
+    "records": 1683,
+    "api_total": 1683,
+    "complete": true,
+    "mode": "windows",
+    "file": "office001_sessions.json",
+    "endpoint": "https://ev.caltech.edu/api/v1/sessions/office001",
+    "downloaded_utc": "2026-10-10T19:31:42Z",
+    "pages": 112,
+    "problem_months": {},
+    "repeated_ids_dropped": 0
+  }
+}
