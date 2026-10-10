@@ -1,0 +1,1667 @@
+{
+ "promodel": {
+  "items": [
+   {
+    "parameter": "VERIFICATION STATUS (read first)",
+    "value": "I could not open any ProModel documentation page directly. WebFetch returned 'getaddrinfo ENOTFOUND' for every host (promodel.com, docs.promodel.com, wikipedia.org included), and curl through the session egress proxy got 'CONNECT tunnel failed, response 403' for promodel.com, documentation.promodel.com, informs-sim.org, researchgate.net and archive.org. Every quote below therefore comes from the page text that the WebSearch tool pulled from the named URL, not from a page I opened. Cross-check each one in ProModel's own Help (F1) before relying on it. Where the extract was paraphrased rather than a table row, the item says so.",
+    "quote": "WebFetch error: 'getaddrinfo ENOTFOUND www.promodel.com'; curl: '(56) CONNECT tunnel failed, response 403'",
+    "source": "Session tool log (this run)",
+    "url": "https://www.promodel.com/onlinehelp/ProModel/86/Content/Topics/C-13%20-%20Distribution%20Functions.htm",
+    "setting": "meta / provenance"
+   },
+   {
+    "parameter": "Distribution functions: general rule",
+    "value": "These are built-in functions that return random values from a distribution. Any numeric expression accepts them, including process times, arrival frequency, Qty each and variable assignment.",
+    "quote": "Distribution functions are built-in functions which, in conjunction with streams, return random values according to a statistical distribution. They are valid in any numeric expression.",
+    "source": "MedModel 8.6 Online Help (same language engine as ProModel 8.6), Logic Elements > Distribution Functions. Seen only in a WebSearch extract.",
+    "url": "https://www.promodel.com/onlinehelp/MedModel/86/Content/Topics/C-13 - Distribution Functions.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Exponential E()",
+    "value": "E(a{,<s>,<ax>}): a = mean (not rate). Takes an optional stream <s> and an optional axis shift <ax>.",
+    "quote": "To use an Exponential distribution interval, use the syntax E(mean), where mean is the average amount for your interval.",
+    "source": "ProModel docs, Distribution Intervals (docs.promodel.com/pmacad). Seen only in a WebSearch extract. The full syntax 'E(a{,<s>,<ax>})' also appeared in the MedModel 8.6 Distribution Functions extract.",
+    "url": "https://docs.promodel.com/pmacad/Documentation/DistributionIntervals.html",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Normal N()",
+    "value": "N(a,b{,<s>}): a = mean, b = standard deviation. There is no axis shift. Negative draws used as times are set to zero (see the time-expression item).",
+    "quote": "Normal ... N(a,b{,<s>}) ... a=mean, b=standard deviation (table row as reproduced in the search extract); help example: 'defined by a normal distribution with a mean value of ... minutes and a standard deviation of ... minutes, N(...)'",
+    "source": "MedModel 8.6 / ProModel 8.0 Online Help, Distribution Functions table; downtime example in ProModel 8.0 help. Seen only in WebSearch extracts. Example numbers omitted because the page was not opened.",
+    "url": "https://promodel.com/onlinehelp/ProModel/80/C-13 - Distribution Functions.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Triangular T()",
+    "value": "T(a,b,c{,<s>}): a = minimum, b = mode, c = maximum. The mode is the middle argument.",
+    "quote": "The syntax is T(minimum, mode, maximum), and the mode is the amount that occurs most often (note that this is not the same as the mean).",
+    "source": "ProModel docs, Distribution Intervals. Seen only in a WebSearch extract, and the extract may be lightly paraphrased.",
+    "url": "https://docs.promodel.com/pmacad/Content/Topics/DistributionIntervals.html",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Uniform U()",
+    "value": "U(a,b{,<s>}): a = MEAN, b = HALF-RANGE. This is not (min, max). Uniform[min, max] is written U((min+max)/2, (max-min)/2).",
+    "quote": "To use a Uniform distribution interval, use the syntax U(mean, half range) ... The half range is the amount above or below the mean that can occur.",
+    "source": "ProModel docs, Distribution Intervals. Seen only in a WebSearch extract. The MedModel 8.6 Distribution Functions extract also gave 'U(a,b{,<s>}) ... a=mean, b=half range'.",
+    "url": "https://docs.promodel.com/pmacad/Content/Topics/DistributionIntervals.html",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Lognormal L(): parameter meaning",
+    "value": "L(a,b{,<s>,<ax>}): the documentation labels a 'mean' and b 'standard deviation'. None of the extracts says whether these describe the lognormal variable itself or the underlying normal of ln(x). Two things point to the lognormal's own arithmetic moments, but this is NOT confirmed: the help's worked example states the mean and standard deviation in minutes, and the sibling product ProcessModel documents Stat::Fit converting mu/sigma into the data's mean and SD. Run a test in ProModel to settle it (see proposed_distributions).",
+    "quote": "Lognormal | L(a,b{,<s>,<ax>}) | a=mean, b=standard deviation; help example: 'the setup time for the machine will be based on a Lognormal distribution with a mean of ... minutes and a standard deviation of ... min'",
+    "source": "ProModel 8.0 Online Help, Distribution Functions and Setup Downtime Editor; ProModel docs, Distribution Intervals ('Lognormal | L(a,b) | a=mean, b=standard deviation'). Seen only in WebSearch extracts. Example numbers omitted.",
+    "url": "https://www.promodel.com/onlinehelp/promodel/80/C-13%20-%20Distribution%20Functions.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Weibull W()",
+    "value": "W(a,b{,<s>,<ax>}): a = SHAPE, b = SCALE. This matches scipy weibull_min(c=shape, scale=scale). The location goes into the axis shift <ax>, which needs a stream.",
+    "quote": "Weibull | W(a,b) | a=shape value, b=scale value",
+    "source": "ProModel docs, Distribution Intervals; MedModel 8.6 Distribution Functions ('W(a,b{,<s>,<ax>})'). Seen only in WebSearch extracts.",
+    "url": "https://docs.promodel.com/pmacad/Documentation/DistributionIntervals.html",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Gamma G()",
+    "value": "G(a,b{,<s>,<ax>}): a = SHAPE, b = SCALE. This matches scipy gamma(a, scale). The documentation says 'scale value', so the mean is a*b. That is my inference; the docs do not state the mean.",
+    "quote": "Gamma | G(a,b) | a=shape value, b=scale value",
+    "source": "ProModel docs, Distribution Intervals; MedModel 8.6 Distribution Functions ('G(a,b{,<s>,<ax>})'). Seen only in WebSearch extracts.",
+    "url": "https://docs.promodel.com/pmacad/Documentation/DistributionIntervals.html",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Erlang ER()",
+    "value": "ER(a,b{,<s>}): a = mean, b = integer shape parameter (k). The docs do not say whether 'mean' is the whole Erlang or one phase. Assume the whole Erlang (total mean = a) and verify. No axis shift.",
+    "quote": "Erlang | ER(a,b) | a=mean, b=integer shape parameter",
+    "source": "ProModel docs, Distribution Intervals. The MedModel 8.6 extract gives 'a=mean value, b=parameter'. Seen only in WebSearch extracts.",
+    "url": "https://docs.promodel.com/pmacad/Documentation/DistributionIntervals.html",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Beta B()",
+    "value": "B(a,b,c,d{,<s>}): a = shape 1, b = shape 2, c = lower bound, d = upper bound. This is a generalized beta on [c, d].",
+    "quote": "Beta | B(a,b,c,d) | a=shape value 1, b=shape value 2, c=lower boundary, d=upper boundary",
+    "source": "ProModel docs, Distribution Intervals. Seen only in a WebSearch extract.",
+    "url": "https://docs.promodel.com/pmacad/Documentation/DistributionIntervals.html",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Poisson P()",
+    "value": "P(a{,<s>}): a single parameter that the docs label 'quantity'. It is the Poisson mean (lambda). Draws are integers, so P() suits a daily-count Qty each.",
+    "quote": "Poisson | P(a{,<s>}) | a=quantity",
+    "source": "MedModel 8.6 Online Help, Distribution Functions. Seen only in a WebSearch extract.",
+    "url": "https://www.promodel.com/onlinehelp/MedModel/86/Content/Topics/C-13 - Distribution Functions.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Binomial BI()",
+    "value": "BI(a,b{,<s>}): a = batch size (number of trials n), b = probability of success p.",
+    "quote": "BI(a,b{,<s>}): Binomial, where a is the batch size and b is the probability of success (the extract paraphrased the table row 'a=batch size, b=probability of success')",
+    "source": "MedModel 8.6 Online Help, Distribution Functions. Seen only in a WebSearch extract.",
+    "url": "https://www.promodel.com/onlinehelp/MedModel/86/Content/Topics/C-13 - Distribution Functions.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Geometric GEO()",
+    "value": "GEO(a{,<s>}): a = probability of success.",
+    "quote": "GEO(a{,<s>}): Geometric, where a is the probability of success (paraphrase of the table row)",
+    "source": "MedModel 8.6 Online Help, Distribution Functions. Seen only in a WebSearch extract.",
+    "url": "https://www.promodel.com/onlinehelp/MedModel/86/Content/Topics/C-13 - Distribution Functions.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Inverse Gaussian IG(), Pearson5 P5(), Pearson6 P6()",
+    "value": "IG(a,b{,<s>,<ax>}): a = shape, b = scale. P5(a,b{,<s>,<ax>}): a = shape, b = scale. P6(a,b,c{,<s>,<ax>}): a = shape 1, b = shape 2, c = scale.",
+    "quote": "Inverse Gaussian · IG(a,b) · a=shape value b=scale value ... Weibull · W(a,b) · a=shape value b=scale value; P6(a,b,c{,<s>,<ax>}) two shape values then a scale value",
+    "source": "ProModel Process Simulator Help, Distributions; MedModel 8.6 Distribution Functions. Seen only in WebSearch extracts.",
+    "url": "https://www.promodel.com/onlinehelp/processsimulator/90/Content/Topics/Distributions.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Stream argument <s>",
+    "value": "The optional stream index is the next argument after the distribution parameters. If it is omitted, the software uses stream 1. If no seed is set, a stream's seed equals its stream number. Give independent inputs (arrivals, kWh, dwell) separate streams for common-random-numbers comparisons.",
+    "quote": "If no stream is given, MedModel will use stream one. / If you do not specify an initial seed value, ProModel will use the stream number as the seed value (i.e., stream 3 uses seed 3).",
+    "source": "MedModel 8.6 Distribution Functions; ProModel 8.6 Help, Using Random Number Streams. Seen only in WebSearch extracts.",
+    "url": "https://www.promodel.com/onlinehelp/ProModel/86/Content/Topics/C-06%20-%20Using%20Random%20Number%20Streams.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Axis shift <ax> (location parameter)",
+    "value": "E, G, W, L, IG, P5 and P6 start at 0 by default. A location or shift goes in <ax>, and the stream must also be given, e.g. W(shape, scale, 3, loc).",
+    "quote": "The distributions, E, G, W, L, IG, P5, and P6 all normally have a minimum value of zero ... Any time an axis shift is specified, a stream must be specified also.",
+    "source": "MedModel 8.6 Online Help, Distribution Functions. Seen only in a WebSearch extract.",
+    "url": "https://www.promodel.com/onlinehelp/MedModel/86/Content/Topics/C-13 - Distribution Functions.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Negative draws in time expressions",
+    "value": "When N(), T() and similar return a negative value used as a time, ProModel silently sets it to 0. This is a truncation, so the realized mean shifts upward. Use L, W or G for strictly positive durations.",
+    "quote": "any negative value returned by a distribution that is used for a time expression will be automatically converted to zero",
+    "source": "ProModel 8.0 Online Help, Distribution Functions > General Components; also Time Expressions (8.6). Seen only in a WebSearch extract.",
+    "url": "https://promodel.com/onlinehelp/ProModel/80/C-13 - General Components.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "User-defined distributions (empirical tables)",
+    "value": "Defined in Build > More Elements > User Distributions. Fields: ID (name), Type = Discrete or Continuous, Cumulative = Yes or No, and a Table of value/percent rows. Call it like a function with empty parentheses, e.g. kWh_Req().",
+    "quote": "The name of the distribution. Discrete or Continuous depending on the number of possible outcomes. Yes or No depending on whether the distribution is to be specified in cumulative or non-cumulative format. ... the open and closed parentheses after the distribution name must be used, such as Dist1(), OpTime().",
+    "source": "ProModel 8.0 Online Help, User Distribution Edit Table and User Defined Distributions. Seen only in WebSearch extracts.",
+    "url": "https://www.promodel.com/onlinehelp/promodel/80/C-06%20-%20User%20Distribution%20Edit%20Table.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Continuous user distribution: table semantics",
+    "value": "In cumulative form, each row is (x, P(X <= x)) and the first row is the minimum with 0%. In non-cumulative form, each row gives the probability mass of the range ending at that x. Values between break points are drawn within the range, i.e. a piecewise-linear CDF. That interpolation is my inference; the extract does not state it.",
+    "quote": "a cumulative distribution specifies the probability that an observed value will be less than or equal to a specified value ... P(2.0 <= X < 3.5) = 0.20 (help example of the density form)",
+    "source": "ProModel 8.0 Online Help, User Defined Distributions > Continuous Distributions. Seen only in a WebSearch extract.",
+    "url": "https://promodel.com/onlinehelp/ProModel/80/C-06 - Continuous Distributions.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Arrival Cycles: definition table",
+    "value": "Defined in Build > More Elements > Arrival Cycles. Fields: ID; Qty/% (Percent or Quantity basis); Cumulative (Yes/No); Table (time-of-cycle break points with a percent or quantity per interval). Time values in the table are always cumulative, measured from the start of the cycle.",
+    "quote": "Select either Percent or Quantity as the basis for the total number of arrivals per cycle occurrence. ... Select Yes to specify the % or Qty values in a cumulative format. ... Time values remain cumulative regardless of the form of the percentages.",
+    "source": "ProModel 8.0 Online Help, Arrival Cycles Edit Table and Cumulative Cycle Tables. Seen only in WebSearch extracts.",
+    "url": "https://promodel.com/onlinehelp/ProModel/80/C-06 - Arrival Cycles Edit Table.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Arrival Cycles: within-interval timing",
+    "value": "Within each cycle interval, arrival times are drawn UNIFORMLY over that interval. They are not exponential or Poisson. The time-varying rate is therefore piecewise-constant, with uniform placement inside each block.",
+    "quote": "The arrivals are randomly distributed according to a Uniform distribution during the time interval in which they arrive.",
+    "source": "ProModel 8.6 Online Help, Arrival Cycles Example. Seen only in a WebSearch extract.",
+    "url": "https://www.promodel.com/onlinehelp/ProModel/86/Content/Topics/C-06%20-%20Arrival%20Cycles%20Example.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Arrival Cycles: hooking a cycle into an Arrivals record",
+    "value": "In the Arrivals table, put the cycle name (optionally followed by a quantity) in Qty Each. Occurrences = number of cycle repetitions (e.g. number of simulated days). Frequency = time between cycle starts (e.g. 24 hr), in the same time unit as the cycle.",
+    "quote": "If you have previously created an arrival cycle and want to use it for this arrival, enter the name of the arrival cycle followed optionally by a quantity. ... If an arrival cycle is used, this is the number of times to repeat the cycle. ... If an arrival cycle was entered for the arrival quantity, this is the time between the start of each cycle.",
+    "source": "ProModel 8.6 / 8.0 Online Help, Arrivals Edit Table. Seen only in WebSearch extracts.",
+    "url": "https://www.promodel.com/onlinehelp/ProModel/86/Content/Topics/C-05%20-%20Arrivals%20Edit%20Table.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "Arrival Cycles: Percent vs Quantity basis and the Qty Each meaning",
+    "value": "With a Percent basis, Qty Each is the total arrivals per cycle, which the percent table splits across intervals. With a Quantity basis, Qty Each is a multiplier applied to every table entry. Qty Each may be any expression that evaluates to a number; the docs do not confirm whether a distribution there is re-sampled each cycle.",
+    "quote": "An arrival cycle will divide the quantity specified in the Qty each... field into various sized groups arriving throughout the day. / the Qty each field in the Arrivals table represents a factor by which all entries in the cycle table will be multiplied. ... This field may be any valid expression which evaluates to a number.",
+    "source": "ProModel 8.6 Arrival Cycles Example; ProModel 8.0 Arrival Cycles by Quantity. Seen only in WebSearch extracts.",
+    "url": "https://promodel.com/onlinehelp/ProModel/80/C-06 - Arrival Cycles by Quantity.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "External Arrivals file (trace-driven arrivals)",
+    "value": "Declared in Build > More Elements > External Files with type Arrival. Columns A-F: entity name, location name, quantity per arrival, time of first arrival, number of occurrences, frequency. Columns G onward set attributes when the header matches an attribute name (e.g. kWh_req, dwell). The 8.0 help allows .wk1/.xls only; the 9.3 help says Excel. Cells must hold values, not spreadsheet formulas, because a formula cell is read as 0. Rows are read in after the Arrivals-editor data. This lets each ACN session be replayed as one row.",
+    "quote": "The values in the spreadsheet cells must be a numeric expression as opposed to a formula commonly used in spreadsheets. For example, if cell E4 in the spreadsheet above was actually a formula generating the value 100, the value ProModel generates is zero.",
+    "source": "ProModel 8.0 Online Help, External Files > File Types > Arrivals File; ProModel 9.3 Help, File Types. Seen only in WebSearch extracts.",
+    "url": "https://promodel.com/onlinehelp/ProModel/80/C-06 - Arrivals File.htm",
+    "setting": "ProModel documentation (syntax)"
+   },
+   {
+    "parameter": "External Arrivals in Process Simulator (sibling product)",
+    "value": "Process Simulator accepts .xls or .xlsx. The first row must be a header row, and only the first sheet is read. ProModel's own arrivals file probably behaves the same way, but that is unconfirmed.",
+    "quote": "An External Arrivals file is a spreadsheet (.xsl or .xlsx format only) ... The first row in the spreadsheet must be used as a header row. ... only the first sheet will be read in.",
+    "source": "ProModel Process Simulator 9.2 Help, External Arrivals. Seen only in a WebSearch extract.",
+    "url": "https://promodel.com/onlinehelp/processsimulator/92/Content/Topics/External_Arrivals.htm",
+    "setting": "ProModel-family documentation (syntax; transferability caveat)"
+   },
+   {
+    "parameter": "Stat::Fit lognormal export convention (sibling product evidence)",
+    "value": "Stat::Fit fits a lognormal as [min, mu, sigma], where mu and sigma belong to the underlying normal. ProcessModel takes the mean and SD of the data after the offset, and Stat::Fit's Distribution Viewer converts between the two. The extract's 'sd' formula is actually the variance (take its square root). This supports, but does not prove, that ProModel's L(a,b) also expects arithmetic moments.",
+    "quote": "For the Lognormal distribution, Stat::Fit uses the parameters [min, mu, sigma] where min is the offset from 0, and mu, sigma are the mean and standard deviation of the included normal distribution.",
+    "source": "ProcessModel Knowledge Base, 'How does ProcessModel Convert Lognormal Conversion From Stat::Fit?' Seen only in a WebSearch extract. Another ProcessModel help page was summarized as using Lognormal(logMean, logSd), which conflicts.",
+    "url": "https://www.processmodel.com/knowledge-base/how-does-processmodel-convert-lognormal-conversion-from-statfit/",
+    "setting": "ProModel-family documentation (transferability caveat)"
+   }
+  ],
+  "proposed_distributions": [
+   {
+    "model_input": "ProModel lognormal convention check (do this before entering any L())",
+    "distribution": "Test model: one entity type, arrivals E(1) min, process 'WAIT L(10,5)' with a stream, 10,000 entities; log each sampled time to a variable or an output file",
+    "parameters": "If the sample mean is about 10 and the SD about 5, L(a,b) takes arithmetic moments. If the sample mean is about exp(10+12.5), it takes log-scale parameters.",
+    "basis": "The documentation labels 'a=mean, b=standard deviation' without saying which scale (unverified extract). The test is our assumption and costs about 5 minutes."
+   },
+   {
+    "model_input": "Move-after-charge response delay (repo synthesis.py: lognormal, median d, sigma 0.8)",
+    "distribution": "Lognormal via ProModel L()",
+    "parameters": "If L takes arithmetic moments: L(1.377*d, 1.304*d), from mean = d*exp(0.8^2/2) and SD = mean*sqrt(exp(0.8^2)-1). If it takes log-scale: L(ln d, 0.8). d = 0 means skip the WAIT (valet case).",
+    "basis": "The sigma 0.8 and median d are the repo's own assumptions (codespace/unobserved_behavior/synthesis.py). The conversion is standard lognormal algebra. The ProModel L() semantics come from an unverified documentation extract."
+   },
+   {
+    "model_input": "Waitlist move-in time after a port frees (repo: Uniform(0, hold))",
+    "distribution": "Uniform via ProModel U(mean, half-range)",
+    "parameters": "U(hold/2, hold/2) min. With the ChargePoint 15-min hold: U(7.5, 7.5) min. With the Cal Poly 30-min hold: U(15, 15) min.",
+    "basis": "Hold times are the already-verified facts (ChargePoint 15 min, Cal Poly 30 min). Using Uniform(0, hold) is the repo's assumption. That ProModel's U is (mean, half-range) comes from an unverified documentation extract."
+   },
+   {
+    "model_input": "Waitlist patience / retry delay (repo: exponential, mean theta)",
+    "distribution": "Exponential via ProModel E(mean)",
+    "parameters": "E(theta) min. Shifted form: E(theta, s, shift).",
+    "basis": "Theta is a repo assumption. That E takes the mean, not the rate, comes from an unverified documentation extract."
+   },
+   {
+    "model_input": "Any Weibull or Gamma fit from scipy (e.g. dwell or kWh fitted on ACN)",
+    "distribution": "Weibull or Gamma",
+    "parameters": "scipy weibull_min(c, loc, scale) maps to W(c, scale, s, loc). scipy gamma(a, loc, scale) maps to G(a, scale, s, loc). Give each input its own stream s.",
+    "basis": "ProModel argument order is shape then scale, with location in <ax> requiring a stream (unverified extract). The scipy parameter names are standard."
+   },
+   {
+    "model_input": "Time-of-day arrival profile (ACN hourly connection counts)",
+    "distribution": "Non-homogeneous arrivals via an Arrival Cycle",
+    "parameters": "Arrival Cycle with Percent basis, Cumulative = No, 24 one-hour rows holding each hour's ACN share of daily arrivals. Arrivals record: Qty Each = '<cycle> <daily count>'; Frequency = 24 hr; Occurrences = number of simulated days (or weekdays only, using separate weekday/weekend cycles). Arrivals are uniform within each hour.",
+    "basis": "The cycle mechanics are an unverified documentation extract. The hourly shares should be computed from ACN data. Whether Qty Each = P(lambda) is re-sampled each day is undocumented; if it is not, generate daily counts through an external arrivals file instead."
+   },
+   {
+    "model_input": "Trace-driven validation run (replay real ACN sessions)",
+    "distribution": "Empirical trace via an External Arrivals file",
+    "parameters": "One row per ACN session. A = EV entity, B = arrival location, C = 1, D = connection time (in model time units from the run start), E = 1, F = 0. G onward = attribute columns such as kWh_req and planned_dwell, with headers equal to the attribute names. Write values only, no formulas.",
+    "basis": "The file layout is from an unverified documentation extract (ProModel 8.0/9.3 help). The ACN fields come from the team's own data."
+   },
+   {
+    "model_input": "Empirical kWh requested or dwell time, where no parametric fit is adequate",
+    "distribution": "Continuous user-defined distribution",
+    "parameters": "Type = Continuous, Cumulative = Yes. Rows are (x_i, F(x_i)) at about 10-20 ACN quantiles with the first row at 0%. Call it as kWh_Req().",
+    "basis": "Mechanics are from an unverified documentation extract. The quantiles should come from ACN data."
+   }
+  ],
+  "unopened": [
+   "https://www.promodel.com/onlinehelp/ProModel/86/Content/Topics/C-13%20-%20Distribution%20Functions.htm: ProModel 8.6 Distribution Functions. WebFetch failed with ENOTFOUND and curl got CONNECT 403; seen only via WebSearch extract.",
+   "https://promodel.com/onlinehelp/ProModel/80/C-13 - Distribution Functions.htm and C-13 - General Components.htm: ProModel 8.0. Same failure.",
+   "https://www.promodel.com/onlinehelp/MedModel/86/Content/Topics/C-13 - Distribution Functions.htm: MedModel 8.6. Same failure.",
+   "https://docs.promodel.com/pmacad/Documentation/DistributionIntervals.html: Distribution Intervals. ENOTFOUND.",
+   "https://documentation.promodel.com/onlinehelp/promodel/: current ProModel help root, probably the 2016-2023 versions. curl CONNECT 403.",
+   "https://www.promodel.com/onlinehelp/ProModel/86/Content/Topics/C-06%20-%20Arrival%20Cycles%20Example.htm, C-06 - Arrival Cycles Edit Table.htm, C-06 - Arrival Cycles by Quantity.htm, C-06 - Cumulative Cycle Tables.htm, C-05 - Arrivals Edit Table.htm: arrival-cycle pages, not opened.",
+   "https://promodel.com/onlinehelp/ProModel/80/C-06 - Arrivals File.htm and https://www.promodel.com/onlinehelp/ProModel/93/Content/Topics/C-06 - File Types.htm: external arrivals file, not opened.",
+   "https://promodel.com/onlinehelp/ProModel/80/C-06 - User Distribution Edit Table.htm and C-06 - Continuous Distributions.htm: user distributions, not opened.",
+   "https://www.promodel.com/onlinehelp/pdfs/4-ProModel%20Instructions.pdf: P. Shannon 2006 ProModel instructions PDF, not opened.",
+   "Harrell, Ghosh & Bowden, 'Simulation Using ProModel' (McGraw-Hill, 2nd ed. 2004 / 3rd ed.): textbook not opened. Only unofficial uploads on scribd, pdfcoffee and kupdf turned up; I did not use them.",
+   "https://www.informs-sim.org/wsc96papers/062.pdf and https://informs-sim.org/wsc97papers/0587.PDF: WSC 'Simulation Modeling and Optimization Using ProModel' tutorials. curl CONNECT 403.",
+   "https://dl.acm.org/doi/pdf/10.1145/256563.256621: ProModel tutorial (WSC), not opened.",
+   "https://www.processmodel.com/knowledge-base/how-does-processmodel-convert-lognormal-conversion-from-statfit/ and https://www.processmodel.com/help/lognormal-distribution/: sibling-product lognormal conventions, not opened. The two pages appear to conflict.",
+   "https://www.researchgate.net/publication/359021844_USER_GUIDE_PROMODEL: not opened."
+  ]
+ },
+ "topics": [
+  {
+   "topic": "reliability",
+   "found": {
+    "items": [
+     {
+      "parameter": "Share of live public charge points out of service on an average day (point-in-time unavailability, 1 - A)",
+      "value": "7.9% (i.e., A ~ 0.921)",
+      "quote": "In that window, 7.9% of live charge points were out of service on an average day.",
+      "source": "Manjunath, T. (2026). ev-charging-ops: Germany-wide EV charging operations analytics (GitHub README). Analysis of MobiData BW / NVBW open data 'Gebündelte Daten E-Ladesäulen Baden-Württemberg' (includes Bundesnetzagentur and EnBW data). NOT peer-reviewed. This is a personal analysis of government open data. Modelling window 30 Jun to 14 Aug 2026, 23,357-station panel. The README also notes that 'Unknown' status peaked at 86% of charge points earlier in 2026, so pre-July data were excluded. Opened via raw.githubusercontent.com.",
+      "url": "https://github.com/TejasManjunath/ev-charging-ops",
+      "setting": "Public charge points in Germany, mixed AC Level-2 and DC fast, not split. Not workplace and not US. Unreviewed secondary analysis: weak evidence, use only as a mid-range scenario point."
+     },
+     {
+      "parameter": "In-house cross-check from ACN data: long no-session runs per station (outage OR disuse, cannot be separated)",
+      "value": "109 runs of >= 10 weekdays without any session, covering 16.1% of station-weekdays",
+      "quote": "\"station_gap_threshold_weekdays\": 10, / \"station_runs_without_sessions\": 109, / \"share_station_weekdays_in_long_gaps\": 0.161339",
+      "source": "Team repo diagnostics computed from Caltech ACN-Data (codespace/unobserved_behavior/outputs/diagnostics_metrics.json, commit 60c6166). In-house derived, NOT literature. Computed on raw_acn/all_sessions_PARTIAL.json (515 observed days), so it may change after the complete download.",
+      "url": "file:///home/user/EV-Charging-Simulator/codespace/unobserved_behavior/outputs/diagnostics_metrics.json",
+      "setting": "Workplace Level-2 (Caltech ACN, 54 ports). This is a loose upper bound on long-outage time, because gaps mix equipment outages with ports nobody used."
+     },
+     {
+      "parameter": "In-house cross-check from ACN data: minimum number of ports with at least one session in a month",
+      "value": "42 of 54 nominal ports (monthly active-port count ranged 42-54)",
+      "quote": "\"nominal_ports\": 54, / \"active_ports_month_min\": 42,",
+      "source": "Team repo diagnostics computed from Caltech ACN-Data (codespace/unobserved_behavior/outputs/diagnostics_metrics.json). In-house derived, NOT literature. Partial download.",
+      "url": "file:///home/user/EV-Charging-Simulator/codespace/unobserved_behavior/outputs/diagnostics_metrics.json",
+      "setting": "Workplace Level-2 (Caltech ACN). Up to 12 ports were idle for a whole month at least once (outage, disuse or data artefact)."
+     },
+     {
+      "parameter": "Smallest energy recorded in an ACN session (shows that failed near-zero sessions are not in the ACN data)",
+      "value": "0.501 kWh",
+      "quote": "\"min_session_kwh\": 0.501,",
+      "source": "Team repo diagnostics computed from Caltech ACN-Data (codespace/unobserved_behavior/outputs/diagnostics_metrics.json). In-house derived.",
+      "url": "file:///home/user/EV-Charging-Simulator/codespace/unobserved_behavior/outputs/diagnostics_metrics.json",
+      "setting": "Workplace Level-2 (Caltech ACN). This means the per-session failure probability must come from outside data such as EV WATTS."
+     }
+    ],
+    "proposed_distributions": [
+     {
+      "model_input": "Per-port time to failure (TTF) for each Level-2 EVSE (ProModel clock-based downtime frequency on the EVSE location/resource)",
+      "distribution": "Exponential (constant hazard)",
+      "parameters": "Mean MTBF = MTTR * A / (1 - A). Baseline A = 0.97 and MTTR = 7 d give MTBF = 226.3 d = 5,432 h, so use E(5432) hr. If your ProModel version measures downtime frequency start-to-start rather than end-to-start, use E(5600) hr (MTBF + MTTR). Implications for 54 ports: on average 1.62 ports down at any time, about 84.5 port failures per year garage-wide, and P(a port fails during a 10 h connection) = 1 - exp(-10/5432) = 0.18%.",
+      "basis": "A = 0.97 is the NEVI floor in 23 CFR 680.116 (more than 97% port uptime for publicly funded chargers; verified earlier in this workflow). It is a regulatory floor, not a measurement, and it does not bind a private workplace garage. MTTR = 7 d is an ASSUMPTION, because no Level-2 repair-time measurement could be opened (see 'unopened'). The exponential shape is also an ASSUMPTION: no opened source gives a hazard shape for Level-2 EVSE. Long-run availability depends only on the two means, so the exponential choice does not bias A. MTBF is computed from these inputs, not sourced."
+     },
+     {
+      "model_input": "Repair / outage duration per failure (ProModel downtime logic: WAIT <repair time>)",
+      "distribution": "Lognormal (right-skewed); exponential as a simpler fallback",
+      "parameters": "Mean 168 h (7 d) and SD 168 h (CV = 1). In ProModel this is L(168,168) hr, where ProModel's L(a,b) takes the lognormal's own mean and SD (check this in your version's help). Underlying normal parameters (ln-hours): mu = 4.777, sigma = 0.833, which gives median about 119 h (5 d) and 90th percentile about 345 h (14 d). Sensitivity range for the mean: 24 h to 720 h (1-30 d). Fallback: E(168) hr.",
+      "basis": "ENTIRELY ASSUMED. The right skew reflects qualitative operator reports that a minority of outages need several technician visits and account for a disproportionate share of downtime (ChargerHelp 2024 and 2026 reports). Those reports could not be opened, so none of their numbers are used. Replace the mean and SD once they or the Stanford 'Beyond Uptime' Level-2 case study are opened. The 1-30 d range matches the existing R16 PortAvailability scenario range in codespace/unobserved_behavior/catalog.py."
+     },
+     {
+      "model_input": "Availability scenario sweep (sets the MTBF in the TTF distribution, holding MTTR = 7 d)",
+      "distribution": "Deterministic scenario levels (experiment factor)",
+      "parameters": "A = 1.00: no failures. A = 0.99: MTBF 693 d (16,632 h), 0.54 ports down on average, 28 failures/yr. A = 0.97: MTBF 226 d (5,432 h), 1.62 down, 85 failures/yr. A = 0.921: MTBF 81.6 d (1,959 h), 4.27 down, 222 failures/yr. A = 0.90: MTBF 63 d (1,512 h), 5.4 down, 282 failures/yr. A = 0.733: MTBF 19.2 d (461 h), 14.4 down, 752 failures/yr.",
+      "basis": "A = 0.97 is the NEVI 23 CFR 680.116 floor (verified, regulatory). A = 0.921 is 1 - 0.079, the out-of-service share of live public charge points in Germany (MobiData BW open data via an unreviewed GitHub analysis; opened; mixed AC/DC). A = 0.733 is Rempel et al. 2024, where 73.3% of 655 public DC fast-charger ports were functional (verified). It is DCFC, public and a single snapshot, so it serves only as a pessimistic stress test. A = 0.99 and A = 0.90 are round-number ASSUMPTIONS. All MTBF values, failure counts and mean down-port counts are computed, not sourced. Cross-check: in the team's ACN data, runs of 10 or more weekdays with no session cover 16.1% of station-weekdays. That mixes outages with disuse, so it is only a loose bound and cannot pick between these levels."
+     },
+     {
+      "model_input": "Initial condition: ports already failed at simulation start (t = 0)",
+      "distribution": "Binomial count, then residual repair time",
+      "parameters": "N_down(0) ~ Binomial(54, 1 - A), which has mean 1.62 at A = 0.97. Each port that starts down gets a remaining repair time drawn from the repair distribution (exact for the exponential fallback, an approximation for the lognormal). Its next failure is then E(MTBF) after it is restored. Each port that starts up gets its first failure at E(MTBF).",
+      "basis": "Method, not data: this is the stationary state of an alternating renewal process. It is needed because, with MTBF of about 226 d, a one-week or one-month replication would almost never see a failure starting from 'all up', and a warm-up of several MTBFs is impractical. With this initialisation, short runs reproduce the long-run unavailability 1 - A."
+     },
+     {
+      "model_input": "Per-session start failure (car is plugged in but the session delivers about 0 kWh)",
+      "distribution": "Bernoulli per plug-in event",
+      "parameters": "p = 0.029 at baseline (sweep 0 to 0.03). A failed session holds the port for U(5,15) min before the driver notices and delivers 0 kWh. The driver then retries a free compatible port with probability 0.8; otherwise the session is recorded as failed/unserved.",
+      "basis": "p is from EV WATTS: 2.9% of public Level-2 sessions delivered less than 0.3 kWh (verified earlier; public networked chargers). That figure includes driver- or vehicle-caused no-charge sessions, so treat it as an upper-ish proxy for equipment-caused failure. ACN-Data cannot calibrate p, because the smallest recorded Caltech session is 0.501 kWh (repo diagnostics). The hold time and the retry probability are ASSUMPTIONS."
+     },
+     {
+      "model_input": "Failure while a vehicle is charging (interruption policy)",
+      "distribution": "Derived from the TTF (memoryless); policy is categorical",
+      "parameters": "The interruption probability per session follows from the TTF: 1 - exp(-dwell/MTBF), for example 0.18% for a 10 h connection at baseline. Policy options from the design document: (a) the vehicle stays parked and gets no more energy until it departs (default); (b) staff move it to the next free port after an assumed U(15,60) min; (c) the vehicle leaves with unmet energy.",
+      "basis": "The probability is a mathematical consequence of the exponential TTF. The policy choices and the move-delay window are ASSUMPTIONS. No opened source documents how workplace operators handle a mid-session EVSE fault."
+     }
+    ],
+    "unopened": [
+     "ACCESS NOTE: this session's network policy blocked every host except GitHub. WebFetch returned ENOTFOUND and the egress proxy returned 403 CONNECT for arxiv.org, clearesult.com, chargerhelp.com, nrel.gov, osti.gov, inl.gov, ecfr.gov, mdpi.com, energy.ca.gov, jdpower.com, ev.ucdavis.edu and others. The sources below were found only through search-result listings. None of their numbers were read in the source, so none are reported. Highest priority to open from an unrestricted session: the first three entries.",
+     "D'Agostino, B., Chen, J., & Rajagopal, R. (2026). Beyond Uptime: Actionable Performance Metrics for EV Charging Site Operators. arXiv:2601.10861 (Stanford). https://arxiv.org/abs/2601.10861. BEST ANALOGUE: a multi-year case study of AC Level-2 chargers at a California university campus. It defines Fault Time, Fault-Reason Time and Unreachable Time and reports 'zombie' chargers, which should yield workplace-L2 unavailability and possibly fault-episode durations, i.e. MTTR. The code repo github.com/Stanford-Sustainable-Systems-Lab/EVSEE was opened, but it contains code only, with no data or results.",
+     "VanSlyke, M., Ichien, D., Ng, J., & Heidel, W. (c. 2024). Electric Vehicle Charging Station Reliability (EV WATTS Whitepaper Series, Energetics / U.S. DOE VTO). https://www.clearesult.com/sites/default/files/2024-05/EV-WATTS_White-Paper_Charging-Station-Reliability.pdf. Session-level error-code and power-transfer analysis covering millions of AC Level-2 sessions. Source for the per-session failure probability and its breakdown by cause; the 2.9% <0.3 kWh figure was already verified earlier.",
+     "ChargerHelp (June 2024). Annual Reliability Report: The State of EV Charging and the Driver Experience. https://chargerhelp.com/_files/ugd/b9213c_a78829531bea47c58729d8f2a4a5af58.pdf. Reportedly covers network-level shares of stations down, causes of failure (component, communications, software), and outage durations split by single- versus multi-visit repairs. Needed for the repair-time distribution. Public networks, mostly DCFC.",
+     "ChargerHelp (2026). 2026 EV Charging Reliability Report. https://www.chargerhelp.com/2026-reliability-report (press coverage: https://finance.yahoo.com/technology/ai/articles/chargerhelp-report-analyzing-half-billion-100000810.html). Reportedly analyses Mean Time To Resolution and median resolution times for single- versus multi-work-order issues, plus the share of recovery time spent before technician dispatch. This is the best candidate to replace the assumed MTTR mean and SD. Search excerpts disagreed on its figures, so it must be opened before use.",
+     "Kelley Blue Book news article on ChargerHelp repair delays (secondary). https://www.kbb.com/car-news/study-finds-repair-delays-prolong-ev-charger-outages/. Reportedly quotes the multi-visit share and the days-to-repair split. Secondary source; cite ChargerHelp directly instead.",
+     "J.D. Power (13 Aug 2025). 2025 U.S. Electric Vehicle Experience (EVX) Public Charging Study, press release. https://www.businesswire.com/news/home/20250813555873/en and jdpower.com. Gives the share of owners who visited a public charger without charging and the share of failed visits caused by hardware or out-of-service equipment. Public, not split Level-2 versus DCFC according to the search listing.",
+     "Konara, K. M. S. Y., Kolhe, M. L., Ulltveit-Moe, N., & Balapuwaduge, I. A. M. (2023). Reliability Enhancement of Fast Charging Station under Electric Vehicle Supply Equipment Failures and Repairs. Energies 16(6), 2933. https://www.mdpi.com/1996-1073/16/6/2933 (also https://uia.brage.unit.no/uia-xmlui/handle/11250/3126973). A CTMC model with explicit EVSE failure and repair rates. Could supply the rate parameters, but they are likely assumed, and the setting is DCFC.",
+     "UC Davis EV Research Center / California Energy Commission. Measuring Charging Infrastructure Reliability in California (field-testing study, CEC docket 22-EVI-04). https://ev.ucdavis.edu/project/measuring-charging-infrastructure-reliability-california. Focuses on DCFC with a smaller Level-2 sample. Status of the final report is unknown.",
+     "California Energy Commission. EV Charger Data and Reliability Standards (AB 2061; Public Resources Code 25231.5; docket 22-EVI-04). https://www.energy.ca.gov/programs-and-topics/programs/clean-transportation-program/ev-charger-data-and-reliability-standards. State uptime standard and recordkeeping rules for publicly funded chargers. Need to verify from the text whether the uptime performance standard covers Level-2 or only DCFC.",
+     "National Renewable Energy Laboratory (FY24). NREL/TP-89896 (contains a section on EVSE uptime and major causes of no-charge events). https://www.nrel.gov/docs/fy24osti/89896.pdf. Title and numbers not confirmed.",
+     "Anand, D. (INL), with Gaxiola, M. (NREL) (2025). EV-EVSE Fault Study (INL/RPT-25-85422). https://inl.gov/content/uploads/2023/07/EV-EVSE-Fault-Analysis-Report-Final-8-27-25-1.pdf; OSTI 3362734. About thermal and electrical faults during DC charging. Probably low value for Level-2 MTBF; the search listing suggests it says component failure-rate statistics were unavailable.",
+     "Consumer Reports. The Most Common EV Charging Problems and How to Avoid Them (member survey). https://www.consumerreports.org/cars/hybrids-evs/most-common-ev-charging-problems-and-how-to-avoid-them-a1108537217/. Survey share of Level-2 versus DCFC sessions with problems. Survey data, not equipment logs.",
+     "Veloz (2022). Charging Reliability Factsheet (webinar series). https://www.veloz.org/wp-content/uploads/2022/04/Charging-Reliability-Factsheet_Final.pdf. Contents unknown.",
+     "DCA: Delayed Charging Attack on the Electric Shared Mobility System. arXiv:2302.01972. https://arxiv.org/pdf/2302.01972. Uses a repair-rate parameter for removed ports as a MODELLING ASSUMPTION citing another source, not field data.",
+     "Tripathi, H., et al. (2025). Estimating Reliability of Electric Vehicle Charging Ecosystem using the Principle of Maximum Entropy. arXiv:2508.00916. https://arxiv.org/abs/2508.00916. Stress-based theoretical reliability, not field failure data. Low relevance."
+    ]
+   },
+   "verification": {
+    "checks": [
+     {
+      "parameter": "Share of live public charge points out of service on an average day (1 - A), Germany, MobiData BW via Manjunath GitHub README",
+      "value": "7.9% (A ~ 0.921)",
+      "verdict": "confirmed",
+      "url": "https://github.com/TejasManjunath/ev-charging-ops",
+      "evidence_quote": "README line 28: \"In that window, 7.9% of live charge points were out of service on an average day.\" Notebook 01_data_quality.ipynb printed output: \"6. In the window, 7.9% of live charge points were out of service and 3.1% unknown on an average day.\" Code: df[\"out_of_service\"] = df[\"out_of_order\"] + df[\"inoperative\"]; share_s = daily[s] / daily[\"live_points\"], where live_points = available + occupied + out_of_service + unknown.",
+      "note": "I opened the README and the notebook through raw.githubusercontent.com. The value, the window (30 Jun to 14 Aug 2026, 46 days), the data source (MobiData BW/NVBW, with EnBW and Bundesnetzagentur data) and the 86% Unknown peak (19 May 2026) all match. Four corrections or caveats apply to how the finding describes it. (1) The 7.9% is NOT computed on the 23,357-station panel. It is the mean of daily shares over all stations reporting on each window day (window_mean = daily[...]), and the panel is only used by later models. (2) The denominator includes the 3.1% 'unknown' charge points. If unknowns are excluded, 1 - A = 0.079/0.969 = 8.2% (A ~ 0.918). If all unknowns were down, A ~ 0.89. (3) 'Out of service' adds 'inoperative' to 'out_of_order'. In OCPI, 'inoperative' covers ports that are not yet active or are temporarily unavailable, not only broken ones, so the figure overstates equipment failure. (4) The README does not say whether the data are AC or DC. 'Mixed AC/DC' is a reasonable inference, not a stated fact. The finding's labels 'not peer-reviewed' and 'weak evidence' are correct."
+     },
+     {
+      "parameter": "ACN in-house: runs of >= 10 weekdays with no session per station",
+      "value": "109 runs covering 16.1% of station-weekdays",
+      "verdict": "confirmed",
+      "url": "file:///home/user/EV-Charging-Simulator/codespace/unobserved_behavior/outputs/diagnostics_metrics.json",
+      "evidence_quote": "\"station_gap_threshold_weekdays\": 10, \"station_runs_without_sessions\": 109, \"share_station_weekdays_in_long_gaps\": 0.161339",
+      "note": "This matches both the working file and the committed version (git show 60c6166). I re-ran the logic in diagnostics.station_availability_metrics on raw_acn/caltech_sessions_PARTIAL.json and got 109 runs, 54 stations, 365 business days and 3,180 gap weekdays (share 0.16134). One minor fix: the input file is caltech_sessions_PARTIAL.json (per meta.source), not all_sessions_PARTIAL.json. My re-run also adds evidence for the 'cannot separate outage from disuse' caveat. 88 of the 109 runs start after 2018-11-01, when weekday arrivals fell from 78.7 to 38.6 per day, so they are mostly disuse. 23 runs (668 weekdays) span the 2018-12-26 winter break, because pd.bdate_range does not drop holidays or campus closures. This makes the figure an even looser upper bound than the finding states."
+     },
+     {
+      "parameter": "ACN in-house: minimum monthly count of ports with >= 1 session",
+      "value": "42 of 54 nominal ports (range 42-54)",
+      "verdict": "confirmed",
+      "url": "file:///home/user/EV-Charging-Simulator/codespace/unobserved_behavior/outputs/diagnostics_metrics.json",
+      "evidence_quote": "\"nominal_ports\": 54, \"stations_observed\": 54, \"active_ports_month_min\": 42, \"active_ports_month_max\": 54",
+      "note": "The values match. diagnostics.py computes this as df.groupby(\"month_local\")[\"station_id\"].nunique(), counting sessions on any day including weekends, so the finding's meaning is correct. 'Up to 12 ports idle for a whole month' is a correct inference (54 - 42). As with the gap metric, it mixes outage, post-fee disuse and partial-month effects at the ends of the download."
+     },
+     {
+      "parameter": "ACN in-house: smallest kWh recorded in a session",
+      "value": "0.501 kWh",
+      "verdict": "confirmed",
+      "url": "file:///home/user/EV-Charging-Simulator/codespace/unobserved_behavior/outputs/diagnostics_metrics.json",
+      "evidence_quote": "\"min_session_kwh\": 0.501, \"share_sessions_kwh_lt_0p55\": 0.002284",
+      "note": "The value matches. I also checked the raw API download directly. caltech_sessions_PARTIAL.json has 23,200 records with min kWhDelivered 0.501 and 0 records below 0.5. all_sessions_PARTIAL.json covers 41,583 records across Caltech, JPL and office001, and its minimum is also 0.501 with 0 records below 0.5. raw_acn/README.md states the download applies no energy filter, and data.load_sessions applies none. So the cutoff is upstream at the ACN API, probably a 0.5 kWh exclusion. I could not confirm this from ACN documentation because ev.caltech.edu was blocked by the proxy. The conclusion that near-zero failed sessions are absent from ACN-Data is supported."
+     },
+     {
+      "parameter": "Repo catalog R16 baseline/range used to justify the repair-time range and the p sweep",
+      "value": "outage 1-30 d; baseline outage 7 d (assumption); session failure baseline 0, range 0-3%",
+      "verdict": "confirmed",
+      "url": "file:///home/user/EV-Charging-Simulator/codespace/unobserved_behavior/catalog.py",
+      "evidence_quote": "baseline=\"A = 0.97; outage 7 days (assumption); blocked space 1%; session failure 0\", range=\"A 0.73-1.0; outage 1-30 days; blocked 0-9%; failure 0-3%\"",
+      "note": "The 1-30 d range and the 7 d assumption match. The catalog's session-failure BASELINE is 0, not 0.029, and the same catalog entry records that '97% of those [<0.3 kWh EV WATTS sessions] had no abnormal stop code'. The proposed baseline p = 0.029 therefore departs from the team's own catalog and should be flagged as such."
+     },
+     {
+      "parameter": "NEVI uptime floor 23 CFR 680.116 (A = 0.97), Rempel et al. 2024 (73.3% of 655 DCFC ports), EV WATTS 2.9% <0.3 kWh",
+      "value": "97% per-port annual uptime; 73.3%; 2.9%",
+      "verdict": "source_unreachable",
+      "url": "https://www.ecfr.gov/current/title-23/chapter-I/subchapter-G/part-680/section-680.116",
+      "note": "These are cited in the distribution bases as 'verified earlier'. I could not re-open any of them: ecfr.gov, law.cornell.edu, federalregister.gov, govinfo.gov, arxiv.org, pubs.acs.org and ev.caltech.edu all failed with ENOTFOUND or proxy 403 CONNECT, and only GitHub is reachable from this session. The same figures appear in the repo's catalog.py R16 basis text, but that is not independent verification. Treat them as unverified in this pass."
+     }
+    ],
+    "distribution_review": [
+     {
+      "model_input": "Per-port time to failure, Exponential E(5432) hr (A = 0.97, MTTR = 7 d)",
+      "ok": true,
+      "note": "I re-checked the arithmetic. MTBF = 168 x 0.97 / 0.03 = 5,432 h (226.3 d), and start-to-start is 5,600 h. Mean ports down = 54 x 0.03 = 1.62. Failures per year = 54 x 8760/5600 = 84.5. P(failure in 10 h) = 1 - exp(-10/5432) = 0.18%. The exponential shape, the 7 d MTTR and the use of a public-funding floor for a private garage are all labelled as assumptions, which is good. The 97% figure itself was not re-verified in this pass (ecfr unreachable). Implementation caution for ProModel: a clock-based downtime on a multi-capacity location takes the WHOLE location down, so the 54 ports must be separate capacity-1 locations (or an array of them), each with its own downtime. Also check whether your version measures downtime frequency start-to-start, as the finding already flags."
+     },
+     {
+      "model_input": "Repair duration, Lognormal L(168,168) hr (fallback E(168))",
+      "ok": true,
+      "note": "This is honestly labelled as ENTIRELY ASSUMED, and no numbers are taken from the unopened ChargerHelp reports. The arithmetic is correct: sigma = sqrt(ln 2) = 0.833, mu = ln 168 - 0.347 = 4.777, median about 119 h, P90 = exp(4.777 + 1.2816 x 0.833) of about 345 h. The 1-30 d sensitivity range matches catalog R16. Long-run A depends only on the means, so the shape choice affects only the variance of capacity loss. Confirm that ProModel's L(a,b) takes the lognormal's own mean and SD, not the underlying normal's, as noted."
+     },
+     {
+      "model_input": "Availability scenario sweep A in {1.00, 0.99, 0.97, 0.921, 0.90, 0.733}, MTTR fixed at 7 d",
+      "ok": true,
+      "note": "I re-computed every MTBF, mean-down and failures-per-year figure and all of them are correct (e.g. A = 0.921: 1,958.6 h, 4.27 down, 222 per year; A = 0.733: 461 h, 14.4 down, 752 per year). The source labels are appropriate, and 0.99 and 0.90 are marked as assumptions. Corrections to the A = 0.921 basis: it is computed over all reporting stations, not the 23,357 panel. Its denominator includes 3.1% unknown, so A falls between about 0.89 and 0.918 depending on how unknowns are treated. It also counts OCPI 'inoperative' (not only broken), so it overstates equipment failure. A = 0.733 should stay labelled as a DCFC single-snapshot stress test. Design concern: with MTTR fixed, lower A is reached only through more frequent failures (752 per year at 0.733). That inflates mid-session interruptions and does not represent the 'few long zombie outages' pattern. Add a second axis that holds A fixed and varies MTTR (e.g. 1 d vs 30 d), or label this sweep as frequency-driven. The ACN cross-check is correctly called non-discriminating. My re-run shows 88 of the 109 gap runs fall after the Nov 2018 demand drop and 23 span the winter break, so it is even weaker than stated."
+     },
+     {
+      "model_input": "Initial condition: N_down(0) ~ Binomial(54, 1 - A) plus residual repair time",
+      "ok": true,
+      "note": "The method is sound: stationary start of an alternating renewal process. For the lognormal, the residual should come from the equilibrium-excess distribution. With CV = 1 its mean is E[X^2]/(2E[X]) = (168^2 + 168^2)/336 = 168 h, so drawing from the repair distribution is correct in mean, as stated. The justification is overstated, though. Garage-wide there are about 1.6 failures per week at A = 0.97, so a one-week run does see failures. The two-state chain also relaxes at rate 1/MTBF + 1/MTTR, a time constant of about 163 h (6.8 d), so starting all-up reaches about 64% of stationary unavailability after one week and about 99% after one month. A warm-up of 3-4 weeks (not 'several MTBFs') would also work. The stationary initialisation is still preferable, but fix the rationale. The Binomial also assumes independent ports, with no common-cause outages (network or panel); label that as an assumption."
+     },
+     {
+      "model_input": "Per-session start failure, Bernoulli p = 0.029, hold U(5,15) min, retry 0.8",
+      "ok": false,
+      "note": "The evidence is used too aggressively. (1) The team's own catalog.py R16 records that 97% of the EV WATTS <0.3 kWh sessions had no abnormal stop code, and it sets the baseline at 0 with range 0-3%. Putting the baseline at 0.029, the top of the range, treats an upper-bound proxy for mostly non-equipment no-charge events as the central estimate. Use a lower baseline (e.g. 0 or about 0.01, labelled as an assumption) with 0.029 as the upper sweep level. (2) Calibration consistency: ACN arrivals contain only successful sessions of 0.5 kWh or more. I checked: there are 0 raw API records below 0.5 kWh across all 3 sites, so failed attempts must be ADDED on top of the observed demand. With 20% non-retry, applying p to the ACN-calibrated arrival stream would push served sessions below what was observed in the baseline unless arrivals are inflated by 1/(1 - p x 0.2). (3) There is a double-counting risk with the port-outage TTF: some near-zero public sessions occur on ports that are already faulted. (4) The EV WATTS cutoff is 0.3 kWh but the ACN cutoff is 0.5 kWh, a minor mismatch. The hold time and retry probability are correctly labelled as assumptions."
+     },
+     {
+      "model_input": "Failure while charging: P = 1 - exp(-dwell/MTBF); policy (a)/(b)/(c)",
+      "ok": true,
+      "note": "The probability follows correctly from the exponential TTF, given the port was up at plug-in. The policies and the U(15,60) min move delay are labelled as assumptions. ProModel caution: a clock downtime with a non-preemptive priority (99 or below, the default) waits until the location is free, so it would never interrupt a charging vehicle. Policy (a) needs a preemptive downtime priority (100 or above). A preempted WAIT also resumes after the repair by default. That implements 'resume charging after repair', not 'no more energy until departure', so departure time and energy must be tracked outside the location's processing time for policy (a) to behave as described."
+     }
+    ]
+   }
+  },
+  {
+   "topic": "behavior",
+   "found": {
+    "items": [
+     {
+      "parameter": "Stated tolerable wait before charging ('Comfort Time'), minutes",
+      "value": "mean 43.8 min, SD 33.6, min 0, max 100 (answer range 0-120 min); n = 230 valid BEV-driver responses, mainland China",
+      "quote": "mean: 43.8 minutes (SD: 33.6, min: 0, max: 100) ... Ultimately, 230 valid responses were used for analysis (175 males and 55 females)",
+      "source": "Wang, Zhang, Wen, He & Tu (2024), Modeling Battery Electric Vehicle Users' Charging Decisions in Scenarios with Both Time-Related and Distance-Related Anxiety, arXiv:2412.16240 (opened via arXiv's bulk-data mirror)",
+      "url": "https://arxiv.org/abs/2412.16240",
+      "setting": "survey (stated preference, China, wait at a highway rest area: DC-fast context, NOT workplace L2; transferability caveat)"
+     },
+     {
+      "parameter": "Wait time at which willingness to charge now stops changing (scenario choices)",
+      "value": "effect saturates at about 45 min; below 45 min respondents mostly chose to charge at the upcoming station",
+      "quote": "the influence of the waiting time saturated at around 45 minutes in general",
+      "source": "Wang et al. (2024), arXiv:2412.16240",
+      "url": "https://arxiv.org/abs/2412.16240",
+      "setting": "survey (stated preference, China highway, DC-fast context)"
+     },
+     {
+      "parameter": "Queue patience as a fraction of required charging time (simulation assumption)",
+      "value": "z = 0.6 x required charging time; the authors say it is not measured",
+      "quote": "z = 0.6 is the Impatience Factor, deﬁned as a fraction of the required charging time that the EV user waits for without getting impatient ... considered in situations where actual data was not available",
+      "source": "Chattopadhyay & Kar (2024), IDEAS: Information-Driven EV Admission in Charging Station Considering User Impatience, arXiv:2403.06223",
+      "url": "https://arxiv.org/abs/2403.06223",
+      "setting": "DCFC simulation model (assumption, not evidence)"
+     },
+     {
+      "parameter": "Mean session / charging / idle (plugged in, not charging) duration under a posted time limit",
+      "value": "session 318 min, charging 233 min, idle 85 min (idle SD 104, min 0, max 614; driver-level means, N = 403 drivers); 331 Level-2 ports",
+      "quote": "The mean session, charging, and idle durations were 318, 233, and 85 minutes, respectively. ... Idle duration (min) 85 104 0 614 403 ... the UCSD charging network comprised 331 Level-2 charging ports",
+      "source": "Garg, Hanna, Myers, Tebbe & Victor, Electric Vehicle Charging at the Workplace: Experimental Evidence on Incentives and Environmental Nudges (working paper, version of 19 May 2026), Table 1 Panel D",
+      "url": "https://raw.githubusercontent.com/sebastiantebbe/sebastiantebbe.github.io/7f50fac/uploads/EV_Charging.pdf",
+      "setting": "workplace L2 (UC San Diego campus); Panel D statistics are per driver per week, not per session"
+     },
+     {
+      "parameter": "Posted time limits and enforcement at the UCSD workplace network",
+      "value": "4 h at ChargePoint L2 stalls, 12 h at PowerFlex stalls; drivers can be cited for idling or for overstaying the posted limit",
+      "quote": "Campus rules permit 4 hours of charging at ChargePoint stations and 12 hours at PowerFlex stations. ... Drivers may be cited if they park in an “EV Charging Only” stall but are not actively charging or exceeding the posted time limit.",
+      "source": "Garg et al. (2026 WP), footnote 15 and Appendix B.1",
+      "url": "https://raw.githubusercontent.com/sebastiantebbe/sebastiantebbe.github.io/7f50fac/uploads/EV_Charging.pdf",
+      "setting": "workplace L2 (operator rule)"
+     },
+     {
+      "parameter": "Employer willingness to make drivers move cars mid-day (compliance friction)",
+      "value": "qualitative: employers generally will not ask workers to interrupt the workday to move vehicles",
+      "quote": "employers are generally unwilling to ask workers to interrupt the workday to move vehicles in response to time-limited or time-varying incentives",
+      "source": "Garg et al. (2026 WP), Introduction",
+      "url": "https://raw.githubusercontent.com/sebastiantebbe/sebastiantebbe.github.io/7f50fac/uploads/EV_Charging.pdf",
+      "setting": "workplace L2"
+     },
+     {
+      "parameter": "Response to a full garage: shifting arrival time instead of retrying (blocked-driver behavior)",
+      "value": "qualitative, from a field experiment with n = 629 drivers: drivers move plug-ins to low-utilization periods to avoid arriving to a full garage",
+      "quote": "In a natural field experiment (n = 629 drivers) ... respond strategically by shifting to low-utilization periods to avoid arriving to a full garage",
+      "source": "Garg et al. (2026 WP), Abstract and Introduction",
+      "url": "https://raw.githubusercontent.com/sebastiantebbe/sebastiantebbe.github.io/7f50fac/uploads/EV_Charging.pdf",
+      "setting": "workplace L2 (UCSD field experiment)"
+     },
+     {
+      "parameter": "Scope of the Asensio et al. (2022) workplace etiquette/fee experiment dataset",
+      "value": "3,395 sessions, 85 drivers, 105 stations, 25 sites of one firm in the DOE Workplace Charging Challenge",
+      "quote": "This dataset contains information from 3,395 high resolution electric vehicle charging sessions. The data contains sessions from 85 EV drivers with repeat usage at 105 stations across 25 sites at a workplace charging program.",
+      "source": "Asensio-lab replication package README for Asensio, Apablaza, Lawson & Walsh (2022), A field experiment on workplace norms and electric vehicle charging etiquette, J. Industrial Ecology (author documentation)",
+      "url": "https://github.com/asensio-lab/workplace-charging-experiment",
+      "setting": "workplace L2 (author documentation)"
+     },
+     {
+      "parameter": "Unplug before a 4-h free window ends under a fee plus etiquette regime (compliance proxy)",
+      "value": "DERIVED BY US from the published replication CSV (third-party GitHub mirror of Dataverse doi:10.7910/DVN/NFPQLW): 2,962 of 3,340 non-zero-kWh sessions (88.7%) lasted <= 4 h. All 378 sessions > 4 h paid; no session > 4 h was free. Sessions per 15-min bin fall from 270 (3.75-4.0 h) to 117 (4.0-4.25 h). Implied fee about $0.98/h beyond 4 h (median, sessions > 5 h), minimum charge $0.50. Comparison from ACN data (ours, partial download): share of sessions with dwell <= 4 h is 22.6% at JPL and 41.9% at Caltech, which have no limit. This is a proxy, not a causal compliance rate.",
+      "quote": "# (a) 4-hour cutoff ... #Calculating statistic on number of users who are treated at 4 hours",
+      "source": "Asensio-lab replication script package_v2.R (the 4-h threshold); numbers computed by us from station_data_dataverse.csv",
+      "url": "https://raw.githubusercontent.com/asensio-lab/workplace-charging-experiment/master/package_v2.R",
+      "setting": "workplace L2 (derived from published replication data, 2014-2015)"
+     },
+     {
+      "parameter": "Time past the deadline for drivers who overstay a fee threshold (non-compliant delay)",
+      "value": "DERIVED BY US: among the 378 sessions over 4 h, time beyond 4 h has median 30.7 min, IQR 10.6-72.1 min, P90 133 min. Lognormal fit on minutes: mu = 3.23, sigma = 1.43 (median 25 min).",
+      "quote": "mccrary_b <- mccrary(station.dat.4$chargeTimeHrs, 4,",
+      "source": "Asensio-lab replication script (the 4-h cutoff); numbers computed by us from station_data_dataverse.csv",
+      "url": "https://raw.githubusercontent.com/asensio-lab/workplace-charging-experiment/master/package_v2.R",
+      "setting": "workplace L2 (derived from published replication data)"
+     },
+     {
+      "parameter": "Parking vs charging duration at a campus workplace station",
+      "value": "201 events in one week (Jan 16-23, 2019). Mean parking 3.25 h, mean charging about 2 h, so about 38% of plugged-in time was idle (mean idle about 1.25 h, our arithmetic).",
+      "quote": "There are in total 201 charging events across the week. The average parking duration is 3.25 hours (Fig. 2) and the average charging duration is less – about 2 hours ... on average, 38% of the time a charger is plugged-in, it does not provide service.",
+      "source": "Bae, Zeng, Travacca & Moura (2019/2020 ACC), Inducing Human Behavior to Alleviate Overstay at PEV Charging Station, arXiv:1912.02341",
+      "url": "https://arxiv.org/abs/1912.02341",
+      "setting": "workplace L2 (Cal Poly San Luis Obispo; the move rule in force in 2019 is unknown)"
+     },
+     {
+      "parameter": "Mean overstay after full charge at a heavily used station",
+      "value": "1.5 h on average, about 75% extra beyond the required charging time",
+      "quote": "PEVs overstay for 1.5 hours on average in their charging sessions, approximately an extra of 75% of the required charging time",
+      "source": "Ju, Zeng, Allybokus & Moura (2023), Robo-Chargers, arXiv:2212.03391, citing Zeng, Zhang & Moura (2020) IEEE TII 16(5) (secondary citation)",
+      "url": "https://arxiv.org/abs/2212.03391",
+      "setting": "public/destination L2 (secondary citation)"
+     },
+     {
+      "parameter": "Concentration of overstay (long-tail sessions)",
+      "value": "the 6% most-overstayed sessions occupy 30% of charger time",
+      "quote": "6% of the most overstayed sessions occupy the charging facility for 30% of the time",
+      "source": "Ju et al. (2023), arXiv:2212.03391, citing Wolbertus, Kroesen, van den Hoed & Chorus (2018), Energy Policy 123 (secondary citation)",
+      "url": "https://arxiv.org/abs/2212.03391",
+      "setting": "public L2, Netherlands (secondary citation)"
+     },
+     {
+      "parameter": "Operator cost of a manual interchange (valet moves a charged car)",
+      "value": "$0.44 per interchange event (a case-study input of the paper, not a measurement)",
+      "quote": "The interchange cost ... is $0.44 per interchange event",
+      "source": "Zeng, Zhang & Moura (2019), Solving Overstay in PEV Charging Station Planning via Chance Constrained Optimization, arXiv:1901.07110",
+      "url": "https://arxiv.org/abs/1901.07110",
+      "setting": "destination/workplace L2 planning model (assumed parameter)"
+     },
+     {
+      "parameter": "Charge-complete notification already exists by default",
+      "value": "qualitative: most vehicles notify their owner when charging stops, so ACN's no-rule data already include a notification",
+      "quote": "improves user experience, since most vehicles will notify their owner when charging stops",
+      "source": "Lee, Lee, Lee, Low et al. (2021), Adaptive Charging Networks, IEEE TSG 12(5), arXiv:2012.02636",
+      "url": "https://arxiv.org/abs/2012.02636",
+      "setting": "workplace L2 (Caltech ACN)"
+     },
+     {
+      "parameter": "Status of evidence on idle-fee effectiveness",
+      "value": "qualitative: Tesla charges per-minute idle fees, but their effect on behavior had not been measured (as of 2019)",
+      "quote": "They impose an “idle fee,” which is a penalty cost they apply to users, in [$/minute], after the PEV is fully charged but still connected [7]. However, the effectiveness of a penalty remains to be studied.",
+      "source": "Bae et al. (2019), arXiv:1912.02341",
+      "url": "https://arxiv.org/abs/1912.02341",
+      "setting": "DCFC operator practice (Tesla), secondary"
+     }
+    ],
+    "proposed_distributions": [
+     {
+      "model_input": "p_balk: a driver who finds all 54 ports occupied does not wait (parks elsewhere, no charge)",
+      "distribution": "Bernoulli(p_balk)",
+      "parameters": "baseline p_balk = 1.0 (Erlang loss); sweep 0.5-1.0",
+      "basis": "ASSUMPTION. No published workplace balking rate was found that we could open. Qualitative support: drivers avoid arriving to a full garage (Garg et al. 2026 WP), and unmanaged workplace sites simply turn late arrivals away (Sutton et al. 2022, verified earlier). ACN never came within 2 ports of full (team diagnostics), so it cannot be estimated from ACN."
+     },
+     {
+      "model_input": "On-site queue patience (impatient variant: a driver who waits in or near the car for a port)",
+      "distribution": "Gamma(shape k, scale theta) truncated at 120 min; alternative Exponential(mean 44 min)",
+      "parameters": "k = 1.70, theta = 25.8 min (mean 43.8, SD 33.6); lognormal alternative mu = 3.55, sigma = 0.68 (median 35 min); sweep mean 15-60 min",
+      "basis": "Mean and SD SOURCED from Wang et al. 2024 (arXiv:2412.16240, stated Comfort Time, n = 230), corroborated by the 45-min saturation in the same study. The gamma shape and the truncation are our fit. Strong transferability caveat: Chinese highway, DC-fast, stated preference. Patience as 0.6 x charge time (Chattopadhyay & Kar 2024) is only an assumed alternative."
+     },
+     {
+      "model_input": "Virtual waitlist: patience and claim delay for drivers parked elsewhere",
+      "distribution": "Patience = the driver's remaining planned dwell (structural). Claim delay after a 'port free' notice ~ Lognormal(median m, sigma 0.8); a driver who misses the hold window H loses the slot",
+      "parameters": "H = 15 min (ChargePoint Waitlist) or 30 min (Cal Poly); m = 10 min (sweep 5-20)",
+      "basis": "H SOURCED (verified earlier: ChargePoint Waitlist 15 min; Cal Poly 30 min). The claim-delay median and shape are ASSUMPTIONS (no measured waitlist response times found)."
+     },
+     {
+      "model_input": "Post-charge idle with a notification only (no rule, no fee) = baseline",
+      "distribution": "Empirical idle distribution resampled from ACN Caltech completed sessions, plus a small completion-triggered share rho that unplugs within Exp(10 min)",
+      "parameters": "Caltech idle median 187 min; 9.3% unplug within 15 min; 74% stay > 60 min (JPL median 232 min); rho = 3.1%",
+      "basis": "ACN numbers computed by the team (repo diagnostics and our site split, partial download). That a notification already exists is SOURCED (Lee et al. 2021: most vehicles notify owners when charging stops). So a 'notification-only' policy should NOT be modeled as a large behavior change unless new evidence appears."
+     },
+     {
+      "model_input": "gamma: compliance with a move-after-charge rule / time limit with fee",
+      "distribution": "Bernoulli(gamma); a compliant driver unplugs by min(natural departure, deadline); a non-compliant driver overstays (next row)",
+      "parameters": "'4-h limit + ~$1/h fee + etiquette' scenario: gamma = 0.85 (sweep 0.75-0.95). 'Rule, no fee': gamma = 0.6 (assumption, sweep 0.2-0.9).",
+      "basis": "Fee scenario anchored on our DERIVED proxy: 88.7% of sessions ended <= 4 h at the Asensio et al. (2022) firm, with a sharp drop in sessions just after 4 h, vs 23-42% <= 4 h at ACN sites with no limit. This is not causal: some of those sessions would have ended early anyway, so 0.85 is deliberately below 0.887. Fee level ~$0.98/h after 4 h with a $0.50 minimum is also derived. The 'no fee' value is an assumption. Published effect sizes (Asensio et al. 2022; Wolbertus & Gerzon 2018; Bornioli et al. 2023) could not be opened."
+     },
+     {
+      "model_input": "Overstay beyond the deadline for non-compliant drivers",
+      "distribution": "Lognormal on minutes past the deadline",
+      "parameters": "mu = 3.23, sigma = 1.43 (median 25 min; empirical median 31, IQR 11-72, P90 133 min); cap at the driver's natural departure",
+      "basis": "DERIVED by us from the Asensio et al. (2022) replication data (n = 378 sessions over 4 h). Workplace L2, 2014-2015."
+     },
+     {
+      "model_input": "Post-completion idle under an enforced posted limit (alternative single-distribution form)",
+      "distribution": "Lognormal (or Gamma) on idle minutes after charge completion",
+      "parameters": "Lognormal mu = 3.99, sigma = 0.96 (mean 85, SD 104, median 54 min); Gamma alternative k = 0.67, theta = 127 min",
+      "basis": "Mean and SD SOURCED from UCSD (Garg et al. 2026 WP: 4-h/12-h limits with citations), driver-level means; the distribution shape is our assumption. Cross-check: Cal Poly mean idle about 75 min (Bae et al. 2019: 3.25 h parked vs about 2 h charging). Both are far below ACN's no-rule median of 187-232 min."
+     },
+     {
+      "model_input": "Response delay after a charge-complete notice for compliant drivers (move-after-charge policy)",
+      "distribution": "Grace G, then delay ~ Lognormal(median d, sigma 1.0)",
+      "parameters": "G = 10-15 min; d = 15 min (sweep 5-60)",
+      "basis": "ASSUMPTION, bracketed by sourced anchors: operator hold windows of 15/30 min (verified earlier), overshoot median 25-31 min in the Asensio data (derived), and 'minutes to hours' when people perform interchange (Zeng et al. 2019). No field measurement of notice-to-move delay could be opened (Bornioli et al. 2023 measured stated intentions)."
+     },
+     {
+      "model_input": "Valet / attendant interchange (operator moves charged cars)",
+      "distribution": "Delay ~ Uniform(5, 30) min; cost per move fixed",
+      "parameters": "cost $0.44 per interchange event",
+      "basis": "Cost SOURCED as a case-study parameter (Zeng, Zhang & Moura 2019, arXiv:1901.07110), not a measurement. The delay range is an ASSUMPTION."
+     },
+     {
+      "model_input": "p_retry: a blocked driver comes back later the same day",
+      "distribution": "Bernoulli(p_retry); return delay ~ Exponential(mean mu_r), truncated before the driver's departure; at most one retry",
+      "parameters": "baseline p_retry = 0 (does not understate lost demand); sweep 0-0.5; mu_r = 150 min (sweep 60-240)",
+      "basis": "ASSUMPTION. No quantitative retry rate found in any source we could open. Qualitative only: a workplace driver re-checks around lunchtime (Sutton et al. 2022, verified earlier), and drivers shift plug-in timing under scarcity (Garg et al. 2026 WP). The latter suggests modeling 'shift tomorrow's arrival' (R05) as the main alternative to same-day retry."
+     }
+    ],
+    "unopened": [
+     "ACCESS NOTE: this session's egress proxy returned 403 for almost every host (doi.org, ScienceDirect, Wiley, MDPI, OSTI/NREL, PMC, escholarship, tesla.com, electrifyamerica.com, evgo.com, gatech.edu, surrey.ac.uk, eur.nl, mass.gov, law.cornell.edu, arxiv.org itself). Only arXiv PDFs via the public arXiv bulk-data mirror (storage.googleapis.com/arxiv-dataset) and GitHub-hosted files could be opened. Everything below was seen only in search snippets, so no numbers from it are reported.",
+     "Asensio, Apablaza, Lawson & Walsh (2022), A field experiment on workplace norms and electric vehicle charging etiquette, J. Industrial Ecology, doi:10.1111/jiec.13116. The full paper with its effect sizes was not opened; only the replication README, R script and data were used.",
+     "Georgia Tech EPIcenter summary of Asensio et al. (epicenter.energy.gatech.edu, 2025-07-01). DNS/proxy blocked.",
+     "Wolbertus & Gerzon (2018), Improving Electric Vehicle Charging Station Efficiency through Pricing, J. Advanced Transportation, doi:10.1155/2018/4831951 (stated-preference idle-fee study)",
+     "Wolbertus, Kroesen, van den Hoed & Chorus (2018), Fully charged: factors that influence connection times at EV-charging stations, Energy Policy 123. Only a secondary quote via Ju et al. was used.",
+     "Bornioli, Vermeulen & Mingardo (2023/2024), Can app notifications reduce charging hogging? An experiment with electric vehicle drivers, Case Studies on Transport Policy 101143 (n = 703 per a snippet; measures stated intentions)",
+     "Luo & Wang (2025), The impacts of rate surge on electric vehicle charging behaviors: Evidence from California, J. Economic Behavior & Organization 236 (Palo Alto $2 post-charging parking rate; snippet reports a parking-time decline)",
+     "Zeng, Zhang & Moura (2020), Solving Overstay and Stochasticity in PEV Charging Station Planning With Real Data, IEEE TII 16(5):3504-3514. Only a secondary citation was used.",
+     "Tesla Supercharger idle/congestion fee support page (tesla.com)",
+     "Electrify America mobile FAQ (idle fee after a grace period)",
+     "EVgo help center: Unattended vehicles at an EVgo charger",
+     "Rhode Island and Massachusetts (EVICC) state Level-2/DCFC idle-fee guides",
+     "Hoen et al. (2023), Charging electric vehicles on long trips and the willingness to pay to reduce waiting for charging (Norway SP), Transportation Research Part A",
+     "Modeling of the Acceptable Waiting Time for EV Charging in Japan (2024), Sustainability 16(6):2536 (MDPI)",
+     "Arthur D. Little, Customer experience drives value in public EV charging (snippet: share unwilling to wait / willing to wait 5-10 min)",
+     "HERE Technologies EV Index 2025 survey; Deloitte consumer survey; Direct Line UK queue poll (industry surveys)",
+     "J.D. Power EVX Public Charging study (share of visits without charging); AEI report Charger Data Transparency (expected odds of charging when all chargers are occupied)",
+     "Nicholas & Tal (2013/2015) UC Davis ITS workplace charging working papers",
+     "Sutton, Hardman & Tal (2022), workplace congestion strategies (used only as the earlier-verified qualitative fact)",
+     "Zhou et al. (2025), A user behavior and reinforcement learning based dynamic pricing method for idle connection time reduction at charging stations, Transportation Research Part A",
+     "Fischer, Hardt, Michalk & Bogenberger (TRB 2022), Charging or Idling: Method for Quantifying the Charging and the Idle Time of Public Charging Stations",
+     "APPAM 2018/2020 conference abstracts on workplace charging experiments (appam.confex.com)",
+     "Motoaki & Shirk (2017), Consumer behavioral adaption in EV fast charging through pricing, Energy Policy (INL)"
+    ]
+   },
+   "verification": {
+    "checks": [
+     {
+      "parameter": "Stated tolerable wait before charging ('Comfort Time'), minutes",
+      "value": "mean 43.8 min, SD 33.6, min 0, max 100 (answer range 0-120 min); n = 230 valid BEV-driver responses, mainland China",
+      "verdict": "confirmed",
+      "url": "https://arxiv.org/abs/2412.16240",
+      "evidence_quote": "mean: 43.8 minutes (SD: 33.6, min: 0, max: 100) ... Ultimately, 230 valid responses were used for analysis (175 males and 55 females) ... Q11: [FI] For a highway trip that is beyond the real mileage of a BEV (i.e., you will need to recharge once in the middle of the trip). If the waiting time before charging is t minutes, would you choose a BEV or a fuel car? - 120 ≥ t ≥ 0 minutes",
+      "note": "I opened the v1 PDF myself through the arXiv bulk mirror (storage.googleapis.com/arxiv-dataset; arxiv.org itself is blocked). The numbers are exact. What the number means needs care. Q11 asks for the wait at which the respondent would still pick a BEV over a fuel car for a long highway trip. It is a vehicle-choice threshold, not observed patience in a queue and not a balking point at a station. The paper describes it as 'sensitivity to the waiting time before charging'. The survey was online in mainland China. The setting caveat (highway, DC-fast) is correct."
+     },
+     {
+      "parameter": "Wait time at which willingness to charge now stops changing (scenario choices)",
+      "value": "effect saturates at about 45 min; below 45 min respondents mostly chose to charge at the upcoming station",
+      "verdict": "confirmed",
+      "url": "https://arxiv.org/abs/2412.16240",
+      "evidence_quote": "the influence of the waiting time saturated at around 45 minutes in general ... when Waiting Time was below 45 minutes, the SHAP values were mostly negative, indicating that the users preferred to charge at the upcoming rest area (Figure 4f).",
+      "note": "Both statements are in the paper. The second one is the authors' reading of SHAP values from their ML model. It is a model attribution, not a raw share of respondents' choices. The scenario waits were shown in 20-minute bins (0-20 ... 80-100 min), so '45 min' is only as precise as that design allows."
+     },
+     {
+      "parameter": "Queue patience as a fraction of required charging time (simulation assumption)",
+      "value": "z = 0.6 x required charging time; the authors say it is not measured",
+      "verdict": "corrected",
+      "url": "https://arxiv.org/abs/2403.06223",
+      "evidence_quote": "where z = 0.6 is the Impatience Factor, deﬁned as a fraction of the required charging time that the EV user waits for without getting impatient ... TImpatience(i) = z · T(i, SoC, 80%) ... Three user types, the Optimist, the Standard user and the Pessimist user, were considered in situations where actual data was not available.",
+      "corrected_value": "z = 0.6 is confirmed (patience = 0.6 x time to reach 80%, Eq. 9; 100% in Eq. 5). The paper gives no source or justification for 0.6. However, the phrase 'considered in situations where actual data was not available' refers to the three user types, not to z. The reported quote joins two separate passages with '...'. Correct wording: 'z = 0.6 is an unsourced model parameter'.",
+      "note": "Setting confirmed: a DC-fast simulation (50-60 kW DC vehicles, fast charge to 80% and then slow). It is still fine to use z only as an assumption, as the proposal does."
+     },
+     {
+      "parameter": "Mean session / charging / idle (plugged in, not charging) duration under a posted time limit",
+      "value": "session 318, charging 233, idle 85 min (idle SD 104, min 0, max 614; N = 403 drivers); 331 Level-2 ports",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/sebastiantebbe/sebastiantebbe.github.io/7f50fac/uploads/EV_Charging.pdf",
+      "evidence_quote": "The mean session, charging, and idle durations were 318, 233, and 85 minutes, respectively. ... Idle duration (min) 85 104 0 614 403 ... the outcome variables (Panel D), which characterize charging behavior per driver per week ... comprised 331 Level-2 charging ports, including 251 ChargePoint and 72 PowerFlex stations ... idle duration (time plugged in but not charging)",
+      "note": "I opened the 19 May 2026 version myself. Experiment window: Oct 5 to Nov 19, 2023. Two caveats matter for later use. (1) The SD of 104 is the spread across drivers' weekly figures (N = 403 drivers), not across sessions. (2) 'Idle' means any time plugged in but not charging. At the PowerFlex EV-12 stalls, drivers enter a departure time and the charger schedules power, so idle there includes scheduled non-charging gaps, not only time after the charge is complete."
+     },
+     {
+      "parameter": "Posted time limits and enforcement at the UCSD workplace network",
+      "value": "4 h at ChargePoint L2, 12 h at PowerFlex; drivers can be cited for idling or for overstaying",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/sebastiantebbe/sebastiantebbe.github.io/7f50fac/uploads/EV_Charging.pdf",
+      "evidence_quote": "Campus rules permit 4 hours of charging at ChargePoint stations and 12 hours at PowerFlex stations. ... EV-4 indicates a 4-hour parking limit at a level-2 charger ... Vehicles may remain in the stall (charging or idling) for up to four hours. ... Drivers may be cited if they park in an “EV Charging Only” stall but are not actively charging or exceeding the posted time limit.",
+      "note": "Both quoted passages are present. Appendix B.1 also says EV-4 stalls explicitly allow idling up to 4 h, so this is a time-limit rule, not a move-after-charge rule. The paper gives no information on how strictly citations are enforced."
+     },
+     {
+      "parameter": "Employer willingness to make drivers move cars mid-day",
+      "value": "qualitative: employers generally will not ask workers to interrupt the workday to move vehicles",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/sebastiantebbe/sebastiantebbe.github.io/7f50fac/uploads/EV_Charging.pdf",
+      "evidence_quote": "employers are generally unwilling to ask workers to interrupt the workday to move vehicles in response to time-limited or time-varying incentives (US Department of Energy 2022)",
+      "note": "Found verbatim in the Introduction. The authors attribute it to US DOE (2022)."
+     },
+     {
+      "parameter": "Response to a full garage: shifting arrival time instead of retrying (blocked-driver behavior)",
+      "value": "drivers move plug-ins to low-utilization periods to avoid arriving to a full garage (n = 629)",
+      "verdict": "corrected",
+      "url": "https://raw.githubusercontent.com/sebastiantebbe/sebastiantebbe.github.io/7f50fac/uploads/EV_Charging.pdf",
+      "evidence_quote": "We provide evidence consistent with a mechanism common in shared workplace networks: perceived (and actual) charger scarcity. Because chargers are bundled with a limited set of parking stalls, drivers may interpret discounts as increasing competition and respond strategically by shifting to low-utilization periods to avoid arriving to a full garage. ... Scarcity beliefs alone shift charging away from the congested early morning period and toward lower-utilization evening periods",
+      "corrected_value": "This is anticipatory re-timing in response to perceived scarcity (set off by a price discount or by priming scarcity beliefs). The paper presents it as a mechanism 'consistent with' the evidence ('drivers may ... respond strategically'). It is not a measurement of what drivers do after being blocked by a full garage, and the paper says nothing about retry versus shift. n = 629 is the main experiment.",
+      "note": "The reported quote joins the Abstract and the Introduction. It is reasonable support for modeling a 'shift tomorrow's arrival' response (R05). It is not evidence about blocked drivers."
+     },
+     {
+      "parameter": "Scope of the Asensio et al. (2022) dataset",
+      "value": "3,395 sessions, 85 drivers, 105 stations, 25 sites, DOE Workplace Charging Challenge firm",
+      "verdict": "confirmed",
+      "url": "https://github.com/asensio-lab/workplace-charging-experiment",
+      "evidence_quote": "This dataset contains information from 3,395 high resolution electric vehicle charging sessions. The data contains sessions from 85 EV drivers with repeat usage at 105 stations across 25 sites at a workplace charging program. ... a firm participating in the U.S. Department of Energy (DOE) workplace charging challenge.",
+      "note": "Read from raw.githubusercontent.com/asensio-lab/workplace-charging-experiment/master/README.md."
+     },
+     {
+      "parameter": "Unplug before a 4-h free window ends under fee + etiquette (compliance proxy, derived)",
+      "value": "2,962/3,340 (88.7%) <= 4 h; all 378 > 4 h paid, none free; 270 -> 117 per 15-min bin; ~$0.98/h after 4 h, $0.50 minimum",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/asensio-lab/workplace-charging-experiment/master/package_v2.R",
+      "evidence_quote": "# (a) 4-hour cutoff ... #Calculating statistic on number of users who are treated at 4 hours ... #Specify hour limits and increments of 5 minutes (marginal cost incurred every 5 min after 4hrs) ... fx <- (x > 0 & x <=4) *0+ (x >4 & x < 4.5) * 0.5 + (x >= 4.5 & x < 10.5) * (x-4)",
+      "note": "I recomputed this from the full 3,395-row CSV mirrored at raw.githubusercontent.com/speegled/fosdata/master/data-raw/ecars/station_data_dataverse.csv (Dataverse is blocked). After dropping the 55 zero-kWh sessions, 3,340 remain. 2,962 of them (0.8868) last <= 4 h. All 378 sessions over 4 h are paid, and no paid session is <= 4 h. Bins: (3.75, 4.0] = 270 (271 if the bin is [3.75, 4.0)); [4.0, 4.25) = 117. The median of dollars/(h-4) for sessions over 5 h is $0.979 (n = 105). The minimum charge is $0.50 (195 sessions). The authors' own pricing function in the script gives the actual rule: free up to 4 h, $0.50 for 4-4.5 h, then $1 per hour beyond 4 h billed in 5-minute steps. Cite the fee as '$1/h' from the script, not as a derived '$0.98'. Dates in the data: Nov 2014 to Oct 2015. The script also analyzes a separate 2-hour 'Behavioral effect' threshold, whose meaning I could not confirm without the paper. Warning: the mirrors in Xzk233233/DEVA and ympan0508/Argos-Data-Analysis are 2,330-row subsets and must not be used. The ACN comparison shares (22.6% / 41.9%) are team computations that I did not check."
+     },
+     {
+      "parameter": "Time past the 4-h deadline for drivers who overstay (derived)",
+      "value": "n = 378; median 30.7 min, IQR 10.6-72.1, P90 133 min; lognormal mu = 3.23, sigma = 1.43 (median 25 min)",
+      "verdict": "corrected",
+      "url": "https://raw.githubusercontent.com/asensio-lab/workplace-charging-experiment/master/package_v2.R",
+      "evidence_quote": "mccrary_b <- mccrary(station.dat.4$chargeTimeHrs, 4, ...",
+      "corrected_value": "The empirical figures reproduce exactly: median 30.71, Q1 10.65, Q3 72.09, P90 132.96 min. The maximum-likelihood lognormal on minutes past 4 h gives mu = 3.24 and sigma = 1.45 (1.446), with median 25.5 min, not 3.23 / 1.43. The difference does not matter in practice.",
+      "note": "Computed by me from the fosdata full-CSV mirror. These are sessions that paid the fee, i.e. non-compliers under a regime of 4-h limit plus about $1/h."
+     },
+     {
+      "parameter": "Parking vs charging duration at Cal Poly workplace station",
+      "value": "201 events (Jan 16-23, 2019); mean parking 3.25 h, charging ~2 h; 38% idle; mean idle ~1.25 h (our arithmetic)",
+      "verdict": "confirmed",
+      "url": "https://arxiv.org/abs/1912.02341",
+      "evidence_quote": "The data was measured from January 16th, 2019 to January 23rd, 2019. There are in total 201 charging events across the week. The average parking duration is 3.25 hours (Fig. 2) and the average charging duration is less – about 2 hours (Fig. 3). The average charging duration to parking duration ratio is 0.62, meaning that, on average, 38% of the time a charger is plugged-in, it does not provide service.",
+      "note": "Opened via the arXiv mirror (v1). The 38% comes from a mean ratio of 0.62. The 1.25 h is a difference of means; 'about 2 hours' is approximate, so the idle figure is too. The source describes the site as 'a workplace charging station for faculty, staff, and students'. It says nothing about move rules, and the 2019/2020 ACC venue is not stated in the arXiv text."
+     },
+     {
+      "parameter": "Mean overstay after full charge at a heavily used station",
+      "value": "1.5 h on average, ~75% extra beyond required charging time",
+      "verdict": "confirmed",
+      "url": "https://arxiv.org/abs/2212.03391",
+      "evidence_quote": "Data analysis on a heavily-utilized charging station shows that, PEVs overstay for 1.5 hours on average in their charging sessions, approximately an extra of 75% of the required charging time [7]. ... [7] T. Zeng, H. Zhang, and S. Moura, “Solving overstay and stochasticity in PEV charging station planning with real data,” IEEE Transactions on Industrial Informatics, vol. 16, no. 5, pp. 3504–3514, 2020.",
+      "note": "The same text appears in v1 and v2. It is correctly labeled as a secondary citation. Ju et al. do not say what type of station it was."
+     },
+     {
+      "parameter": "Concentration of overstay (long-tail sessions)",
+      "value": "6% most-overstayed sessions occupy 30% of charger time",
+      "verdict": "confirmed",
+      "url": "https://arxiv.org/abs/2212.03391",
+      "evidence_quote": "A nationwide survey on Dutch PEV users shows a long-tailed distribution in session duration where 6% of the most overstayed sessions occupy the charging facility for 30% of the time [9].",
+      "note": "Secondary citation of Wolbertus, Kroesen, van den Hoed & Chorus (2018), Energy Policy 123, pp. 1-7. Ju et al. call it a 'nationwide survey'. The primary paper was not opened."
+     },
+     {
+      "parameter": "Operator cost of a manual interchange",
+      "value": "$0.44 per interchange event (case-study input)",
+      "verdict": "confirmed",
+      "url": "https://arxiv.org/abs/1901.07110",
+      "evidence_quote": "The interchange cost citc oper is $0.44 per interchange event and citc plan is thus $0.0167/kWh. ... in scenarios where human interactions are involved, it may be as long as several minutes to several hours.",
+      "note": "The value is stated in the case study without a citation, so it is an assumed parameter. The case is 'a destination charging station, which serves 50 PEVs/day' at 6.6 kW, with NHTS-based Monte Carlo. The footnote's 'several minutes to several hours' for human interchange is relevant to the valet delay assumption."
+     },
+     {
+      "parameter": "Charge-complete notification already exists by default",
+      "value": "most vehicles notify their owner when charging stops",
+      "verdict": "confirmed",
+      "url": "https://arxiv.org/abs/2012.02636",
+      "evidence_quote": "We also require the charging rate to be non-zero from when a car plugs in until its charging demand is met. This constraint helps prevent contactor wear in the EVSEs and improves user experience, since most vehicles will notify their owner when charging stops.",
+      "note": "Opened via the arXiv mirror (v1, Dec 2020). The context is ACN avoiding mid-session pauses. The passage supports 'vehicle notifications are common'. That every ACN driver actually received one is an inference. The journal details (IEEE TSG 12(5)) are not visible in the arXiv copy."
+     },
+     {
+      "parameter": "Status of evidence on idle-fee effectiveness",
+      "value": "Tesla idle fees exist; effect not measured as of 2019",
+      "verdict": "confirmed",
+      "url": "https://arxiv.org/abs/1912.02341",
+      "evidence_quote": "They impose an “idle fee,” which is a penalty cost they apply to users, in [$/minute], after the PEV is fully charged but still connected [7]. However, the effectiveness of a penalty remains to be studied.",
+      "note": "Verbatim. [7] is an Electrek news item from 2018."
+     },
+     {
+      "parameter": "Waitlist hold window H = 15 min (ChargePoint), used as SOURCED in the virtual-waitlist distribution",
+      "value": "15 min",
+      "verdict": "source_unreachable",
+      "url": "https://na.chargepoint.com/waitlist_driver_faq",
+      "note": "The host is blocked (ENOTFOUND), so I only saw search snippets. They say the 15-minute hold starts after the driver accepts the notification, that before accepting there are only 'a couple of minutes', and that station owners can configure the timers. The Cal Poly 30-min figure was not re-checked. Both values are marked 'verified earlier' and I could not re-verify them here."
+     }
+    ],
+    "distribution_review": [
+     {
+      "model_input": "p_balk: driver who finds all 54 ports occupied does not wait",
+      "ok": true,
+      "note": "This is labeled as an assumption, and an Erlang-loss baseline of 1.0 with a sweep from 0.5 to 1.0 is defensible. Garg et al. supports anticipatory re-timing under perceived scarcity, not balking itself, so cite it only as context. The Sutton et al. support and the 'ACN never within 2 ports' diagnostic were not checked here."
+     },
+     {
+      "model_input": "On-site queue patience (impatient variant)",
+      "ok": true,
+      "note": "The arithmetic is right: Gamma k = 1.699, theta = 25.8; lognormal method of moments mu = 3.548, sigma = 0.680, median 34.7. The source measure is the wait at which a respondent still picks a BEV over a fuel car for a long highway trip, so it likely overstates on-site patience at a workplace, where parking elsewhere costs little. Treat 43.8 min as an upper anchor and make the 15-60 sweep the main result. The data include zeros (min 0), which a lognormal cannot represent. Calling z = 0.6 'assumed' is right, but do not say Chattopadhyay & Kar call it unmeasured: they give no source at all."
+     },
+     {
+      "model_input": "Virtual waitlist: patience and claim delay",
+      "ok": true,
+      "note": "The claim delay is properly labeled as an assumption. H = 15 min could not be re-opened. Snippets suggest a short accept window ('a couple of minutes') comes before the 15-minute hold and that operators can configure it, so model an accept step plus the hold, or sweep H."
+     },
+     {
+      "model_input": "Post-charge idle with notification only = baseline",
+      "ok": true,
+      "note": "Lee et al. supports 'most vehicles notify when charging stops', so treating notification-only as close to the ACN baseline is defensible. The ACN numbers (median 187/232 min, 9.3%, 74%, rho = 3.1%) are team computations that I did not verify."
+     },
+     {
+      "model_input": "gamma: compliance with move-after-charge rule / limit + fee",
+      "ok": false,
+      "note": "The derived numbers reproduce. The mapping is wrong, though. In this model, gamma only matters for drivers whose natural departure is later than the deadline (compliers leave at min(natural, deadline)). So gamma should be about 1 - P(>4h | rule) / P(>4h | no rule), not the share of sessions <= 4h. With the team's ACN no-rule shares over 4 h (58.1% Caltech, 77.4% JPL), that gives about 0.81 and 0.85. If the 2014-15 firm's own counterfactual share over 4 h was lower (smaller batteries), the implied gamma is lower (e.g. a 30% counterfactual gives about 0.62). Therefore 0.85 is not 'deliberately below 0.887' and is not conservative. Restate the logic and widen the sweep to about 0.6-0.95. State the fee as the authors' scheduled rule ($0.50 for 4-4.5 h, then $1/h in 5-min steps), not as a derived ~$0.98. 'Rule, no fee' = 0.6 is correctly labeled as an assumption. Note that the replication script also analyzes a 2-h 'Behavioral' threshold with no visible bunching (only 20% of sessions <= 2 h), but what that threshold means is unverified."
+     },
+     {
+      "model_input": "Overstay beyond the deadline for non-compliant drivers",
+      "ok": true,
+      "note": "Use the MLE values mu = 3.24, sigma = 1.45 (median 25.5); the empirical quantiles match exactly. This is defensible for a 'limit + fee' scenario. Label it as non-compliers who paid about $1/h, at a 4-h plug-in-based deadline. Transferring it to a deadline set by charge completion is an assumption."
+     },
+     {
+      "model_input": "Post-completion idle under an enforced posted limit (UCSD-based lognormal/gamma)",
+      "ok": false,
+      "note": "The moment arithmetic is correct (mu = 3.985, sigma = 0.957, median 53.8; Gamma k = 0.668, theta = 127). The evidence does not support the label. (1) SD 104 is the spread across drivers' weekly figures (N = 403 drivers), so a session-level fit will understate dispersion. (2) UCSD 'idle' is any plugged-in non-charging time, which at the PowerFlex EV-12 stalls includes scheduled pauses, so it is not post-completion idle. (3) EV-4 explicitly allows idling up to 4 h and EV-12 allows 12 h, so this is a loose time limit, not a move-after-charge rule, and enforcement intensity is unknown. (4) The comparison sets means (85, 75 min) against ACN medians. (5) The Cal Poly rule is unknown, so it cannot cross-check an 'under a rule' scenario. Relabel it as 'posted 4h/12h limit, mixed idle definition, driver-level moments; shape assumed', or drop it."
+     },
+     {
+      "model_input": "Response delay after charge-complete notice (compliant drivers)",
+      "ok": true,
+      "note": "This is labeled as an assumption. The anchors are loose. The Asensio overshoot (median 25-31 min) belongs to fee-paying non-compliers, not compliers. Zeng et al. say human interchange can take 'several minutes to several hours', so extend the sweep beyond 60 min."
+     },
+     {
+      "model_input": "Valet / attendant interchange",
+      "ok": true,
+      "note": "$0.44 is confirmed as an unsourced case-study input, and the basis says so correctly. The Uniform(5, 30) delay is labeled as an assumption. Zeng's footnote ('several minutes to several hours' when humans are involved) suggests 30 min is an optimistic upper bound, so sweep higher."
+     },
+     {
+      "model_input": "p_retry: blocked driver returns later the same day",
+      "ok": true,
+      "note": "This is labeled as an assumption, and a baseline of 0 with a sweep is defensible. Garg et al. supports making next-day re-timing (R05) the main alternative, since the paper documents anticipatory shifts under perceived scarcity, not same-day retries."
+     }
+    ]
+   }
+  },
+  {
+   "topic": "tariff",
+   "found": {
+    "items": [
+     {
+      "parameter": "SCE TOU-EV-4 energy charge and TOU hours, summer weekday (Jun 1 to Sep 30)",
+      "value": "00-08 h $0.05623/kWh (off-peak); 08-12 h $0.0925 (mid-peak); 12-18 h $0.26668 (on-peak); 18-23 h $0.0925 (mid-peak); 23-24 h $0.05623 (off-peak). Demand charge $15.51/kW. Dollar basis: tariff effective 2019-03-01, nominal 2019 $",
+      "quote": "\"id\": \"Summer-Weekday\", \"effective_start\": \"06-01\", \"effective_end\": \"09-30\", \"dow_mask\": \"WEEKDAYS\", \"times\": [0, 8, 12, 18, 23], \"tariffs\": [0.05623, 0.0925, 0.26668, 0.0925, 0.05623], \"demand_charge\": 15.51",
+      "source": "acnportal v0.3.3 (Caltech NetLab / Z. Lee et al., the ACN-Sim software used for the ACN cost studies), file acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_4_march_2019.json. Opened from the PyPI sdist; identical to the copy on GitHub master. This is the authors' machine-readable encoding of the SCE sheet, not the SCE PDF itself",
+      "url": "https://github.com/zach401/acnportal/blob/master/acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_4_march_2019.json",
+      "setting": "utility tariff (commercial EV TOU with demand charge), as encoded by the ACN operator/research team"
+     },
+     {
+      "parameter": "SCE TOU-EV-4 energy charge, summer weekend",
+      "value": "$0.05623/kWh all day (off-peak); demand charge $15.51/kW",
+      "quote": "\"id\": \"Summer-Weekend\", \"effective_start\": \"06-01\", \"effective_end\": \"09-30\", \"dow_mask\": \"WEEKENDS\", \"times\": [0], \"tariffs\": [0.05623], \"demand_charge\": 15.51",
+      "source": "acnportal v0.3.3, sce_tou_ev_4_march_2019.json",
+      "url": "https://github.com/zach401/acnportal/blob/master/acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_4_march_2019.json",
+      "setting": "utility tariff"
+     },
+     {
+      "parameter": "SCE TOU-EV-4 energy charge and TOU hours, winter weekday (Oct 1 to May 31)",
+      "value": "00-08 h $0.06087/kWh; 08-12 h $0.07492; 12-18 h $0.0869; 18-23 h $0.07492; 23-24 h $0.06087. Demand charge $15.51/kW",
+      "quote": "\"id\": \"Winter-Weekday\", \"effective_start\": \"10-01\", \"effective_end\": \"05-31\", \"dow_mask\": \"WEEKDAYS\", \"times\": [0, 8, 12, 18, 23], \"tariffs\": [0.06087, 0.07492, 0.0869, 0.07492, 0.06087], \"demand_charge\": 15.51",
+      "source": "acnportal v0.3.3, sce_tou_ev_4_march_2019.json",
+      "url": "https://github.com/zach401/acnportal/blob/master/acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_4_march_2019.json",
+      "setting": "utility tariff"
+     },
+     {
+      "parameter": "SCE TOU-EV-4 energy charge, winter weekend",
+      "value": "$0.06087/kWh all day; demand charge $15.51/kW",
+      "quote": "\"id\": \"Winter-Weekend\", \"effective_start\": \"10-01\", \"effective_end\": \"05-31\", \"dow_mask\": \"WEEKENDS\", \"times\": [0], \"tariffs\": [0.06087], \"demand_charge\": 15.51",
+      "source": "acnportal v0.3.3, sce_tou_ev_4_march_2019.json",
+      "url": "https://github.com/zach401/acnportal/blob/master/acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_4_march_2019.json",
+      "setting": "utility tariff"
+     },
+     {
+      "parameter": "TOU-EV-4 file metadata (effective date, units, source sheet)",
+      "value": "Effective 2019-03-01; prices in $/kWh; times in hours since midnight; source sheet SCE ce141-12.pdf (not opened)",
+      "quote": "\"name\": \"SCE TOU-EV-4\", \"effective\": \"2019-3-1\", \"link\": \"https://www1.sce.com/NR/sc3/tm2/pdf/ce141-12.pdf\" ... tariffs (List[Tuple[float, float]]): List of time, tariff pairs where time is measured in hours since midnight and tariffs are in $/kWh.",
+      "source": "acnportal v0.3.3, sce_tou_ev_4_march_2019.json and acnportal/signals/tariffs/tou_tariff.py docstring",
+      "url": "https://github.com/zach401/acnportal/blob/master/acnportal/signals/tariffs/tou_tariff.py",
+      "setting": "utility tariff"
+     },
+     {
+      "parameter": "How ACN-Sim computes the demand charge",
+      "value": "Demand charge = ($/kW rate) x (maximum aggregate site power over the simulated horizon). The docstring says this is accurate only when the simulation covers exactly one billing period",
+      "quote": "Note this is only an accurate depiction of true demand charge if the simulation is exactly one billing period long. ... dc = tariff.get_demand_charge(sim.start) return dc * np.max(agg)",
+      "source": "acnportal v0.3.3, acnportal/acnsim/analysis/__init__.py, function demand_charge(sim, tariff)",
+      "url": "https://github.com/zach401/acnportal/blob/master/acnportal/acnsim/analysis/__init__.py",
+      "setting": "workplace L2 simulator (ACN-Sim) cost accounting"
+     },
+     {
+      "parameter": "SCE TOU-EV-8 (June 2019 encoding), a tariff with no demand charge, for sensitivity",
+      "value": "Summer weekday: $0.12597/kWh, except 16-21 h $0.49619; summer weekend: 16-21 h $0.25563, otherwise $0.12597. Winter (all days): 00-08 h $0.13568; 08-16 h $0.07724; 16-21 h $0.297; 21-24 h $0.13568. Demand charge 0",
+      "quote": "\"name\": \"SCE TOU-EV-8\", \"effective\": \"2018-10-12\" ... \"times\": [0, 16, 21], \"tariffs\": [0.12597, 0.49619, 0.12597], \"demand_charge\": 0 ... \"id\": \"Winter\", ... \"times\": [0, 8, 16, 21], \"tariffs\": [0.13568, 0.07724, 0.297, 0.13568], \"demand_charge\": 0",
+      "source": "acnportal v0.3.3, sce_tou_ev_8_june_2019.json (source sheet SCE ce401.pdf, not opened)",
+      "url": "https://github.com/zach401/acnportal/blob/master/acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_8_june_2019.json",
+      "setting": "utility tariff (alternative EV rate without a demand charge)"
+     },
+     {
+      "parameter": "PG&E A-10 TOU (Aug 2019 encoding), an alternative tariff with a demand charge",
+      "value": "Summer (May 1 to Oct 31) weekday: 00-08:30 $0.14903; 08:30-12 $0.1771; 12-18 $0.23223; 18-21:30 $0.1771; then $0.14903; demand charge $19.99/kW. Winter: $0.13064 / $0.1477 (08:30-21:30); demand charge $11.66/kW",
+      "quote": "\"name\": \"PGE A-10 TOU\", \"effective\": \"2019-07-01\" ... \"times\": [0, 8.5, 12, 18, 21.5], \"tariffs\": [0.14903, 0.1771, 0.23223, 0.1771, 0.14903], \"demand_charge\": 19.99 ... \"times\": [0, 8.5, 21.5], \"tariffs\": [0.13064, 0.1477, 0.13064], \"demand_charge\": 11.66",
+      "source": "acnportal v0.3.3, pge_a10_tou_aug_2019.json",
+      "url": "https://github.com/zach401/acnportal/blob/master/acnportal/signals/tariffs/tariff_schedules/pge_a10_tou_aug_2019.json",
+      "setting": "utility tariff (a different utility; sensitivity only)"
+     },
+     {
+      "parameter": "ACN-Sim case study setup (benchmark for our cost output)",
+      "value": "About 100 or 200 EVs/day with a JPL-like demand pattern; 30-day horizon starting 2019-06-01 (summer TOU); tariff = SCE TOU-EV-4 (March 2019)",
+      "quote": "We consider the case of a site host who expects to charge approximately 100 EVs per day with a demand pattern similar to that of JPL. ... start = timezone.localize(datetime(2019, 6, 1)) ... signals = {'tariff': TimeOfUseTariff('sce_tou_ev_4_march_2019')}",
+      "source": "Z. Lee, 'Comparing Infrastructure Designs using ACN-Sim', acnportal-experiments notebook 1.2 (Caltech NetLab), last updated 4/16/2020",
+      "url": "https://github.com/caltech-netlab/acnportal-experiments/blob/master/examples/1-Infrastructure-Evaluation/1.2-Comparing-Infrastructure-Designs/1.2-comparing-infrastructure-designs.ipynb",
+      "setting": "workplace L2 simulation (JPL-like synthetic demand), operator/research documentation, not peer-reviewed"
+     },
+     {
+      "parameter": "Operating cost per kWh delivered, 100 EV/day: uncontrolled, 102 L2 EVSEs, 670 kW transformer",
+      "value": "energy_cost $2,799.55; demand_charge $5,323.03; total $8,122.59; 23,468 kWh; $0.346/kWh. Derived by me: energy-only $0.119/kWh; demand charge = 65.5% of cost; implied peak 343 kW",
+      "quote": "Level 2: Unctrl: 670 kW : 102 EVSEs ... energy_delivered 23468.418816 ... energy_cost 2799.553116 demand_charge 5323.032000 total_cost 8122.585116 $/kWh 0.346107",
+      "source": "acnportal-experiments notebook 1.2, cell output read from results/100_EV_comparison.csv",
+      "url": "https://github.com/caltech-netlab/acnportal-experiments/blob/master/examples/1-Infrastructure-Evaluation/1.2-Comparing-Infrastructure-Designs/1.2-comparing-infrastructure-designs.ipynb",
+      "setting": "workplace L2 simulation, June 2019 (summer)"
+     },
+     {
+      "parameter": "Operating cost per kWh delivered, 100 EV/day: smart charging (LLF and cost-minimizing MPC), 200 kW transformer",
+      "value": "LLF: total $5,991.95 for 23,437 kWh = $0.2557/kWh, demand charge $3,076.81 (51%). Min-cost: $0.2450/kWh, demand charge $2,901.49 (51%)",
+      "quote": "Level 2: LLF: 200 kW : 102 EVSEs ... energy_cost 2915.142030 demand_charge 3076.811760 total_cost 5991.953790 $/kWh 0.255665 ... Level 2: Min Cost: 200 kW : 102 EVSEs ... demand_charge 2901.486720 total_cost 5736.226118 $/kWh 0.245048",
+      "source": "acnportal-experiments notebook 1.2, 100-EV comparison table",
+      "url": "https://github.com/caltech-netlab/acnportal-experiments/blob/master/examples/1-Infrastructure-Evaluation/1.2-Comparing-Infrastructure-Designs/1.2-comparing-infrastructure-designs.ipynb",
+      "setting": "workplace L2 simulation, June 2019"
+     },
+     {
+      "parameter": "Operating cost per kWh delivered, 200 EV/day (congested case)",
+      "value": "Ranges from $0.226/kWh (min-cost, 200 kW, 201 EVSEs) to $0.328/kWh (uncontrolled, 670 kW, 102 EVSEs; demand charge $9,661.21 = 64%)",
+      "quote": "Level 2: Unctrl: 670 kW : 102 EVSEs ... demand_charge 9661.213390 total_cost 15126.092066 $/kWh 0.327513 ... Level 2: Min Cost: 200 kW : 201 EVSEs ... total_cost 10340.038673 $/kWh 0.226280",
+      "source": "acnportal-experiments notebook 1.2, 200-EV comparison table",
+      "url": "https://github.com/caltech-netlab/acnportal-experiments/blob/master/examples/1-Infrastructure-Evaluation/1.2-Comparing-Infrastructure-Designs/1.2-comparing-infrastructure-designs.ipynb",
+      "setting": "workplace L2 simulation, June 2019"
+     },
+     {
+      "parameter": "Workplace charging program dataset with the fee paid per session (documentation)",
+      "value": "3,395 sessions; 85 drivers; 25 workplace locations; 'dollars' = money paid per session (US$)",
+      "quote": "This dataset consists of information on 3,395 electric vehicle charging sessions across locations for a workplace charging program. The data contains information on multiple charging sessions from 85 electric vehicle drivers across 25 workplace locations ... \\item{dollars}{Quantity of money paid for the charging session in U.S. dollars} ... @source Harvard Dataverse \\doi{10.7910/DVN/NFPQLW}.",
+      "source": "moderndive R package, R/datasets.R, documentation of the ev_charging data (a copy of Asensio et al. Harvard Dataverse doi:10.7910/DVN/NFPQLW, CC0)",
+      "url": "https://github.com/moderndive/moderndive/blob/master/R/datasets.R",
+      "setting": "workplace charging (corporate program, 2014-15); charger level not stated in the opened doc"
+     },
+     {
+      "parameter": "Workplace user fee structure, inferred from session data (my own computation on the opened data file)",
+      "value": "88.8% of sessions paid $0. All 3,016 sessions shorter than 4 h were free (longest 3.999 h); all 379 sessions of 4 h or more paid. Minimum fee $0.50 (modal value, 195 of 379); fees step by about $1/12. The rule fee ~ max($0.50, $1.00/h x (plug-in hours - 4)), rounded to 5-min steps, matches 94.5% of paid sessions within $0.09. Paid-session fee: mean $1.06, median $0.50. Data period Nov 2014 to Oct 2015 (nominal $)",
+      "quote": "\\item{dollars}{Quantity of money paid for the charging session in U.S. dollars} ... \\item{charge_time_hrs}{Length of the charging session in hours}",
+      "source": "moderndive data/ev_charging.rda (Asensio et al. dataset), analyzed with pyreadr; the fee rule is my inference, not a published tariff",
+      "url": "https://github.com/moderndive/moderndive/blob/master/data/ev_charging.rda",
+      "setting": "workplace charging, time-based pricing (free grace period, then an hourly fee)"
+     }
+    ],
+    "proposed_distributions": [
+     {
+      "model_input": "Grid energy price p(t) [$/kWh] applied to site kW each time step (operator cost)",
+      "distribution": "Deterministic time-of-day step function. In ProModel, a lookup table by (season, weekday/weekend, hour); not sampled",
+      "parameters": "TOU-EV-4. Summer (Jun 1 to Sep 30) weekdays: 0-8 h 0.05623 | 8-12 h 0.0925 | 12-18 h 0.26668 | 18-23 h 0.0925 | 23-24 h 0.05623. Summer weekends: 0.05623. Winter (Oct 1 to May 31) weekdays: 0.06087 | 0.07492 | 0.0869 | 0.07492 | 0.06087 (same breakpoints). Winter weekends: 0.06087",
+      "basis": "Sourced: acnportal sce_tou_ev_4_march_2019.json (effective 2019-03-01, nominal 2019 $). This matches the tariff and $15.51 demand charge used in Lee et al. 2021 (previously verified). Which season to simulate is a scenario choice. Assumption: the SCE PDF itself was not opened, so customer charges and any riders are omitted"
+     },
+     {
+      "model_input": "Monthly demand charge [$]",
+      "distribution": "Deterministic formula: DC = rate x max over the month of aggregate site kW",
+      "parameters": "Baseline rate 15.51 $/kW-month (TOU-EV-4). Sensitivity: 0 $/kW (TOU-EV-8, energy-only, with higher evening prices 0.49619 summer / 0.297 winter for 16-21 h); PG&E A-10 19.99 (summer) / 11.66 (winter). Upper bound for our 150 kVA site (derived, assumes PF = 1): 150 kW x 15.51 = about $2,327/month",
+      "basis": "Sourced: acnportal JSON files and acnportal demand_charge(): dc * np.max(agg), valid only when the run covers one billing period. Assumption: acnportal takes the max at the simulation step. The real SCE billing-interval averaging was not verified because the tariff sheet was not opened. Run ProModel in calendar-month blocks, or prorate"
+     },
+     {
+      "model_input": "User price / revenue rule (scenario parameter)",
+      "distribution": "Deterministic scenario parameter, not random. Revenue variability comes from the simulated kWh and dwell time",
+      "parameters": "S0 free: $0. S1 energy-based: $0.12/kWh x kWh delivered (Caltech from 2018-11-01). S2 time-based workplace rule: free for the first 4 h, then about $1.00/h with a $0.50 minimum (5-min increments)",
+      "basis": "S1 sourced: Lee et al. 2019 (previously verified). S2 sourced: inferred by me from Asensio et al. workplace data via moderndive (2014-15 nominal $; 94.5% of paid sessions within $0.09 of the rule). It is an inference, not a documented tariff. S0 is the pre-Nov-2018 Caltech regime (previously verified)"
+     },
+     {
+      "model_input": "Validation target: total operating cost per kWh delivered (an output to check, not an input)",
+      "distribution": "Benchmark range for face validity",
+      "parameters": "Summer (June 2019) TOU-EV-4: $0.226-0.346/kWh total. Energy-only $0.118-0.158/kWh. Demand charge = 30-66% of operating cost (51% at 100 EV/day on a 200 kW transformer)",
+      "basis": "Sourced: Caltech NetLab ACN-Sim case study, notebook 1.2 outputs (JPL-like synthetic demand, 102 EVSEs, not Caltech's 54 ports). Story point (derived): $0.12/kWh roughly covers the TOU energy cost but not the demand charge"
+     },
+     {
+      "model_input": "EVSE capital cost per port (hardware + installation), annualized",
+      "distribution": "Proposed form only: Triangular(min, mode, max) for sensitivity, applied after the run as a fixed annualized cost (capital recovery factor); not sampled inside ProModel replications",
+      "parameters": "NOT FILLED. Candidate sources (ICCT Nicholas 2019 WP 2019-14; DOE Smith & Castellano 2015) could not be opened in this environment",
+      "basis": "Assumption (structure only). No sourced numbers: every candidate host was blocked by the egress policy. Fill from an opened copy of the ICCT and DOE reports and record the dollar year"
+     },
+     {
+      "model_input": "Annual network subscription + maintenance per port",
+      "distribution": "Proposed form only: Uniform(low, high) per port-year, fixed cost after the run",
+      "parameters": "NOT FILLED. Sources not opened",
+      "basis": "Assumption (structure only); needs an opened DOE 2015 / ICCT 2019 / operator price sheet"
+     }
+    ],
+    "unopened": [
+     "Lee, Lee, Low & Li 2021, 'Adaptive Charging Networks' (arXiv 2012.02809; IEEE TSG): arxiv.org and ar5iv were blocked (DNS / egress 403), so the paper text was not read. Its tariff values were taken from the same authors' acnportal code instead",
+     "SCE TOU-EV-4 tariff sheet ce141-12.pdf (www1.sce.com) and the sce.com tariff-books page: host blocked",
+     "SCE TOU-EV-8 tariff sheet ce401.pdf (www1.sce.com): host blocked",
+     "CPUC 'IOU existing EV rates' PDF and SCE CPUC EV rate forum deck (cpuc.ca.gov): host blocked",
+     "ICCT, Nicholas 2019, 'Estimating electric vehicle charging infrastructure costs across major U.S. metropolitan areas', Working Paper 2019-14 (theicct.org): host blocked",
+     "DOE/New West Technologies, Smith & Castellano 2015, 'Costs Associated With Non-Residential Electric Vehicle Supply Equipment' (afdc.energy.gov evse_cost_report_2015.pdf): host blocked",
+     "DOE VTO Fact #910 'Study Shows Average Cost of Electric Vehicle Charger Installations' (energy.gov): host blocked",
+     "DOE Clean Cities EVSE Cost Webinar (cleancities.energy.gov) and UC Davis Ward 2016 'EVSE Cost at UC Davis' (steps.ucdavis.edu): hosts blocked",
+     "INL Navy workplace charging presentation (avt.inl.gov): host blocked",
+     "Vermont ACCD multifamily EV charging overview (network subscription fees per port; outside.vermont.gov): host blocked",
+     "Massachusetts 'Public Level 2 EV Charging Station Fees and Policies Guide' (mass.gov): host blocked",
+     "Luo & Wang 2025, Journal of Economic Behavior & Organization, Palo Alto public charging price change (ideas.repec.org): host blocked",
+     "Asensio et al. 2021, Scientific Data, workplace charging dataset paper, and Harvard Dataverse doi:10.7910/DVN/NFPQLW: paper and Dataverse not opened; only the moderndive copy of the data and its documentation were read",
+     "NREL EVI-FAST user manual (nrel.gov): host blocked",
+     "OpenEI Utility Rate Database entries for SCE EV rates (apps.openei.org): host blocked"
+    ]
+   },
+   "verification": {
+    "checks": [
+     {
+      "parameter": "SCE TOU-EV-4 energy charge and TOU hours, summer weekday (Jun 1 to Sep 30)",
+      "value": "00-08 $0.05623; 08-12 $0.0925; 12-18 $0.26668; 18-23 $0.0925; 23-24 $0.05623; demand charge $15.51/kW; effective 2019-03-01",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/zach401/acnportal/master/acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_4_march_2019.json",
+      "evidence_quote": "\"id\": \"Summer-Weekday\", \"effective_start\": \"06-01\", \"effective_end\": \"09-30\", \"dow_mask\": \"WEEKDAYS\", \"times\": [0, 8, 12, 18, 23], \"tariffs\": [0.05623, 0.0925, 0.26668, 0.0925, 0.05623], \"demand_charge\": 15.51",
+      "note": "I opened GitHub master and the PyPI acnportal-0.3.3 sdist. The two files are byte-identical. The values are acnportal's encoding of the tariff. The SCE PDF (www1.sce.com) failed DNS lookup, so I could not check it against the utility sheet. acnportal treats weekdays by dow_mask only and has no holiday handling; SCE normally prices holidays like weekends."
+     },
+     {
+      "parameter": "SCE TOU-EV-4 energy charge, summer weekend",
+      "value": "$0.05623/kWh all day; $15.51/kW",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/zach401/acnportal/master/acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_4_march_2019.json",
+      "evidence_quote": "\"id\": \"Summer-Weekend\", ... \"dow_mask\": \"WEEKENDS\", \"times\": [0], \"tariffs\": [0.05623], \"demand_charge\": 15.51",
+      "note": "Matches exactly."
+     },
+     {
+      "parameter": "SCE TOU-EV-4 energy charge and TOU hours, winter weekday (Oct 1 to May 31)",
+      "value": "0.06087 / 0.07492 / 0.0869 / 0.07492 / 0.06087 at 0/8/12/18/23 h; $15.51/kW",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/zach401/acnportal/master/acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_4_march_2019.json",
+      "evidence_quote": "\"id\": \"Winter-Weekday\", \"effective_start\": \"10-01\", \"effective_end\": \"05-31\", \"dow_mask\": \"WEEKDAYS\", \"times\": [0, 8, 12, 18, 23], \"tariffs\": [0.06087, 0.07492, 0.0869, 0.07492, 0.06087], \"demand_charge\": 15.51",
+      "note": "Matches exactly. TimeOfUseTariff.__init__ splits the season that wraps the year end into two date ranges (10-01 to 12-31 and 01-01 to 05-31)."
+     },
+     {
+      "parameter": "SCE TOU-EV-4 energy charge, winter weekend",
+      "value": "$0.06087/kWh all day; $15.51/kW",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/zach401/acnportal/master/acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_4_march_2019.json",
+      "evidence_quote": "\"id\": \"Winter-Weekend\", ... \"dow_mask\": \"WEEKENDS\", \"times\": [0], \"tariffs\": [0.06087], \"demand_charge\": 15.51",
+      "note": "Matches exactly."
+     },
+     {
+      "parameter": "TOU-EV-4 file metadata (effective date, units, source sheet)",
+      "value": "Effective 2019-03-01; $/kWh; hours since midnight; source ce141-12.pdf",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/zach401/acnportal/master/acnportal/signals/tariffs/tou_tariff.py",
+      "evidence_quote": "\"name\": \"SCE TOU-EV-4\", \"effective\": \"2019-3-1\", \"link\": \"https://www1.sce.com/NR/sc3/tm2/pdf/ce141-12.pdf\" | tou_tariff.py: \"tariffs (List[Tuple[float, float]]): List of time, tariff pairs where time is measured in hours since midnight and tariffs are in $/kWh.\" get_demand_charge docstring: \"float: Tariff [$/kW]\"",
+      "note": "The units come from code docstrings ($/kWh for energy, $/kW for demand), not from the JSON. The JSON does not say whether the demand charge is per month, so 'per kW-month' is an assumption. It does hold in the code's one-billing-period use. The sdist also includes a file named sce_tou_ev_4_march_2019_tou_periods_shifted.json. Its own comment says it is 'NOT a real tariff structure', so it must not be used as a real alternative."
+     },
+     {
+      "parameter": "How ACN-Sim computes the demand charge",
+      "value": "DC = $/kW rate x max aggregate site power over the horizon; accurate only for exactly one billing period",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/zach401/acnportal/master/acnportal/acnsim/analysis/__init__.py",
+      "evidence_quote": "Note this is only an accurate depiction of true demand charge if the simulation is exactly one billing period long. ... agg = aggregate_power(sim)\n    dc = tariff.get_demand_charge(sim.start)\n    return dc * np.max(agg)",
+      "note": "Confirmed in master and in the 0.3.3 sdist. Two details: the rate is taken only at sim.start, so a run that crosses a season boundary uses the starting season's rate. The max is taken over per-step aggregate kW, which is the simulation period (5 min in the case study), not a utility 15-min average. aggregate_power = voltages^T x charging_rates / 1000 [kW]. energy_cost = tariffs dot agg x (period/60)."
+     },
+     {
+      "parameter": "SCE TOU-EV-8 (June 2019 encoding), no demand charge",
+      "value": "Summer weekday 0.12597 except 16-21 h 0.49619; summer weekend 16-21 h 0.25563 else 0.12597; winter all days 0.13568/0.07724/0.297/0.13568 at 0/8/16/21; DC 0",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/zach401/acnportal/master/acnportal/signals/tariffs/tariff_schedules/sce_tou_ev_8_june_2019.json",
+      "evidence_quote": "\"name\": \"SCE TOU-EV-8\", \"effective\": \"2018-10-12\" ... \"Summer-Weekday\" ... \"times\": [0, 16, 21], \"tariffs\": [0.12597, 0.49619, 0.12597], \"demand_charge\": 0 ... \"Summer-Weekend\" ... \"tariffs\": [0.12597, 0.25563, 0.12597] ... \"Winter\" ... \"dow_mask\": \"ALL\", \"times\": [0, 8, 16, 21], \"tariffs\": [0.13568, 0.07724, 0.297, 0.13568], \"demand_charge\": 0",
+      "note": "The values match. Caveat: the sdist also ships sce_tou_ev_8_oct_2018.json with the same name and the same effective field ('2018-10-12') but very different prices (summer 0.05993/0.17698; winter 0.05993/0.03964/0.17698/0.05993). The 'effective' field in the June 2019 file looks copied from the Oct 2018 file, so its real effective date is uncertain. Name the file explicitly (sce_tou_ev_8_june_2019) whenever this rate is cited."
+     },
+     {
+      "parameter": "PG&E A-10 TOU (Aug 2019 encoding)",
+      "value": "Summer (May 1-Oct 31) weekday 0.14903/0.1771/0.23223/0.1771/0.14903 at 0/8.5/12/18/21.5; DC 19.99. Winter 0.13064/0.1477 (8.5-21.5); DC 11.66",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/zach401/acnportal/master/acnportal/signals/tariffs/tariff_schedules/pge_a10_tou_aug_2019.json",
+      "evidence_quote": "\"Winter-Weekday\", \"effective_start\": \"11-01\", \"effective_end\": \"4-30\", \"dow_mask\": \"ALL\", \"times\": [0, 8.5, 21.5], \"tariffs\": [0.13064, 0.1477, 0.13064], \"demand_charge\": 11.66 ... \"Winter-Weekend\", ... \"dow_mask\": \"ALL\", \"times\": [0], \"tariffs\": [0.13064]",
+      "note": "The values match. Encoding defect: both winter entries use dow_mask 'ALL', so they overlap. acnportal's _get_tariff_schedule would raise 'More than one tariff schedule is valid' for any winter date. The intended split is probably weekday/weekend, but that is an inference. The summer weekend is 0.14903 all day. The 'effective' field reads 2019-07-01. The PG&E PDF was not opened, so the actual A-10 structure is unverified."
+     },
+     {
+      "parameter": "ACN-Sim case study setup (benchmark)",
+      "value": "About 100 or 200 EVs/day, JPL-like; 30-day horizon from 2019-06-01; SCE TOU-EV-4",
+      "verdict": "corrected",
+      "corrected_value": "100 or 200 EVs per WEEKDAY only, 0 on weekends. The 30-day horizon from Sat 2019-06-01 to 2019-07-01 contains 20 operating weekdays, so the 30-day average is about 67 or 133 EVs/day. Sessions come from a GMM trained on JPL weekday data. Setup: 5-min period, 208 V, AeroVironment L2 EVSEs, 6.6 kW default battery power. Tariff is TOU-EV-4 March 2019 as stated",
+      "url": "https://raw.githubusercontent.com/caltech-netlab/acnportal-experiments/master/examples/1-Infrastructure-Evaluation/1.2-Comparing-Infrastructure-Designs/1.2-comparing-infrastructure-designs.ipynb",
+      "evidence_quote": "num_evs = [0]*2 + [sessions_per_day]*5 + [0]*2 + [sessions_per_day]*5 + [0]*2 + [sessions_per_day]*5 + [0]*2 + [sessions_per_day]*5 + [0]*2 ... \"We assume that the site will be closed on weekends, so no charging will occur.\" ... start = timezone.localize(datetime(2019, 6, 1)) ... signals = {'tariff': TimeOfUseTariff('sce_tou_ev_4_march_2019')}",
+      "note": "The intro text does say 'approximately 100 EVs per day'. The code shows weekday-only demand, and that matters when cost per kWh or demand charge per day is scaled to our site. Author 'Zachary Lee' and 'Last updated: 4/16/2020' are confirmed. This is a notebook, not peer-reviewed."
+     },
+     {
+      "parameter": "Operating cost 100 EV/day uncontrolled 102 L2 EVSEs '670 kW'",
+      "value": "energy $2,799.55; DC $5,323.03; total $8,122.59; 23,468 kWh; $0.346/kWh; energy-only $0.119; DC 65.5%; peak 343 kW",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/caltech-netlab/acnportal-experiments/master/examples/1-Infrastructure-Evaluation/1.2-Comparing-Infrastructure-Designs/1.2-comparing-infrastructure-designs.ipynb",
+      "evidence_quote": "Level 2: Unctrl: 670 kW : 102 EVSEs ... energy_delivered 23468.418816 ... energy_cost 2799.553116 demand_charge 5323.032000 total_cost 8122.585116 $/kWh 0.346107",
+      "note": "I recomputed the derived values: 2799.55/23468.42 = 0.1193 $/kWh; 5323.03/8122.59 = 65.5%; 5323.03/15.51 = 343.2 kW. Provenance caveat: cell 10 defines level_2_680kW_102 (transformer_cap=680), but cell 23 calls an undefined level_2_670kW_102. The simulation cells have no outputs, and the tables are pd.read_csv of results/*.csv files that are not in the repo (404). So the outputs cannot be tied exactly to the code shown, and the transformer size is 670 or 680 kW."
+     },
+     {
+      "parameter": "Operating cost 100 EV/day smart charging, 200 kW transformer",
+      "value": "LLF total $5,991.95 / 23,437 kWh = $0.2557, DC $3,076.81 (51%); Min-cost $0.2450, DC $2,901.49 (51%)",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/caltech-netlab/acnportal-experiments/master/examples/1-Infrastructure-Evaluation/1.2-Comparing-Infrastructure-Designs/1.2-comparing-infrastructure-designs.ipynb",
+      "evidence_quote": "Level 2: LLF: 200 kW : 102 EVSEs ... energy_delivered 23436.779333 ... energy_cost 2915.142030 demand_charge 3076.811760 total_cost 5991.953790 $/kWh 0.255665 ... Level 2: Min Cost: 200 kW : 102 EVSEs ... energy_cost 2834.739398 demand_charge 2901.486720 total_cost 5736.226118 $/kWh 0.245048",
+      "note": "Recomputed demand-charge shares: LLF 51.3%, Min-cost 50.6%. Both round to 51%."
+     },
+     {
+      "parameter": "Operating cost 200 EV/day range",
+      "value": "$0.226/kWh (min-cost, 200 kW, 201 EVSEs) to $0.328/kWh (uncontrolled 670 kW 102 EVSEs; DC $9,661.21 = 64%)",
+      "verdict": "corrected",
+      "corrected_value": "The lowest is $0.2261/kWh for Min Cost, 200 kW, 102 EVSEs, which delivered only 87.2% of demand with 332 EVs never charged. The 201-EVSE min-cost case is $0.2263/kWh (98.8% delivered). The upper end is confirmed: $0.3275/kWh, DC $9,661.21 = 63.9%",
+      "url": "https://raw.githubusercontent.com/caltech-netlab/acnportal-experiments/master/examples/1-Infrastructure-Evaluation/1.2-Comparing-Infrastructure-Designs/1.2-comparing-infrastructure-designs.ipynb",
+      "evidence_quote": "Level 2: Min Cost: 200 kW : 102 EVSEs ... proportion_of_energy_delivered 0.871940 ... num_never_charged 332 ... total_cost 9117.915796 $/kWh 0.226092 ... Level 2: Min Cost: 200 kW : 201 EVSEs ... proportion_of_energy_delivered 0.987986 ... total_cost 10340.038673 $/kWh 0.226280 ... Level 2: Unctrl: 670 kW : 102 EVSEs ... demand_charge 9661.213390 total_cost 15126.092066 $/kWh 0.327513",
+      "note": "The difference is small (both round to 0.226), but the range endpoint is attributed to the wrong configuration. Also, the 200-EV dict in cell 37 labels this column '680 kW', while the printed CSV says '670 kW'. Low $/kWh in congested cases partly reflects unmet demand."
+     },
+     {
+      "parameter": "Workplace charging dataset documentation (moderndive ev_charging)",
+      "value": "3,395 sessions; 85 drivers; 25 locations; dollars = US$ paid per session",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/moderndive/moderndive/master/R/datasets.R",
+      "evidence_quote": "This dataset consists of information on 3,395 electric vehicle charging sessions across locations for a workplace charging program. The data contains information on multiple charging sessions from 85 electric vehicle drivers across 25 workplace locations ... \\item{dollars}{Quantity of money paid for the charging session in U.S. dollars} ... @source Harvard Dataverse \\doi{10.7910/DVN/NFPQLW}. Note data is released under a CC0: Public Domain license.",
+      "note": "The data file confirms 3,395 rows, 85 user_id, 25 location_id and 105 station_id. The doc does not state charger level or geography."
+     },
+     {
+      "parameter": "Workplace user fee structure inferred from session data",
+      "value": "88.8% $0; all 3,016 sessions <4 h free (max 3.999 h); all 379 >=4 h paid; min $0.50 modal (195/379); ~$1/12 steps; rule max($0.50, $1/h x (h-4)) 5-min rounded matches 94.5% within $0.09; paid mean $1.06, median $0.50; Nov 2014-Oct 2015",
+      "verdict": "confirmed",
+      "url": "https://github.com/moderndive/moderndive/blob/master/data/ev_charging.rda",
+      "evidence_quote": "My recomputation with pyreadr: share $0 = 0.8884 (3016); sessions <4h = 3016, all free, max 3.998611 h; sessions >=4h = 379, all paid; paid min 0.50, mean 1.0594, median 0.50; $0.50 count 195; unique fees 0.50, 0.58, 0.67, 0.75, 0.83, 0.92, 1.00 ... (diffs 0.08/0.09); rule within $0.09: 358/379 = 0.9446; created range 2014-11-18 to 2015-10-04",
+      "note": "All statistics reproduce. Caveats: only 64% of paid sessions match the rule to within $0.01. The $0.09 tolerance is about one fee step. Residuals include a 55.2 h session that paid only $0.83, and several sessions that paid $1.5-3 more than the rule, so a cap or other rules may exist. Fee correlates with duration (r=0.38) but not with kWh (r=0.01), which supports time-based pricing. The last session starts 2015-10-04, so 'to Oct 2015' is accurate. Location and charger level are unknown."
+     }
+    ],
+    "distribution_review": [
+     {
+      "model_input": "Grid energy price p(t) [$/kWh] by (season, weekday/weekend, hour)",
+      "ok": true,
+      "note": "Defensible: a published TOU tariff is deterministic, so a lookup table is the right form, and every value matches the acnportal JSON. The assumptions are labeled (SCE PDF not opened; customer charges and riders omitted; season is a scenario choice). Add two more labels. First, holidays are treated as weekdays, as in acnportal. Second, this is the historical 2019 TOU-EV-4 with legacy 12-18 h on-peak periods, in nominal 2019 $. The 'previously verified' match to Lee et al. 2021 could not be re-checked here because arxiv.org failed DNS."
+     },
+     {
+      "model_input": "Monthly demand charge [$]",
+      "ok": true,
+      "note": "Defensible: the deterministic formula DC = rate x monthly max kW matches acnportal demand_charge(). The 150 x 15.51 = $2,326.50 upper bound is correctly labeled as derived (PF = 1). Fixes needed in the sensitivity set. (a) In pge_a10_tou_aug_2019.json both winter entries have dow_mask 'ALL', so they overlap. Using the 'Winter-Weekday' prices for all winter days is an interpretation and should be labeled as one. (b) Two TOU-EV-8 encodings exist with the same name and effective date ('2018-10-12') but very different prices. Cite the june_2019 file explicitly and flag its effective date as uncertain. Also label the acnportal convention: the max is taken at the sim step (5 min in the case study) and the rate is taken at sim.start."
+     },
+     {
+      "model_input": "User price / revenue rule (S0 free, S1 $0.12/kWh, S2 4 h free then ~$1/h, $0.50 minimum)",
+      "ok": true,
+      "note": "Defensible as deterministic scenario levers, and S2 is correctly labeled as an inference. I reproduced the inference exactly (88.8% free, 4 h threshold, $0.50 minimum, 94.5% within $0.09). Strengthen the label: an exact match (within $0.01) holds for only 64% of paid sessions, outliers suggest a cap or other rules, and the program location and charger level are unknown (2014-15 nominal $). S0 and S1 rely on earlier verification that I did not re-check here."
+     },
+     {
+      "model_input": "Validation target: total operating cost per kWh delivered",
+      "ok": false,
+      "note": "Correct the energy-only range. Across all 11 configurations it is $0.118-0.163/kWh, not 0.118-0.158: 200-EV LLF = 0.1627 and 200-EV uncontrolled 30 EVSEs = 0.1605. The total range of $0.226-0.346 and the demand-charge share of 30-66% are confirmed. The derived story point that '$0.12/kWh roughly covers the TOU energy cost' holds only for the 100-EV L2 cases (0.119-0.124). In the 200-EV cases, summer energy-only cost is 0.149-0.163, so $0.12 does not cover it. Restate it as: $0.12/kWh is at or below summer energy cost and well below total cost. Benchmark caveats to label: demand is weekday-only (20 of 30 days); 102 or 201 EVSEs on synthetic JPL demand; outputs come from CSVs not in the repo; the transformer is 670 or 680 kW (inconsistent code); and the low $/kWh in congested cases partly reflects unmet demand."
+     },
+     {
+      "model_input": "EVSE capital cost per port, annualized",
+      "ok": true,
+      "note": "Acceptable as a placeholder: Triangular(min, mode, max), applied after the run, is a reasonable form when only a range and a typical value are known. It is clearly labeled as structure-only, with no sourced numbers. It must not be used until it is filled from an opened source with a stated dollar year."
+     },
+     {
+      "model_input": "Annual network subscription + maintenance per port",
+      "ok": true,
+      "note": "Acceptable as a placeholder: Uniform(low, high) is a reasonable maximum-ignorance form for a fee range, and it is labeled as an assumption with no sourced numbers. It still needs an opened source before use."
+     }
+    ]
+   }
+  },
+  {
+   "topic": "demand",
+   "found": {
+    "items": [
+     {
+      "parameter": "Effect of workplace charging access on PEV ownership (demand growth driver)",
+      "value": "Employees with workplace charging access are 6x more likely to own a PEV",
+      "quote": "Employees who have access to workplace charging are six times more likely to own a PEV than those who lack such access.",
+      "source": "U.S. DOE Vehicle Technologies Office (2017), 'Implementing Workplace Charging within Federal Agencies' - summary text in DOE EERE VTO Publications Database (read from EERE's official GitHub repo EEREweb/public; energy.gov itself was unreachable)",
+      "url": "https://raw.githubusercontent.com/EEREweb/public/master/vto/datatables/publications/VTO_Publications_Database_3.14.2019.csv",
+      "setting": "workplace L2 (DOE program / survey-based claim); association, not causal"
+     },
+     {
+      "parameter": "Registered drivers per port at a DOE Workplace Charging Challenge employer",
+      "value": "85 repeat-use drivers / 105 stations / 25 sites / 3,395 sessions => ~0.81 drivers per station (ratio computed from quoted counts)",
+      "quote": "This dataset contains information from 3,395 high resolution electric vehicle charging sessions. The data contains sessions from 85 EV drivers with repeat usage at 105 stations across 25 sites at a workplace charging program.",
+      "source": "Asensio, Apablaza, Lawson, Walsh - replication data README for 'A Field Experiment on Workplace Norms and Electric Vehicle Charging Etiquette' (data DOI 10.7910/DVN/NFPQLW)",
+      "url": "https://github.com/asensio-lab/workplace-charging-experiment",
+      "setting": "workplace L2 (multi-site US firm in DOE Workplace Charging Challenge); low-utilization program, counts only repeat users"
+     },
+     {
+      "parameter": "Per-user session frequency heterogeneity (habitual vs casual users)",
+      "value": "Median of 19 sessions per user over the observation period; users above the median are 'habitual'",
+      "quote": "A habitual user is defined as someone who logged more than the median of 19 charging sessions over the course of the data collection period, while a casual user is someone who logged fewer than 19 sessions.",
+      "source": "Asensio, Lawson, Apablaza - data descriptor README for 'Electric vehicle charging stations in the workplace with high-resolution data from casual and habitual users' (data DOI 10.7910/DVN/QF1PMO)",
+      "url": "https://github.com/asensio-lab/high-resolution-ev-charging-data-descriptor",
+      "setting": "workplace L2 (same firm as above)"
+     },
+     {
+      "parameter": "Share of BEV vs PHEV owners who use workplace charging",
+      "value": "BEV: 30-40%; PHEV: <30%",
+      "quote": "About 30 –40% of BEV owners use workplace charging facilities, with most of them using the latter along with home charging.Less than 30% of PHEV owners use workplace charging",
+      "source": "Lee, Chakraborty, Hardman, Tal (2020), Exploring electric vehicle charging patterns: Mixed usage of charging infrastructure, Transportation Research Part D 79:102249 (n = 7,979 California PEV owners). Full text read from a GitHub-hosted text extraction (publisher site unreachable)",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "setting": "survey (California PEV owners, 7-day charging diaries, 2016-2017)"
+     },
+     {
+      "parameter": "Share of BEV charging events at the workplace",
+      "value": "15-20%",
+      "quote": "Approximately 15– 20% of the charging events occur at the workplace for BEV owners.",
+      "source": "Lee et al. (2020) TR-D 79:102249 (literature-review statement in the paper)",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "setting": "survey / literature summary (US)"
+     },
+     {
+      "parameter": "Share of PEV owners who charge only at work (workplace-dependent segment)",
+      "value": "Work-only 16% of PEV owners; Home+public 13%; 86% charged from home",
+      "quote": "These groups account for 16% and 13% of total PEV owners, respectively.In total, 86% of respondents (including Home- only, Home-work, Home-public , and All) charged from home",
+      "source": "Lee et al. (2020) TR-D 79:102249",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "setting": "survey (California PEV owners)"
+     },
+     {
+      "parameter": "PHEV owners who never plug in",
+      "value": "8.9% of PHEV owners do not charge at all",
+      "quote": "8.9% of PHEV owners in this study do not charge their vehicles at all.",
+      "source": "Lee et al. (2020) TR-D 79:102249",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "setting": "survey (California PEV owners)"
+     },
+     {
+      "parameter": "Sample mix and multi-location charging by vehicle type",
+      "value": "Sample slightly more BEV than PHEV; 37.8% of BEVs and 30.5% of PHEVs use more than one location",
+      "quote": "37.8% of the BEVs and 30.5% of the PHEVs use more than one location and, in many cases, di ﬀerent charging powers over the week.",
+      "source": "Lee et al. (2020) TR-D 79:102249 (also: 'the sample has slightly more BEV owners than PHEV owners')",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "setting": "survey (California PEV owners)"
+     },
+     {
+      "parameter": "PHEV charging level at work vs home",
+      "value": ">60% of PHEV owners use L1 at home but L2 at work/public",
+      "quote": "More than 60% of PHEV owners used L1 chargers at home while their main chargers at a workplace or public locations were L2 chargers.",
+      "source": "Lee et al. (2020) TR-D 79:102249",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "setting": "survey (California PEV owners)"
+     },
+     {
+      "parameter": "Free workplace charging as a demand driver (price response, qualitative)",
+      "value": "Qualitative: free workplace charging is a significant driver of charging at work (no elasticity reported)",
+      "quote": "( Nicholas and Tal, 2013 ) a signi ﬁcant driver for charging at work was employers providing charging for free.",
+      "source": "Lee et al. (2020) TR-D 79:102249, citing Nicholas & Tal 2013 (primary source not opened)",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "setting": "survey (California); secondary citation"
+     },
+     {
+      "parameter": "Port sharing via vehicle swapping (more than 1 PEV per port per day)",
+      "value": "Qualitative: one workplace port can serve more than one PEV per day when drivers swap spaces",
+      "quote": "Swapping parking spaces at work allows one charge point to support more than one PEV throughout the day, thus reducing the issues of congestion and increasing the availability of workplace chargers to PEV owners.",
+      "source": "Lee et al. (2020) TR-D 79:102249",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "setting": "survey (California workplace)"
+     },
+     {
+      "parameter": "US EV car STOCK by powertrain, 2018-2024 (fleet PHEV share)",
+      "value": "BEV/PHEV stock (thousands): 2018 640/480 (PHEV 42.9%); 2019 880/570 (39.3%); 2020 1100/640 (36.8%); 2021 1500/720 (32.4%); 2022 2100/910 (30.2%); 2023 3500/1300 (27.1%); 2024 4700/1600 (25.4%). Shares computed from the quoted rows",
+      "quote": "USA,Historical,EV stock,Cars,BEV,2019,Vehicles,880000 | USA,Historical,EV stock,Cars,PHEV,2019,Vehicles,570000 | USA,Historical,EV stock,Cars,BEV,2024,Vehicles,4700000 | USA,Historical,EV stock,Cars,PHEV,2024,Vehicles,1600000",
+      "source": "IEA Global EV Data Explorer (2025 edition CSV, file header cites iea.org); read from a GitHub copy because iea.org was unreachable",
+      "url": "https://raw.githubusercontent.com/RupertSutherland/earth-materials-esci453/master/data/ev/IEA-EV-dataEV_salesHistoricalCars.csv",
+      "setting": "national US fleet (all charging settings), not workplace-specific; California is not split out"
+     },
+     {
+      "parameter": "US EV car SALES by powertrain, 2018-2024 (new-vehicle PHEV share)",
+      "value": "BEV/PHEV sales (thousands): 2018 240/120 (PHEV 33%); 2019 240/85 (26%); 2020 230/64 (22%); 2021 470/160 (25%); 2022 800/190 (19%); 2023 1100/290 (21%); 2024 1200/320 (21%)",
+      "quote": "USA,Historical,EV sales,Cars,BEV,2018,Vehicles,240000 | USA,Historical,EV sales,Cars,PHEV,2018,Vehicles,120000 | USA,Historical,EV sales,Cars,BEV,2024,Vehicles,1200000 | USA,Historical,EV sales,Cars,PHEV,2024,Vehicles,320000",
+      "source": "IEA Global EV Data Explorer (2025 edition CSV)",
+      "url": "https://raw.githubusercontent.com/RupertSutherland/earth-materials-esci453/master/data/ev/IEA-EV-dataEV_salesHistoricalCars.csv",
+      "setting": "national US new sales"
+     },
+     {
+      "parameter": "Workplace L2 charger utilization vs EV stock share (ICCT model default)",
+      "value": "8% of time (1.92 h/day) at 2% EV stock share; 20% (4.8 h/day) at 50% EV stock share; log interpolation between",
+      "quote": "| BEV + PHEV | Workplace          | Level 2      | 2%             | 8%                  | 1.92          | ... | BEV + PHEV | Workplace          | Level 2      | 50%            | 20%                 | 4.8           |",
+      "source": "ICCT, EV CHARGE model documentation v1.2 (official ICCT GitHub repo theicct/EVCHARGE-doc)",
+      "url": "https://github.com/theicct/EVCHARGE-doc/blob/main/versions/v1.2.md",
+      "setting": "workplace L2; model default assumption, not a measurement"
+     },
+     {
+      "parameter": "Share of a driver's charging energy drawn at work (ICCT default by user group)",
+      "value": "Home-access commuter with work access: BEV 20%, PHEV 20% from workplace; no-home-access commuter: BEV 70%, PHEV 80% from workplace",
+      "quote": "PC\\_BEV\\_home\\_commuter\\_work\\_global      | 70%         | 20% ... PC\\_PHEV\\_home\\_commuter\\_work\\_global     | 75%         | 20% ... PC\\_BEV\\_nohome\\_commuter\\_work\\_global    | 0%          | 70% ... PC\\_PHEV\\_nohome\\_commuter\\_work\\_global   | 0%          | 80%",
+      "source": "ICCT EV CHARGE documentation v1.2, 'User group usage share' (columns: Home, Workplace, ...); 'derived from multiple EV drivers surveys'",
+      "url": "https://github.com/theicct/EVCHARGE-doc/blob/main/versions/v1.2.md",
+      "setting": "workplace L2; model default"
+     },
+     {
+      "parameter": "US share of commuting EVs with workplace charging access (ICCT default)",
+      "value": "US: 33% at 10 EV stock per million; 55% at 150 (column order Canada, Europe, United States, Rest of world)",
+      "quote": "| **10**                   | 37%                            | 20                       | 35%                            | 10                       | 33%  ... | **400**                  | 45%                            | 300                      | 50%                            | 150                      | 55%",
+      "source": "ICCT EV CHARGE documentation v1.2, 'Work charging access'",
+      "url": "https://github.com/theicct/EVCHARGE-doc/blob/main/versions/v1.2.md",
+      "setting": "workplace; model default"
+     },
+     {
+      "parameter": "North America workplace EVSE capacity mix and power delivery ratio (vehicle-limited delivery)",
+      "value": "New workplace L2 in 2023: 60% 7.2 kW, 40% 14 kW; average power actually delivered = 80% of rated (2023) rising to 90% (2035)",
+      "quote": "| Capacity in kW   | **7.2**     | **14** ... | Chargers Share   | 60%         | 40% ... | Power delivery ratio | 80%         | 80% ... | Power delivery ratio | 90%         | 90%",
+      "source": "ICCT EV CHARGE documentation v1.2, 'Evolution of the capacity of new chargers installed' and 'Power delivery ratio' (North America tables)",
+      "url": "https://github.com/theicct/EVCHARGE-doc/blob/main/versions/v1.2.md",
+      "setting": "workplace L2; model default"
+     },
+     {
+      "parameter": "Installed power needed per BEV vs PHEV (proxy for typical charge-power need by type)",
+      "value": "8 kW per BEV, 4 kW per PHEV",
+      "quote": "By default, the model assumes 8kW of installed power output per BEV and 4kW per PHEV.",
+      "source": "ICCT EV CHARGE documentation v1.2 (depot chargers)",
+      "url": "https://github.com/theicct/EVCHARGE-doc/blob/main/versions/v1.2.md",
+      "setting": "depot (fleet) charging; weak transfer to workplace"
+     },
+     {
+      "parameter": "Workplace charger density in top US EV markets (macro demand benchmark)",
+      "value": "430 workplace chargers per million population; 10% EV share of sales in top-10 metro areas",
+      "quote": "For workplace charging, the ten areas with the highest uptake averaged 430 workplace chargers per million population, while half of the U.S. population lives in an area with less than 10% of this leading benchmark.",
+      "source": "Bui, Slowik, Lutsey (ICCT briefing, Sept 14 2021), Evaluating electric vehicle market growth across U.S. cities; read from a GitHub-hosted copy of the web page",
+      "url": "https://raw.githubusercontent.com/huyvanzzz/2A202600773-Nguyen-Van-Huy-Day19/main/dataset/doc_1.txt",
+      "setting": "metro-area workplace charging (US)"
+     },
+     {
+      "parameter": "Demand response when a free L2 network switched to $0.23/kWh (1 Aug 2017)",
+      "value": "Sessions/day -30% (time series) to -43% (DiD); energy/day -43% to -51%; kWh/session -19% to -14%; idle time/session -65% to -50%; 2016 placebo +10%/+2%/-7%/-15%",
+      "quote": "After the $0.23/kWh fee started, sessions fell 29 to 43% and idle time per session (plugged in but not charging) fell 50 to 65%, depending on the design. ... | Sessions per day | -30% | -43% | +10% | ... | Energy per day | -43% | -51% | +2% | ... | kWh per session | -19% | -14% | -7% |",
+      "source": "tanaymihani/offpeak GitHub analysis of City of Palo Alto open data (EV Charging Station Usage, Jul 2011-Dec 2020). NOT peer-reviewed; author says to read results as 'the right direction and rough size, not as precise numbers'",
+      "url": "https://github.com/tanaymihani/offpeak",
+      "setting": "public L2 (municipal Palo Alto), not workplace; non-peer-reviewed"
+     },
+     {
+      "parameter": "EVI-Pro 'free workplace charging' load-profile scenarios (published NREL scenario data)",
+      "value": "Profiles exist for business-as-usual (home-dominant) vs free workplace charging at site vs across metro; generated at 50% EV penetration",
+      "quote": "The load profiles generated by Wood et al. (2018) are based on an assumption of a 50% EV penetration rate.",
+      "source": "NREL OpenStudio common measures, add_ev_load README (A. Allen, 2020); URBANopt docs attribute profiles to Pless et al. 2020 (ACEEE, NREL/CP-77438) built from EVI-Pro (Bedir et al. 2018, CEC-600-2018-001)",
+      "url": "https://raw.githubusercontent.com/NatLabRockies/openstudio-common-measures-gem/develop/lib/measures/add_ev_load/README.md",
+      "setting": "modeled (Denver district), workplace/home/public L1-L2; simulation output, not observed behavior"
+     }
+    ],
+    "proposed_distributions": [
+     {
+      "model_input": "Price-regime multiplier on arrival rate (switching free <-> paid)",
+      "distribution": "Uniform",
+      "parameters": "free->paid: U(0.57, 0.70); paid->free: U(1.43, 1.75) (reciprocal)",
+      "basis": "Bounds sourced from the Palo Alto fee study (sessions/day -30% to -43%; public L2, non-peer-reviewed). ACN itself contains the Caltech free->$0.12/kWh change on 2018-11-01 (Lee et al. 2019, already verified), so the preferred estimate is the ACN pre/post ratio (ideally year-over-year to remove seasonality). Use the Palo Alto range only as a plausibility check. Lee et al. 2020 / Nicholas & Tal 2013 support the direction qualitatively."
+     },
+     {
+      "model_input": "Price-regime multipliers on per-session behavior when paid",
+      "distribution": "Uniform",
+      "parameters": "kWh/session multiplier U(0.81, 0.86); idle-time (connected but not charging) multiplier U(0.35, 0.50)",
+      "basis": "Sourced from the Palo Alto study (kWh/session -19% / -14%; idle -65% / -50%; public L2, non-peer-reviewed). Transfer to a workplace is an assumption. Check against ACN pre/post Nov 2018 before using."
+     },
+     {
+      "model_input": "Demand growth factor over time (scenario years)",
+      "distribution": "Deterministic compound growth with uncertain rate",
+      "parameters": "factor(t) = (1+g)^t, g ~ U(0.10, 0.33) per year",
+      "basis": "Upper bound 0.33 is sourced: US EV car stock CAGR 2018-2024 = (6.3M/1.12M)^(1/6) - 1 = 33.4% (IEA rows). Lower bound 0.10 is an assumption for a mature campus where the number of EV-driving employees grows slower than the national fleet. DOE's '6x more likely to own a PEV' supports offering charging as a growth driver but gives no rate. ICCT utilization defaults (8% at 2% EV share -> 20% at 50%) can serve as an external check on simulated port utilization."
+     },
+     {
+      "model_input": "Registered EV drivers per port (size of the user pool)",
+      "distribution": "Discrete scenario",
+      "parameters": "{0.8, 1.5, 2.0, 3.0} drivers per port",
+      "basis": "0.8 is sourced: Asensio workplace program had 85 repeat drivers / 105 stations. Values above 1 rely on vehicle swapping, which Lee et al. 2020 support qualitatively; the specific values 1.5/2/3 are assumptions. If ACN userIDs are used, the per-driver session rate can come from ACN (heterogeneous; Asensio median = 19 sessions/user)."
+     },
+     {
+      "model_input": "Vehicle type of an arriving EV (PHEV vs BEV)",
+      "distribution": "Bernoulli",
+      "parameters": "p_PHEV = 0.39 (2019 baseline, matches ACN 2018-2019); scenario 0.25 (2024 fleet); sensitivity 0.43 (2018)",
+      "basis": "Sourced from IEA US stock rows: 570/(880+570) = 39.3% (2019); 1600/(4700+1600) = 25.4% (2024); 480/1120 = 42.9% (2018). This is the national fleet; the California/Caltech mix is probably more BEV-heavy (assumption, not quantified). Optionally multiply PHEV arrival propensity by 8.9% never-plug and <30% vs 30-40% workplace use (Lee et al. 2020)."
+     },
+     {
+      "model_input": "On-board charger limit class (max kW a vehicle can draw at a 6.6 kW ACN port)",
+      "distribution": "Two-point mixture",
+      "parameters": "{3.3 kW class w.p. q, 6.6 kW (EVSE cap) w.p. 1-q}; baseline q = 0.515 (in-repo ACN estimate: 3.27 kW / 6.43 kW classes); future-mix scenario q = 0.515 x 0.646 = 0.33",
+      "basis": "Baseline q comes from our own ACN analysis (R12 in scenario_parameters.csv), not from literature. The 0.646 factor is sourced arithmetic, the 2024/2019 drop in PHEV stock share (IEA). Applying it to q assumes the slow class shrinks with the PHEV share. No opened published source gives a US fleet split of 3.3/6.6/7.2/11 kW on-board chargers. ACN ports are 32 A x 208 V = 6.66 kW, so 7.2 and 11 kW chargers collapse to the port cap and only matter in an EVSE-upgrade scenario. That scenario can use ICCT NA workplace defaults: 60% 7.2 kW / 40% 14 kW EVSE, with delivered power = 0.8-0.9 x rated."
+     },
+     {
+      "model_input": "Workplace-dependent driver segment (drivers without home charging)",
+      "distribution": "Bernoulli segment with energy multiplier",
+      "parameters": "P(work-dependent) = 0.14-0.16; for that segment, requested energy x ~3.5 relative to home-access commuters (70-80% vs 20% of energy at work)",
+      "basis": "Sourced: Lee et al. 2020 (Work-only group 16%; 86% charged from home, so about 14% did not); ICCT default usage shares (workplace 20% for home-access commuters vs 70% BEV / 80% PHEV without home access). The 3.5x multiplier = 70/20 is my arithmetic on model defaults. Applying it to ACN's requested-energy distribution is an assumption."
+     },
+     {
+      "model_input": "Extreme 'free workplace charging' energy scenario (upper bound only)",
+      "distribution": "Deterministic scenario",
+      "parameters": "weekday workplace energy x 5.2 vs business-as-usual (home-dominant) at 50% EV penetration",
+      "basis": "My own computation from NREL-published EVI-Pro load profiles (add_ev_load resources chg2 vs chg1, weekday, min-delay, 26 workplace buildings: 31,178 vs 6,041 kWh/day; peak 5,055 vs 784 kW). It is NOT a price elasticity: BAU means home-dominant behavior, and the profiles are modeled, not observed. Use only as a stress-test ceiling."
+     }
+    ],
+    "unopened": [
+     "ACCESS NOTE: this session's egress policy blocked energy.gov, nrel.gov, osti.gov, arxiv.org, ucdavis.edu, escholarship, mdpi, ncbi, semanticscholar, zenodo, dataverse, iea.org, theicct.org and web.archive.org (HTTP 403 / DNS failure). Only GitHub-hosted copies could be opened; every item above was read from such a copy.",
+     "DOE Workplace Charging Challenge 2016 Annual Progress Report (energy.gov/sites/prod/files/2017/01/f34/WPCC_2016 Annual Progress Report.pdf). Blocked. A search snippet mentioned '1 in 73' / '1 in 71' partner employees driving PEVs (2014/2015 updates); NOT verified, no numbers used.",
+     "DOE Workplace Charging Challenge Progress Updates 2014 and 2015, and the Mid-Program Review 'Employees Plug In' (energy.gov). Blocked.",
+     "Nicholas & Tal (2015/2013), 'Charging for Charging at Work: Increasing the Availability of Charging Through Pricing', UC Davis ITS (itspubs.ucdavis.edu id=1919 / 2590; TRR 2454-09). Blocked. A search snippet claimed '38% ... unable to charge at least once per week'; not re-verified here (an earlier pass in this repo cites it).",
+     "Nicholas & Tal (2013), 'Dynamics of workplace charging for PEVs: how much is needed and at what speed?', EVS27. Not opened.",
+     "Williams & DeShazo, UCLA Luskin, 'Pricing workplace charging: financial viability and fueling costs' / 'Electric Vehicle Charging at Work' full report. Not opened.",
+     "NREL fy15osti/63230 (workplace charging report). Blocked.",
+     "Asensio et al., Scientific Data (2021) data descriptor and J. Industrial Ecology field-experiment paper (text of the firm's price policy). Not opened; only the GitHub READMEs and code were read.",
+     "Motoaki & Shirk (2017), 'Consumer behavioral adaption in EV fast charging through pricing', Energy Policy (DC fast). Only the DOE database summary (no numbers) was opened.",
+     "INL (2015), 'Plugged In: How Americans Charge Their Electric Vehicles' (EV Project). Not opened.",
+     "EV WATTS reports and dashboards (vehicle mix, Level 2 workplace session statistics). Not opened.",
+     "Argonne National Laboratory, Light Duty Electric Drive Vehicles Monthly Sales Updates (model-level sales, needed for an on-board-charger-weighted mix). Not opened.",
+     "AFDC (afdc.energy.gov) charging pages listing typical on-board charger power. Blocked.",
+     "Pless et al. (2020) ACEEE, NREL/CP-5500-77438, and Bedir et al. (2018) CEC-600-2018-001, 'California PEV Infrastructure Projections 2017-2025'. Not opened; only the NREL/URBANopt documentation that cites them was read.",
+     "Hardman et al. (2018), 'A review of consumer preferences of and interactions with EV charging infrastructure', TR-D 62. Not opened.",
+     "Nicholson et al. (ICCT 2019), 'Quantifying the electric vehicle charging infrastructure gap across U.S. markets'. Not opened.",
+     "NREL (2023), 'The 2030 National Charging Network' (vehicle charge-power assumptions). Not opened."
+    ]
+   },
+   "verification": {
+    "checks": [
+     {
+      "parameter": "Effect of workplace charging access on PEV ownership",
+      "value": "Employees with workplace charging access are 6x more likely to own a PEV",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/EEREweb/public/master/vto/datatables/publications/VTO_Publications_Database_3.14.2019.csv",
+      "evidence_quote": "Employees who have access to workplace charging are six times more likely to own a PEV than those who lack such access.\",Vehicle Technologies Office,2017,Technology Integration,Report",
+      "note": "Found in row 63 of the CSV, in the summary of 'Implementing Workplace Charging within Federal Agencies' (VTO, 2017). I did not open the report itself, and energy.gov was not tried. The figure is an association, not a causal effect, and gives no growth rate."
+     },
+     {
+      "parameter": "Registered drivers per port at a DOE Workplace Charging Challenge employer",
+      "value": "85 repeat drivers / 105 stations / 25 sites / 3,395 sessions => ~0.81 drivers per station",
+      "verdict": "confirmed",
+      "url": "https://github.com/asensio-lab/workplace-charging-experiment",
+      "evidence_quote": "This dataset contains information from 3,395 high resolution electric vehicle charging sessions. The data contains sessions from 85 EV drivers with repeat usage at 105 stations across 25 sites at a workplace charging program.",
+      "note": "Quote matches the README (raw master/README.md); 85/105 = 0.81. Caveats: the README counts 'stations', not ports, and only drivers 'with repeat usage', so 0.81 is a lower bound on registered drivers per station. The program was lightly used: 3,395/105 is about 32 sessions per station over the whole observation period. The data also includes a 'dollars' field set 'per the price policy implemented by the firm', so it was not a free-charging program."
+     },
+     {
+      "parameter": "Per-user session frequency heterogeneity",
+      "value": "Median 19 sessions per user; above the median = habitual",
+      "verdict": "confirmed",
+      "url": "https://github.com/asensio-lab/high-resolution-ev-charging-data-descriptor",
+      "evidence_quote": "A habitual user is defined as someone who logged more than the median of 19 charging sessions over the course of the data collection period, while a casual user is someone who logged fewer than 19 sessions.",
+      "note": "Verbatim in the README data dictionary (habitualUser). The figure is per user over the whole collection period, not a rate per week. The mean is 3,395/85, about 40, which suggests a right-skewed distribution."
+     },
+     {
+      "parameter": "Share of BEV vs PHEV owners who use workplace charging",
+      "value": "BEV 30-40%; PHEV <30%",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "evidence_quote": "About 30 –40% of BEV owners use workplace charging facilities, with most of them using the latter along with home charging.Less than 30% of PHEV owners use workplace charging, again most of them belonging to the Home-work group.",
+      "note": "Verbatim in the text extraction of Lee et al. (2020), TR-D 79:102249, whose header is present in the file. The same sentence says most workplace users belong to the Home-work group, which matters for the work-only item below."
+     },
+     {
+      "parameter": "Share of BEV charging events at the workplace",
+      "value": "15-20%",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "evidence_quote": "workplace charging is more important for BEV owners than PHEV owners who can rely on the ICE driving mode of their car when the battery is depleted ( Nicholas and Tal, 2015).Approximately 15– 20% of the charging events occur at the workplace for BEV owners.",
+      "note": "Confirmed. The sentence is in the paper's literature-review section and has no citation of its own, so it is not a result of the 7,979-person survey."
+     },
+     {
+      "parameter": "Share of PEV owners who charge only at work (workplace-dependent segment)",
+      "value": "Work-only 16%; Home+public 13%; 86% charged from home",
+      "verdict": "corrected",
+      "corrected_value": "The 16% group is Home-work (home AND work), not Work-only. Home-public 13% and '86% charged from home' are correct. So Work-only + Public-only + Work-public together are at most 14% of respondents. The text never states the Work-only share (it is only in Fig. 2, which the extraction does not contain).",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "evidence_quote": "The second and third largest groups are the people who utilized workplace charging only and those who used public charging facilities together with home charging.These groups account for 16% and 13% of total PEV owners, respectively.In total, 86% of respondents (including Home- only, Home-work, Home-public , and All) charged from home ... [definitions] Work-only : those that only charge at work ... Home-work : those that charge at home and at work.",
+      "note": "The sentence is ambiguous, but reading 16% as Work-only breaks the paper's own arithmetic. Home-charging groups: Home-only 53 + Home-public 13 + (Home-work + All) = 86, so Home-work + All = 20. Adding Work-only 16 would give 53+13+20+16 = 102% > 100%. The paper also says most BEV workplace users charge 'along with home charging' (Home-work), and that Work-only/Work-public groups are 'significantly smaller' outside urban areas. The 16% is therefore the Home-work group, and the work-dependent share of all PEV owners is below 14%."
+     },
+     {
+      "parameter": "PHEV owners who never plug in",
+      "value": "8.9%",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "evidence_quote": "Also, 8.9% of PHEV owners in this study do not charge their vehicles at all.",
+      "note": "Verbatim, from the limitations/conclusion section of Lee et al. (2020)."
+     },
+     {
+      "parameter": "Sample mix and multi-location charging by vehicle type",
+      "value": "Slightly more BEV than PHEV; 37.8% of BEVs and 30.5% of PHEVs use more than one location",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "evidence_quote": "37.8% of the BEVs and 30.5% of the PHEVs use more than one location and, in many cases, di ﬀerent charging powers over the week. ... the sample has slightly more BEV owners than PHEV owners.",
+      "note": "Both statements are verbatim. The sample over-represents high-income, detached-home owners (more than 80% each), so its BEV/PHEV mix is not representative of the fleet."
+     },
+     {
+      "parameter": "PHEV charging level at work vs home",
+      "value": ">60% of PHEV owners use L1 at home but L2 at work/public",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "evidence_quote": "More than 60% of PHEV owners used L1 chargers at home while their main chargers at a workplace or public locations were L2 chargers.",
+      "note": "Verbatim."
+     },
+     {
+      "parameter": "Free workplace charging as a demand driver (qualitative)",
+      "value": "Qualitative; no elasticity",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "evidence_quote": "According to Tal et al.  ( Nicholas and Tal, 2013 ) a signi ﬁcant driver for charging at work was employers providing charging for free.",
+      "note": "Verbatim. This is a secondary citation; the primary Nicholas & Tal (2013) was not opened."
+     },
+     {
+      "parameter": "Port sharing via vehicle swapping",
+      "value": "Qualitative: one workplace port can serve more than one PEV per day",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/apache-jw/Capstone/main/RAG/vault.txt",
+      "evidence_quote": "The Work- only group tends to have BEVs with shorter range, they are likely to have unlimited free workplace charging, and are more likely to need to swap their vehicles' parking location while at work.  Swapping parking spaces at work allows one charge point to support more than one PEV throughout the day",
+      "note": "Verbatim. The paper says this in describing the Work-only BEV group, which has unlimited free workplace charging. It is qualitative and gives no number of vehicles per port."
+     },
+     {
+      "parameter": "US EV car stock by powertrain, 2018-2024",
+      "value": "BEV/PHEV stock (k): 2018 640/480 ... 2024 4700/1600; PHEV share 42.9% -> 25.4%",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/RupertSutherland/earth-materials-esci453/master/data/ev/IEA-EV-dataEV_salesHistoricalCars.csv",
+      "evidence_quote": "USA,Historical,EV stock,Cars,PHEV,2019,Vehicles,570000 | USA,Historical,EV stock,Cars,BEV,2019,Vehicles,880000 | USA,Historical,EV stock,Cars,PHEV,2024,Vehicles,1600000 | USA,Historical,EV stock,Cars,BEV,2024,Vehicles,4700000",
+      "note": "All 14 stock rows for 2018-2024 match. I recomputed the shares: 42.9, 39.3, 36.8, 32.4, 30.2, 27.1, 25.4%. The file is a third-party GitHub copy; its first line is only the IEA URL, and iea.org did not resolve (ENOTFOUND). The '2025 edition' label is inferred from the data running to 2024 and is not stated in the file."
+     },
+     {
+      "parameter": "US EV car sales by powertrain, 2018-2024",
+      "value": "BEV/PHEV sales (k) 2018 240/120 ... 2024 1200/320; PHEV share 33% -> 21%",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/RupertSutherland/earth-materials-esci453/master/data/ev/IEA-EV-dataEV_salesHistoricalCars.csv",
+      "evidence_quote": "USA,Historical,EV sales,Cars,BEV,2018,Vehicles,240000 | USA,Historical,EV sales,Cars,PHEV,2018,Vehicles,120000 | USA,Historical,EV sales,Cars,BEV,2024,Vehicles,1200000 | USA,Historical,EV sales,Cars,PHEV,2024,Vehicles,320000",
+      "note": "All rows match. Recomputed shares: 33.3, 26.2, 21.8, 25.4, 19.2, 20.9, 21.1%. Total sales grew only about 9% from 2023 (1.39M) to 2024 (1.52M). Same third-party-copy caveat as the stock item."
+     },
+     {
+      "parameter": "Workplace L2 charger utilization vs EV stock share (ICCT default)",
+      "value": "8% (1.92 h/day) at 2% EV stock share; 20% (4.8 h/day) at 50%; log interpolation",
+      "verdict": "confirmed",
+      "url": "https://github.com/theicct/EVCHARGE-doc/blob/main/versions/v1.2.md",
+      "evidence_quote": "| BEV + PHEV | Workplace          | Level 2      | 2%             | 8%                  | 1.92          | ... | BEV + PHEV | Workplace          | Level 2      | 50%            | 20%                 | 4.8           | ... The model uses a logarithmic interpolation between these two values",
+      "note": "Confirmed with both curl and WebFetch. These are model defaults applied globally, not measurements."
+     },
+     {
+      "parameter": "Share of a driver's charging energy drawn at work (ICCT default)",
+      "value": "Home-access commuter with work access: BEV 20%, PHEV 20%; no-home-access: BEV 70%, PHEV 80%",
+      "verdict": "confirmed",
+      "url": "https://github.com/theicct/EVCHARGE-doc/blob/main/versions/v1.2.md",
+      "evidence_quote": "PC\\_BEV\\_home\\_commuter\\_work\\_global      | 70%         | 20% ... PC\\_BEV\\_nohome\\_commuter\\_work\\_global    | 0%          | 70% ... PC\\_PHEV\\_home\\_commuter\\_work\\_global     | 75%         | 20% ... PC\\_PHEV\\_nohome\\_commuter\\_work\\_global   | 0%          | 80%",
+      "note": "Confirmed. The columns are Home, Workplace, ... and each row sums to 100%. These are shares of a group's total energy, 'derived from multiple EV drivers surveys'. The same document gives different electric-VKT shares for PHEVs: 70% with home access and work access, 45% without home access but with work access. That matters for any energy multiplier built from these shares."
+     },
+     {
+      "parameter": "US share of commuting EVs with workplace charging access (ICCT default)",
+      "value": "US 33% at 10; 55% at 150 (EV stock per million)",
+      "verdict": "confirmed",
+      "url": "https://github.com/theicct/EVCHARGE-doc/blob/main/versions/v1.2.md",
+      "evidence_quote": "| **10**                   | 37%                            | 20                       | 35%                            | 10                       | 33%                            | 20                       | 33%  ... | **400** | 45% | 300 | 50% | 150 | 55% | 550 | 65%",
+      "note": "Confirmed; the column order is Canada, Europe, United States, Rest of world. The unit 'EV stock per million' is not defined further in the document."
+     },
+     {
+      "parameter": "North America workplace EVSE capacity mix and power delivery ratio",
+      "value": "2023: 60% 7.2 kW / 40% 14 kW; delivery ratio 80% (2023) -> 90% (2035)",
+      "verdict": "confirmed",
+      "url": "https://github.com/theicct/EVCHARGE-doc/blob/main/versions/v1.2.md",
+      "evidence_quote": "***North America*** | Capacity in kW   | **7.2**     | **14** ... | Chargers Share   | 60%         | 40% ... | Power delivery ratio | 80%         | 80% ... | Power delivery ratio | 90%         | 90%",
+      "note": "Confirmed. ICCT defines the delivery ratio as reflecting 'battery level and vehicle charge acceptance rate', so it already includes vehicle-side limits."
+     },
+     {
+      "parameter": "Installed power needed per BEV vs PHEV",
+      "value": "8 kW per BEV, 4 kW per PHEV",
+      "verdict": "confirmed",
+      "url": "https://github.com/theicct/EVCHARGE-doc/blob/main/versions/v1.2.md",
+      "evidence_quote": "By default, the model assumes 8kW of installed power output per BEV and 4kW per PHEV.",
+      "note": "Confirmed with both curl and WebFetch. The figure is for depot chargers only, as the finding says."
+     },
+     {
+      "parameter": "Workplace charger density in top US EV markets",
+      "value": "430 workplace chargers per million population; 10% EV share in top-10 metros",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/huyvanzzz/2A202600773-Nguyen-Van-Huy-Day19/main/dataset/doc_1.txt",
+      "evidence_quote": "Of the 200 most populous metropolitan areas, the ten with the highest uptake averaged a 10% electric share and 935 public chargers per million population. ... For workplace charging, the ten areas with the highest uptake averaged 430 workplace chargers per million population",
+      "note": "Confirmed in the GitHub copy (ICCT briefing, 14 Sep 2021; Bui, Slowik, Lutsey). theicct.org did not resolve (ENOTFOUND). The 10% is the electric share of new-vehicle sales in 2020, not of the vehicle stock."
+     },
+     {
+      "parameter": "Demand response when a free L2 network switched to $0.23/kWh (Palo Alto, 1 Aug 2017)",
+      "value": "Sessions/day -30%/-43%; energy/day -43%/-51%; kWh/session -19%/-14%; idle/session -65%/-50%; placebo +10%/+2%/-7%/-15%",
+      "verdict": "confirmed",
+      "url": "https://github.com/tanaymihani/offpeak",
+      "evidence_quote": "| Sessions per day | -30% | -43% | +10% | | Energy per day | -43% | -51% | +2% | | kWh per session | -19% | -14% | -7% | | Idle time per session | **-65%** | **-50%** | -15% | ... Every station went from free to paid on 1 August 2017",
+      "note": "Table confirmed with both curl and WebFetch. The repo's reports/results/pa_fee_effects.csv adds detail. The DiD estimate for sessions is -43.4% (95% CI -46.1 to -40.5), but the 2016 placebo is +9.8% (CI +4.0 to +15.8), which is significantly non-zero. Interrupted-time-series (ITS) estimates of sessions run from -28.5% to -33.7% depending on bandwidth. The kWh/session placebo is also significant: -7.0% (CI -10.6 to -3.2). Not peer-reviewed; public L2 sites, n = 24 stations."
+     },
+     {
+      "parameter": "EVI-Pro 'free workplace charging' load-profile scenarios",
+      "value": "BAU vs free workplace at site vs metro; generated at 50% EV penetration",
+      "verdict": "confirmed",
+      "url": "https://raw.githubusercontent.com/NatLabRockies/openstudio-common-measures-gem/develop/lib/measures/add_ev_load/README.md",
+      "evidence_quote": "The load profiles generated by Wood et al. (2018) are based on an assumption of a 50% EV penetration rate. ... Charging Behavior, Type: Choice (Business as Usual, Free Workplace Charging at Project Site, Free Workplace Charging Throughout Metropolitan Area)",
+      "note": "Confirmed. The README credits the profiles to Wood et al. (2018); the Pless et al. 2020 and Denver attributions do not appear in it, although measure.rb references 'Pena Station Next', a Denver site. I recomputed the 5.2x from resources chg1/chg2_dow1_flex1.csv: 96 rows at 15-minute steps, with the 26 work_indices defined in measure.rb. Work energy is 6,041 vs 31,178 kWh/day (ratio 5.16), and peak load is 784 vs 5,055 kW."
+     }
+    ],
+    "distribution_review": [
+     {
+      "model_input": "Price-regime multiplier on arrival rate (free <-> paid)",
+      "ok": false,
+      "note": "Making the ACN pre/post change the primary estimate is the right call. A web-search snippet of a Caltech procurement notice supports free -> $0.12/kWh from 1 Nov 2018, but I could not open the page (ENOTFOUND). Two problems remain. (1) The Palo Alto band U(0.57, 0.70) is too narrow. In the repo's own results CSV, the DiD placebo is +9.8% (CI +4 to +16), so the design has roughly ±10 pp bias, and ITS estimates vary from -28.5% to -33.7% by bandwidth. A fallback band of about U(0.55, 0.80) is more honest. The fee was also $0.23/kWh at public sites, not $0.12 at a workplace. (2) paid -> free U(1.43, 1.75) is presented as the 'reciprocal', but no source observes a fee being removed, so symmetric reversibility is an unlabeled assumption. Also, 1/U(0.57, 0.70) is not uniform. It should be labeled as an assumption, or derived as 1/m from the same draw."
+     },
+     {
+      "model_input": "Price-regime multipliers on per-session behavior when paid",
+      "ok": false,
+      "note": "The values are faithful to the source, and the workplace transfer is labeled as an assumption. kWh/session U(0.81, 0.86): the 2016 placebo shows a significant -7% (CI -10.6 to -3.2), so part of the drop may be secular trend; something like U(0.80, 0.95) is safer. Idle U(0.35, 0.50): the study says idle time fell because 'the fee mostly removed people who used the chargers as parking', which is a change in who charges, not a change per session. At a workplace, dwell time is set by work hours. Applying this as a per-session multiplier on top of the lower arrival rate double-counts the effect and is weakly transferable. Better to model the change in user mix, or estimate it from ACN before and after Nov 2018."
+     },
+     {
+      "model_input": "Demand growth factor over time",
+      "ok": true,
+      "note": "Acceptable as a scenario range. The upper bound is correct: (6.3M/1.12M)^(1/6) - 1 = 33.4%. The lower bound of 0.10 is labeled as an assumption. Caveats to state: (a) 33% is an early-adoption CAGR from a low base; total US EV sales grew only about 9% from 2023 to 2024, and the 2018-2024 sales CAGR is about 27%. (b) Compounding at fixed ports without a saturation cap explodes over long horizons (1.33^10 ≈ 17x), so cap growth by the employee pool or the port count. (c) ICCT defaults let workplace utilization rise only from 8% to 20% as EV share goes from 2% to 50%, so arrivals per port do not scale one-for-one with fleet growth."
+     },
+     {
+      "model_input": "Registered EV drivers per port",
+      "ok": true,
+      "note": "1.5, 2 and 3 are labeled as assumptions; 0.81 is correct arithmetic. Two corrections to the framing. Asensio counts 'stations', not ports, and only drivers 'with repeat usage', so 0.81 is a lower bound. That program was also lightly used (about 32 sessions per station over the whole period), so 0.8 reflects under-subscription, not a design ratio. Prefer the empirical userID-per-port count from ACN Caltech as the baseline."
+     },
+     {
+      "model_input": "Vehicle type of an arriving EV (PHEV vs BEV)",
+      "ok": false,
+      "note": "The IEA shares are correct (39.3% in 2019, 25.4% in 2024, 42.9% in 2018). But the claim that 0.39 'matches ACN 2018-2019' has no source: ACN has no vehicle-type field. Fleet stock share is also not the share among workplace arrivals. Lee et al. 2020 report BEV owners use workplace charging more often (30-40% vs <30% for PHEV owners), and 8.9% of PHEV owners never plug in, so both push the PHEV share among arrivals below the stock share. Example: 0.393×0.30 / (0.393×0.30 + 0.607×0.35) ≈ 0.36 or lower. Present 0.39 as an upper bound, drop 'matches ACN', and do not use this Bernoulli together with the on-board-charger mixture without checking for double counting."
+     },
+     {
+      "model_input": "On-board charger limit class at a 6.6 kW ACN port",
+      "ok": true,
+      "note": "The assumptions are labeled; 0.515×0.646 = 0.333 is correct. Caveats: (a) q = 0.515 is larger than the PHEV stock share of 0.39, so the slow class is not purely PHEVs (early BEVs are in it too), and scaling q by the PHEV-share ratio is weakly grounded. Show it as a sensitivity case, not a forecast. (b) In an EVSE-upgrade scenario, do not apply the ICCT 0.8-0.9 delivery ratio on top of vehicle-class caps. ICCT defines that ratio as including 'vehicle charge acceptance', so it would double-count. (c) q comes from the repo's own ACN analysis and was not checked here."
+     },
+     {
+      "model_input": "Workplace-dependent driver segment",
+      "ok": false,
+      "note": "P(work-dependent) = 0.14-0.16 rests on a misread. The 16% in Lee et al. is the Home-work group: reading it as Work-only gives 53+13+20+16 = 102% given the paper's '86% charged from home'. The 14% is the ceiling for all non-home groups together (Work-only + Public-only + Work-public), and the text never states the Work-only share. The denominator is also all PEV owners; a workplace simulation needs the share among workplace-charger users, which the text does not give. Energy multiplier: 70/20 = 3.5 holds for BEVs only. PHEVs give 80/20 = 4.0 by energy share, but ICCT's electric-VKT shares (45% without home access vs 70% with) reduce that to 0.80×0.45 / (0.20×0.70) ≈ 2.6. ICCT shares are of annual energy, so the extra energy may show up as more sessions rather than larger ones, and each session is capped by 6.6 kW × dwell time. Re-label this as a scenario with P ≤ 0.14 (assumption) and an energy multiplier of about 2.6-3.5 (assumption)."
+     },
+     {
+      "model_input": "Extreme 'free workplace charging' energy scenario (upper bound)",
+      "ok": true,
+      "note": "Recomputed and confirmed: 31,178 vs 6,041 kWh/day (5.16x); peak 5,055 vs 784 kW. The basis correctly says this is modeled output, not an elasticity. One extra caveat supports that: summed over the 49 home indices, home energy barely moves between the two scenarios (26,764 vs 26,525 kWh/day) while total energy rises from 42,449 to 65,900. The free-workplace scenario adds demand rather than shifting it from home, so use it only as a stress-test ceiling."
+     }
+    ]
+   }
+  }
+ ]
+}

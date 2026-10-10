@@ -27,6 +27,10 @@ LOCAL_TZ = "America/Los_Angeles"
 
 # Caltech ACN (siteID 0002, cluster 0039): 54 EVSEs appear in the session records.
 NOMINAL_PORTS = {"0002": 54, "0001": 52, "0019": 8}
+# Site 0002 spans several Caltech garages in ACN-Data-Static (California Garage 01 = cluster 39 with
+# station IDs 2-39-*, California Garage 02 = 2-6-*, N/S Wilson = 2-137-*/2-105-*, LIGO = 2-154-*).
+# The modeled facility is the 54-EVSE California Garage 01, so Caltech sessions are restricted to it.
+GARAGE_CLUSTER = {"0002": "0039"}
 SITE_NAMES = {"0002": "Caltech", "0001": "JPL", "0019": "Office 1"}
 
 # Structural break in the Caltech data: from 2018-11-01 the share of sessions with user input jumps
@@ -141,8 +145,12 @@ def _inputs_from_clean_table(raw: pd.DataFrame) -> tuple[pd.DataFrame, str]:
     return inputs, version
 
 
-def load_sessions(path: str | Path | None = None, site: str = "0002") -> pd.DataFrame:
-    """Load and normalize sessions for one site. See module docstring for input priority."""
+def load_sessions(path: str | Path | None = None, site: str = "0002", cluster: str | None = "default") -> pd.DataFrame:
+    """Load and normalize sessions for one site. See module docstring for input priority.
+
+    cluster: keep only this cluster (garage). "default" uses GARAGE_CLUSTER (California Garage 01
+    for Caltech); None keeps every cluster of the site.
+    """
     path = Path(path) if path else DEFAULT_RAW
     raw = _read(path)
 
@@ -155,6 +163,10 @@ def load_sessions(path: str | Path | None = None, site: str = "0002") -> pd.Data
     df["has_session_id"] = "sessionID" in raw
     df["site_id"] = raw["siteID"].astype("string").str.zfill(4)
     df["station_id"] = raw["stationID"].astype("string")
+    if "clusterID" in raw:
+        df["cluster_id"] = raw["clusterID"].astype("string").str.zfill(4)
+    else:  # cleaned tables may drop clusterID; station IDs read <site>-<cluster>-...
+        df["cluster_id"] = df["station_id"].str.split("-").str[1].str.zfill(4)
     df["user_id"] = raw["userID"].astype("string") if "userID" in raw else pd.NA
     df["connect"] = _to_utc(raw["connectionTime"])
     df["disconnect"] = _to_utc(raw["disconnectTime"])
@@ -172,6 +184,9 @@ def load_sessions(path: str | Path | None = None, site: str = "0002") -> pd.Data
     df["input_version"] = version  # a column, not attrs: attrs do not survive joins and filters
 
     df = df.loc[df["site_id"] == site].copy()
+    cluster = GARAGE_CLUSTER.get(site) if cluster == "default" else cluster
+    if cluster is not None:
+        df = df.loc[df["cluster_id"] == cluster].copy()
     df["valid_interval"] = df["disconnect"] > df["connect"]
     # Minute-floored timestamps (e.g. a cleaned table) blur the 1-min interrupted cutoff; record it.
     seconds = pd.concat([df["connect"].dt.second, df["disconnect"].dt.second])
@@ -203,4 +218,5 @@ def load_sessions(path: str | Path | None = None, site: str = "0002") -> pd.Data
     df.attrs["source"] = str(path)
     df.attrs["site"] = site
     df.attrs["nominal_ports"] = NOMINAL_PORTS.get(site)
+    df.attrs["cluster"] = cluster
     return df.sort_values("connect").reset_index(drop=True)

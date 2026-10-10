@@ -1,0 +1,738 @@
+{
+ "data": {
+  "source": "/home/user/EV-Charging-Simulator/raw_acn/caltech_sessions_PARTIAL.json",
+  "garage": "California Garage 01 (site 0002, cluster 0039, 54 stations)",
+  "regime": "post_2018-11 (paid charging)",
+  "first_day": "2018-11-01",
+  "last_day": "2019-09-16",
+  "sessions": 10074,
+  "claimed_share": 0.8541
+ },
+ "daily_arrivals": {
+  "weekday": {
+   "days": 228,
+   "mean": 38.7,
+   "var": 116.16,
+   "var_to_mean": 3.0,
+   "zero_days": 0,
+   "p10_p50_p90": [
+    30.0,
+    39.0,
+    50.30000000000001
+   ],
+   "negbin_r": 19.34,
+   "promodel_poisson_gamma": "P(G(19.34, 2.001))"
+  },
+  "weekend": {
+   "days": 92,
+   "mean": 13.59,
+   "var": 31.37,
+   "var_to_mean": 2.31,
+   "zero_days": 0,
+   "p10_p50_p90": [
+    8.0,
+    12.5,
+    20.900000000000006
+   ],
+   "negbin_r": 10.38,
+   "promodel_poisson_gamma": "P(G(10.38, 1.309))"
+  }
+ },
+ "arrival_profile_pct_by_hour": {
+  "weekday": [
+   0.16,
+   0.06,
+   0.02,
+   0.02,
+   0.05,
+   0.41,
+   2.74,
+   5.18,
+   21.27,
+   19.28,
+   11.75,
+   5.25,
+   6.71,
+   6.32,
+   3.21,
+   2.19,
+   2.91,
+   2.89,
+   3.5,
+   2.28,
+   1.73,
+   1.3,
+   0.53,
+   0.24
+  ],
+  "weekend": [
+   0.8,
+   0.24,
+   0.56,
+   0.08,
+   0.16,
+   0.08,
+   0.64,
+   3.52,
+   6.8,
+   8.32,
+   11.6,
+   7.68,
+   8.96,
+   8.08,
+   6.4,
+   7.52,
+   7.04,
+   5.36,
+   4.08,
+   4.48,
+   2.56,
+   2.32,
+   1.68,
+   1.04
+  ]
+ },
+ "dwell_excluded_over_24h_share": 0.0084,
+ "dwell_hours": {
+  "weekday 00-07": {
+   "n": 304,
+   "mean": 5.567,
+   "median": 5.253,
+   "p10_p90": [
+    1.129,
+    11.43
+   ],
+   "best_by_aic": "weibull",
+   "deciles_0_to_100": [
+    0.27,
+    1.13,
+    1.25,
+    1.42,
+    2.83,
+    5.25,
+    5.7,
+    8.46,
+    9.31,
+    11.43,
+    22.47
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(1.348, 4.131)",
+     "ks": 0.157,
+     "aic": 1640.6
+    },
+    "lognorm": {
+     "promodel": "L(6.079, 8.005) [mean, sd of X]; ln X ~ N(1.302, 1.003)",
+     "ks": 0.174,
+     "aic": 1660.1
+    },
+    "weibull": {
+     "promodel": "W(1.217, 5.941)",
+     "ks": 0.16,
+     "aic": 1639.2
+    }
+   }
+  },
+  "weekday 07-09": {
+   "n": 2326,
+   "mean": 7.782,
+   "median": 8.657,
+   "p10_p90": [
+    3.364,
+    10.471
+   ],
+   "best_by_aic": "weibull",
+   "deciles_0_to_100": [
+    0.11,
+    3.36,
+    4.92,
+    7.22,
+    8.24,
+    8.66,
+    8.97,
+    9.3,
+    9.79,
+    10.47,
+    22.32
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(4.353, 1.788)",
+     "ks": 0.219,
+     "aic": 12351.2
+    },
+    "lognorm": {
+     "promodel": "L(8.243, 5.370) [mean, sd of X]; ln X ~ N(1.933, 0.595)",
+     "ks": 0.236,
+     "aic": 13177.8
+    },
+    "weibull": {
+     "promodel": "W(2.999, 8.646)",
+     "ks": 0.185,
+     "aic": 11669.3
+    }
+   }
+  },
+  "weekday 09-11": {
+   "n": 2728,
+   "mean": 7.115,
+   "median": 7.693,
+   "p10_p90": [
+    2.494,
+    9.733
+   ],
+   "best_by_aic": "weibull",
+   "deciles_0_to_100": [
+    0.1,
+    2.49,
+    5.19,
+    6.62,
+    7.25,
+    7.69,
+    8.09,
+    8.51,
+    9.02,
+    9.73,
+    23.92
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(3.884, 1.832)",
+     "ks": 0.213,
+     "aic": 14251.0
+    },
+    "lognorm": {
+     "promodel": "L(7.592, 5.309) [mean, sd of X]; ln X ~ N(1.828, 0.631)",
+     "ks": 0.244,
+     "aic": 15207.1
+    },
+    "weibull": {
+     "promodel": "W(2.723, 7.914)",
+     "ks": 0.161,
+     "aic": 13543.8
+    }
+   }
+  },
+  "weekday 11-14": {
+   "n": 1612,
+   "mean": 4.965,
+   "median": 4.782,
+   "p10_p90": [
+    1.514,
+    8.149
+   ],
+   "best_by_aic": "weibull",
+   "deciles_0_to_100": [
+    0.13,
+    1.51,
+    2.6,
+    3.34,
+    4.09,
+    4.78,
+    5.29,
+    5.87,
+    6.67,
+    8.15,
+    23.69
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(2.628, 1.889)",
+     "ks": 0.079,
+     "aic": 7738.0
+    },
+    "lognorm": {
+     "promodel": "L(5.222, 4.235) [mean, sd of X]; ln X ~ N(1.400, 0.711)",
+     "ks": 0.117,
+     "aic": 7992.8
+    },
+    "weibull": {
+     "promodel": "W(1.760, 5.575)",
+     "ks": 0.061,
+     "aic": 7724.6
+    }
+   }
+  },
+  "weekday 14-24": {
+   "n": 1799,
+   "mean": 3.757,
+   "median": 2.003,
+   "p10_p90": [
+    0.791,
+    11.384
+   ],
+   "best_by_aic": "lognorm",
+   "deciles_0_to_100": [
+    0.11,
+    0.79,
+    1.16,
+    1.41,
+    1.69,
+    2.0,
+    2.52,
+    3.28,
+    4.79,
+    11.38,
+    23.79
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(1.193, 3.149)",
+     "ks": 0.143,
+     "aic": 8331.0
+    },
+    "lognorm": {
+     "promodel": "L(3.641, 4.347) [mean, sd of X]; ln X ~ N(0.849, 0.941)",
+     "ks": 0.078,
+     "aic": 7947.3
+    },
+    "weibull": {
+     "promodel": "W(1.027, 3.806)",
+     "ks": 0.129,
+     "aic": 8362.1
+    }
+   }
+  },
+  "weekend 00-11": {
+   "n": 407,
+   "mean": 3.323,
+   "median": 2.147,
+   "p10_p90": [
+    1.133,
+    7.25
+   ],
+   "best_by_aic": "lognorm",
+   "deciles_0_to_100": [
+    0.26,
+    1.13,
+    1.47,
+    1.68,
+    1.84,
+    2.15,
+    2.7,
+    3.46,
+    4.84,
+    7.25,
+    20.36
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(1.755, 1.893)",
+     "ks": 0.122,
+     "aic": 1730.0
+    },
+    "lognorm": {
+     "promodel": "L(3.318, 3.074) [mean, sd of X]; ln X ~ N(0.890, 0.787)",
+     "ks": 0.073,
+     "aic": 1688.3
+    },
+    "weibull": {
+     "promodel": "W(1.278, 3.618)",
+     "ks": 0.116,
+     "aic": 1754.6
+    }
+   }
+  },
+  "weekend 11-24": {
+   "n": 813,
+   "mean": 4.256,
+   "median": 2.361,
+   "p10_p90": [
+    0.672,
+    11.489
+   ],
+   "best_by_aic": "lognorm",
+   "deciles_0_to_100": [
+    0.09,
+    0.67,
+    1.13,
+    1.53,
+    1.93,
+    2.36,
+    3.09,
+    4.18,
+    5.98,
+    11.49,
+    23.84
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(1.109, 3.837)",
+     "ks": 0.106,
+     "aic": 3979.6
+    },
+    "lognorm": {
+     "promodel": "L(4.316, 5.913) [mean, sd of X]; ln X ~ N(0.934, 1.028)",
+     "ks": 0.035,
+     "aic": 3874.8
+    },
+    "weibull": {
+     "promodel": "W(1.004, 4.263)",
+     "ks": 0.092,
+     "aic": 3985.0
+    }
+   }
+  }
+ },
+ "energy_delivered_kwh": {
+  "claimed, dwell 0-2h": {
+   "n": 1513,
+   "mean": 5.126,
+   "median": 4.346,
+   "p10_p90": [
+    1.836,
+    9.598
+   ],
+   "best_by_aic": "gamma",
+   "deciles_0_to_100": [
+    0.51,
+    1.84,
+    2.63,
+    3.46,
+    3.94,
+    4.35,
+    4.96,
+    6.05,
+    7.87,
+    9.6,
+    13.59
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(2.906, 1.764)",
+     "ks": 0.044,
+     "aic": 7251.0
+    },
+    "lognorm": {
+     "promodel": "L(5.262, 3.780) [mean, sd of X]; ln X ~ N(1.452, 0.645)",
+     "ks": 0.073,
+     "aic": 7366.1
+    },
+    "weibull": {
+     "promodel": "W(1.847, 5.787)",
+     "ks": 0.072,
+     "aic": 7263.1
+    }
+   }
+  },
+  "claimed, dwell 2-4h": {
+   "n": 1364,
+   "mean": 9.086,
+   "median": 7.893,
+   "p10_p90": [
+    2.51,
+    16.438
+   ],
+   "best_by_aic": "weibull",
+   "deciles_0_to_100": [
+    0.59,
+    2.51,
+    4.48,
+    5.51,
+    6.6,
+    7.89,
+    9.77,
+    11.67,
+    13.58,
+    16.44,
+    26.95
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(2.544, 3.572)",
+     "ks": 0.034,
+     "aic": 8227.7
+    },
+    "lognorm": {
+     "promodel": "L(9.439, 7.552) [mean, sd of X]; ln X ~ N(1.998, 0.703)",
+     "ks": 0.058,
+     "aic": 8364.3
+    },
+    "weibull": {
+     "promodel": "W(1.747, 10.219)",
+     "ks": 0.034,
+     "aic": 8216.9
+    }
+   }
+  },
+  "claimed, dwell 4-6h": {
+   "n": 1132,
+   "mean": 11.449,
+   "median": 9.361,
+   "p10_p90": [
+    2.17,
+    23.826
+   ],
+   "best_by_aic": "gamma",
+   "deciles_0_to_100": [
+    0.66,
+    2.17,
+    4.79,
+    6.32,
+    7.0,
+    9.36,
+    11.83,
+    14.8,
+    17.74,
+    23.83,
+    39.22
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(1.835, 6.238)",
+     "ks": 0.044,
+     "aic": 7579.1
+    },
+    "lognorm": {
+     "promodel": "L(12.176, 12.457) [mean, sd of X]; ln X ~ N(2.141, 0.846)",
+     "ks": 0.07,
+     "aic": 7686.7
+    },
+    "weibull": {
+     "promodel": "W(1.440, 12.639)",
+     "ks": 0.057,
+     "aic": 7579.3
+    }
+   }
+  },
+  "claimed, dwell 6-8h": {
+   "n": 1460,
+   "mean": 11.053,
+   "median": 8.224,
+   "p10_p90": [
+    3.026,
+    22.228
+   ],
+   "best_by_aic": "lognorm",
+   "deciles_0_to_100": [
+    0.53,
+    3.03,
+    4.37,
+    5.61,
+    6.65,
+    8.22,
+    10.39,
+    12.44,
+    15.17,
+    22.23,
+    52.72
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(1.842, 6.000)",
+     "ks": 0.065,
+     "aic": 9668.3
+    },
+    "lognorm": {
+     "promodel": "L(11.163, 10.238) [mean, sd of X]; ln X ~ N(2.107, 0.781)",
+     "ks": 0.023,
+     "aic": 9580.2
+    },
+    "weibull": {
+     "promodel": "W(1.332, 12.122)",
+     "ks": 0.067,
+     "aic": 9748.5
+    }
+   }
+  },
+  "claimed, dwell 8-10h": {
+   "n": 2052,
+   "mean": 11.7,
+   "median": 9.264,
+   "p10_p90": [
+    3.236,
+    23.096
+   ],
+   "best_by_aic": "lognorm",
+   "deciles_0_to_100": [
+    0.53,
+    3.24,
+    4.49,
+    5.63,
+    6.78,
+    9.26,
+    11.32,
+    13.14,
+    16.17,
+    23.1,
+    59.83
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(1.795, 6.519)",
+     "ks": 0.06,
+     "aic": 13848.9
+    },
+    "lognorm": {
+     "promodel": "L(11.845, 11.121) [mean, sd of X]; ln X ~ N(2.156, 0.795)",
+     "ks": 0.047,
+     "aic": 13733.5
+    },
+    "weibull": {
+     "promodel": "W(1.317, 12.800)",
+     "ks": 0.071,
+     "aic": 13953.6
+    }
+   }
+  },
+  "claimed, dwell 10-24h": {
+   "n": 1009,
+   "mean": 14.713,
+   "median": 11.837,
+   "p10_p90": [
+    2.167,
+    39.483
+   ],
+   "best_by_aic": "lognorm",
+   "deciles_0_to_100": [
+    0.77,
+    2.17,
+    3.93,
+    5.52,
+    7.77,
+    11.84,
+    14.02,
+    15.7,
+    17.01,
+    39.48,
+    75.53
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(1.294, 11.371)",
+     "ks": 0.128,
+     "aic": 7409.2
+    },
+    "lognorm": {
+     "promodel": "L(15.312, 19.243) [mean, sd of X]; ln X ~ N(2.255, 0.973)",
+     "ks": 0.097,
+     "aic": 7363.4
+    },
+    "weibull": {
+     "promodel": "W(1.123, 15.403)",
+     "ks": 0.133,
+     "aic": 7425.4
+    }
+   }
+  },
+  "unclaimed (30-min auto stop)": {
+   "n": 1459,
+   "mean": 1.115,
+   "median": 0.897,
+   "p10_p90": [
+    0.783,
+    1.435
+   ],
+   "best_by_aic": "lognorm",
+   "deciles_0_to_100": [
+    0.5,
+    0.78,
+    0.84,
+    0.86,
+    0.88,
+    0.9,
+    0.92,
+    0.95,
+    1.01,
+    1.44,
+    10.6
+   ],
+   "fits": {
+    "gamma": {
+     "promodel": "G(4.400, 0.253)",
+     "ks": 0.316,
+     "aic": 2065.3
+    },
+    "lognorm": {
+     "promodel": "L(1.070, 0.436) [mean, sd of X]; ln X ~ N(-0.009, 0.392)",
+     "ks": 0.283,
+     "aic": 1384.7
+    },
+    "weibull": {
+     "promodel": "W(1.558, 1.257)",
+     "ks": 0.295,
+     "aic": 2682.8
+    }
+   }
+  }
+ },
+ "spearman_dwell_kwh_claimed": 0.277,
+ "announced_departure_error_min": {
+  "n": 8530,
+  "definition": "announced departure minus actual unplug (negative = stayed longer)",
+  "quantiles": {
+   "5": -451.6,
+   "10": -358.5,
+   "25": -173.8,
+   "50": -41.1,
+   "75": 12.2,
+   "90": 107.2,
+   "95": 207.1
+  }
+ },
+ "requested_over_delivered_energy": {
+  "n": 8530,
+  "quantiles": {
+   "5": 1.007,
+   "10": 1.032,
+   "25": 1.248,
+   "50": 1.765,
+   "75": 2.753,
+   "90": 5.316,
+   "95": 7.676
+  }
+ },
+ "requested_energy_kwh": {
+  "n": 8530,
+  "mean": 19.451,
+  "median": 15.0,
+  "p10_p90": [
+   6.66,
+   37.5
+  ],
+  "best_by_aic": "lognorm",
+  "deciles_0_to_100": [
+   2.0,
+   6.66,
+   8.0,
+   9.99,
+   12.0,
+   15.0,
+   18.0,
+   20.0,
+   28.0,
+   37.5,
+   180.0
+  ],
+  "fits": {
+   "gamma": {
+    "promodel": "G(2.161, 9.001)",
+    "ks": 0.097,
+    "aic": 65323.3
+   },
+   "lognorm": {
+    "promodel": "L(19.146, 14.755) [mean, sd of X]; ln X ~ N(2.719, 0.683)",
+    "ks": 0.09,
+    "aic": 64087.5
+   },
+   "weibull": {
+    "promodel": "W(1.378, 21.527)",
+    "ks": 0.112,
+    "aic": 66212.9
+   }
+  }
+ },
+ "user_class": {
+  "unclaimed_share_of_sessions": 0.1459,
+  "claimed_repeat_user_share_of_sessions": 0.8473,
+  "claimed_one_time_user_share_of_sessions": 0.0068,
+  "identified_users": 306,
+  "median_sessions_per_user": 9.0
+ },
+ "ports_in_service_by_month": {
+  "min": 42,
+  "max": 53,
+  "median": 48.0
+ }
+}
