@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 
 A = json.load(open('acn_fits.json'))
@@ -27,6 +28,7 @@ req = A['requested_energy_kwh']
 req_ln = req['fits']['lognorm']
 win = A['data']
 long4 = A['share_dwell_over_4h']
+stations = re.search(r'(\d+) stations', win['garage']).group(1)
 ASENSIO_WITHIN_4H = 0.887  # Asensio et al. 2022: sessions ending within the 4 free hours
 gamma = '%.2f–%.2f' % tuple(sorted(1 - (1 - ASENSIO_WITHIN_4H) / x for x in long4.values()))
 pricing = A['weekday_arrivals_before_after_pricing']
@@ -38,11 +40,14 @@ if win['window_end_exclusive'] == '2020-03-01':
 elif win['window_end_exclusive']:
     window_note = (f"只拟合 {win['window_end_exclusive']} 之前的会话（`fit_acn.py --end` 设定），"
                    f"之后的 {win['sessions_left_out_after_window']:,} 个会话没有用。")
+elif win['last_day'] >= '2020-03-01':
+    window_note = '拟合用到数据的最后一个完整日，包括 2020 年 3 月以后 COVID 停课、用量骤降的时期。'
+    if win.get('recording_gap_days_left_out'):
+        window_note += (f"{'、'.join(g.replace('..', ' 至 ') for g in win['recording_gaps'])} 的 {win['recording_gap_days_left_out']} 天 ACN 系统没有记录"
+                        '（Caltech 和 JPL 同时中断），这些天不计入每天到达数，而不是算作 0 到达。')
+    window_note += '只要收费后、COVID 之前的时期，用 `fit_acn.py --end 2020-03-01` 重跑。'
 else:
-    gap = A['longest_run_without_sessions']
-    window_note = ('拟合用到数据的最后一个完整日，包括 2020 年 3 月以后 COVID 停课、用量骤降的时期'
-                   + (f"；其中 {gap['from']} 至 {gap['to']} 连续 {gap['days']} 天没有任何会话记录，按 0 到达计入" if gap and gap['days'] >= 7 else '')
-                   + '。只要收费后、COVID 之前的时期，用 `fit_acn.py --end 2020-03-01` 重跑。')
+    window_note = '拟合用到数据的最后一个完整日。'
 if win['fast_charger_sessions_left_out']:
     window_note += (f"不含 2020-11 新增的一台快充桩（2-39-81-4550）的 {win['fast_charger_sessions_left_out']:,} 个会话，"
                     '模型里的接口是 54 个 Level-2 桩（`--keep-fast-charger` 可保留）。')
@@ -67,7 +72,7 @@ md = f"""# ProModel 输入补充表（初稿）
 ## 先看这里
 
 **来源标注**
-- **ACN 拟合**：用 Caltech ACN 数据直接拟合，**只用大停车场 California Garage 01**（集群 0039，54 个桩）的会话。范围是 2018-11-01 收费之后的时期，{win['first_day']} 至 {win['last_day']}，{win['sessions']:,} 个会话。数据是{download}（到 {win['data_last_day']}）；{window_note}
+- **ACN 拟合**：用 Caltech ACN 数据直接拟合，**只用大停车场 California Garage 01**（集群 0039，{stations} 个桩）的会话。范围是 2018-11-01 收费之后的时期，{win['first_day']} 至 {win['last_day']}，{win['sessions']:,} 个会话。数据是{download}（到 {win['data_last_day']}）；{window_note}
 - **ACN 推导**：从 ACN 数据算出来，但不是直接拟合分布。
 - **文献（已核实）**：调研者打开了原文并抄录原句。
 - **文献（仅摘要）**：原文打不开，只在搜索结果摘要里看到，使用前要再核对。

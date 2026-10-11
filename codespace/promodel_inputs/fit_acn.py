@@ -19,13 +19,18 @@ from unobserved_behavior.data import load_sessions  # noqa: E402
 
 # COVID-19 closures emptied the garage from mid-March 2020: weekday plug-ins fell from about 37 a day
 # (to 2020-03-06) to 4 in the week of 2020-03-16 and under 1 in April; monthly sessions went 847
-# (2020-02), 381, 24 (2020-04). No sessions were recorded from 2020-08-04 to 2020-11-17. From then to the
-# end of the data (2021-09) use was 8-22% of the earlier monthly level until 2021-02 and about two thirds
-# by 2021-08, the Level-2 ports had a median stay of about 3 h instead of 5-6 h, and a new fast charger
-# (2-39-81-4550) took a third of the sessions. The fit keeps every day by default; --end 2020-03-01
-# fits only the paid period before COVID. The before/after-pricing comparison always stops at
-# COVID_START, so the COVID drop is not counted as a pricing effect.
+# (2020-02), 381, 24 (2020-04). After the recording gap below, to the end of the data (2021-09), the
+# Level-2 ports were at 5-13% of their earlier monthly level until 2021-02 and about half by 2021-08,
+# with a median stay of about 3 h instead of 5-6 h, and a new fast charger (2-39-81-4550) took a third
+# of the sessions. The fit keeps every day by default; --end 2020-03-01 fits only the paid period before
+# COVID. The before/after-pricing comparison always stops at COVID_START, so the COVID drop is not
+# counted as a pricing effect.
 COVID_START = dt.date(2020, 3, 1)
+# Nothing was recorded at Caltech or JPL from 2020-08-03 about 15:00 to 2020-11-18 about 13:00 local: both
+# sites stop within 20 minutes of each other and restart the same day, so this is a recording outage,
+# not a garage without demand. Its days (inclusive, the two partial ones too) are left out of the daily
+# arrival counts instead of being counted as zero-arrival days; no session is dropped.
+RECORDING_GAPS = [(dt.date(2020, 8, 3), dt.date(2020, 11, 18))]
 # Station 2-39-81-4550 (from 2020-11-18) is a fast charger: 96% of its sessions average more than 7 kW
 # over the whole stay, which a 6.66 kW Level-2 port cannot do. The modeled ports are the garage's 54
 # Level-2 EVSEs, so its sessions are left out unless --keep-fast-charger is given.
@@ -57,12 +62,13 @@ data_last_day = post['date_local'].max()
 after_end = int((post['date_local'] >= end).sum()) if end else 0
 # drop the last partial day of the download
 post = post[post['date_local'] < data_last_day]
-if end:
-    post = post[post['date_local'] < end]
 fast = post.station_id.isin(FAST_CHARGERS)
-fast_left_out = 0 if args.keep_fast_charger else int(fast.sum())
+fast_left_out = 0 if args.keep_fast_charger else int((fast & (post['date_local'] < end if end else True)).sum())
 if not args.keep_fast_charger:
     post = post[~fast]
+paid = post[post['date_local'] < COVID_START]  # paid period before COVID, whatever the fit window
+if end:
+    post = post[post['date_local'] < end]
 if post.empty:
     raise SystemExit('No post-2018-11 sessions before --end %s' % end)
 first_day, last_day = post['date_local'].min(), post['date_local'].max()
@@ -72,11 +78,17 @@ out = {'data': {'source': os.path.relpath(source, REPO_ROOT), 'garage': 'Califor
                 'sessions_left_out_after_window': after_end, 'fast_charger_sessions_left_out': fast_left_out}}
 
 # ---------- daily counts (calendar days, zeros included) ----------
-days = pd.DataFrame({'date': pd.date_range(first_day, last_day, freq='D')})
-days['date_local'] = days.date.dt.date
-days['weekend'] = days.date.dt.dayofweek >= 5
+calendar = pd.DataFrame({'date': pd.date_range(first_day, last_day, freq='D')})
+calendar['date_local'] = calendar.date.dt.date
+calendar['weekend'] = calendar.date.dt.dayofweek >= 5
+calendar['gap'] = False
+for gap_from, gap_to in RECORDING_GAPS:
+    calendar['gap'] |= (calendar.date_local >= gap_from) & (calendar.date_local <= gap_to)
 counts = post.groupby('date_local').size().rename('n')
-days = days.merge(counts, left_on='date_local', right_index=True, how='left').fillna({'n': 0})
+calendar = calendar.merge(counts, left_on='date_local', right_index=True, how='left').fillna({'n': 0})
+days = calendar[~calendar.gap]
+out['data']['recording_gap_days_left_out'] = int(calendar.gap.sum())
+out['data']['recording_gaps'] = ['%s..%s' % (a, b) for a, b in RECORDING_GAPS if a <= last_day and b >= first_day]
 daily = {}
 for name, g in days.groupby('weekend'):
     n = g['n'].to_numpy()
@@ -88,8 +100,8 @@ for name, g in days.groupby('weekend'):
         'negbin_r': round(r, 2) if r else None,
         'promodel_poisson_gamma': 'P(G(%.2f, %.3f))' % (r, m / r) if r else None}
 out['daily_arrivals'] = daily
-zero = days['n'] == 0
-runs = days[zero].groupby((~zero).cumsum()[zero])['date_local'].agg(['min', 'max', 'size'])
+zero = (calendar['n'] == 0) & ~calendar.gap  # recording-gap days break a run instead of joining it
+runs = calendar[zero].groupby((~zero).cumsum()[zero])['date_local'].agg(['min', 'max', 'size'])
 longest = runs.sort_values('size').iloc[-1] if len(runs) else None
 out['longest_run_without_sessions'] = (None if longest is None else
                                        {'from': str(longest['min']), 'to': str(longest['max']), 'days': int(longest['size'])})
@@ -97,7 +109,6 @@ pre = df[(df.regime == 'pre_2018-11') & df.valid_interval]
 pre_days = pd.date_range(pre['date_local'].min(), pre['date_local'].max(), freq='D')
 pre_n = pre.groupby('date_local').size().reindex(pre_days.date, fill_value=0)
 pre_weekday = pre_n[pre_days.dayofweek < 5].mean()
-paid = post[post['date_local'] < COVID_START]  # paid period before COVID, whatever the fit window
 paid_days = pd.date_range(paid['date_local'].min(), paid['date_local'].max(), freq='D')
 paid_n = paid.groupby('date_local').size().reindex(paid_days.date, fill_value=0)
 paid_weekday = paid_n[paid_days.dayofweek < 5].mean()
@@ -193,7 +204,8 @@ out['user_class'] = {
     'identified_users': int(per_user.size), 'median_sessions_per_user': float(per_user.median())}
 
 # ---------- capacity in service ----------
-monthly_ports = post.groupby('month_local').station_id.nunique()
+gap_months = set(calendar.loc[calendar.gap, 'date'].dt.strftime('%Y-%m'))  # months cut short by a recording gap
+monthly_ports = post[~post.month_local.isin(gap_months)].groupby('month_local').station_id.nunique()
 out['ports_in_service_by_month'] = {'min': int(monthly_ports.min()), 'max': int(monthly_ports.max()),
                                     'median': float(monthly_ports.median())}
 

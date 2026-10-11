@@ -18,13 +18,17 @@ python fit_acn.py acn_fits.json && python make_md.py ProModel_inputs_draft.md
 ```
 
 The numbers come from the complete download (`raw_acn/caltech_sessions.json`, 31,424 Caltech sessions,
-2018-04-25 to 2021-09-13 local time). The fit uses every day from 2018-11-01 to 2021-09-12 (the last full
-day). That period includes the COVID-19 closures from mid-March 2020 (24 sessions in April 2020) and 106
-days with no sessions recorded at all (2020-08-04 to 2020-11-17), which count as zero-arrival days, so
-weekday arrivals are far more dispersed than before COVID (variance/mean 16.4 against 3.3 for
-2018-11-01 to 2020-02-29). `python fit_acn.py acn_fits.json --end 2020-03-01` fits only the paid period
-before COVID. The before/after-pricing arrival comparison always uses 2018-11-01 to 2020-02-29.
+2018-04-25 to 2021-09-13 local time). The fit uses every session from 2018-11-01 to 2021-09-12 (the last
+full day), including the COVID-19 closures from mid-March 2020 (24 sessions in April 2020), so weekday
+arrivals are far more dispersed than before COVID (variance/mean 14.1 against 3.3 for 2018-11-01 to
+2020-02-29). `python fit_acn.py acn_fits.json --end 2020-03-01` fits only the paid period before COVID.
+The before/after-pricing arrival comparison always uses 2018-11-01 to 2020-02-29.
+
+ACN recorded nothing at Caltech or JPL from 2020-08-03 afternoon to 2020-11-18 (both sites stop within
+20 minutes of each other and restart the same day), so those 108 days are a recording outage. They are
+left out of the daily arrival counts and the monthly port counts instead of being counted as days with
+no arrivals.
 
 Station 2-39-81-4550, added on 2020-11-18, is a fast charger (most of its sessions average more than
-7 kW over the whole stay, above what a 6.66 kW Level-2 port can deliver). Its 1,126 sessions are left
-out; `--keep-fast-charger` keeps them.
+7 kW over the whole stay, above what a 6.66 kW Level-2 port can deliver). Its 1,126 sessions in the fit
+window are left out; `--keep-fast-charger` keeps them.

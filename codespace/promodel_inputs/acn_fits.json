@@ -10,42 +10,46 @@
   "window_end_exclusive": null,
   "data_last_day": "2021-09-13",
   "sessions_left_out_after_window": 0,
-  "fast_charger_sessions_left_out": 1126
+  "fast_charger_sessions_left_out": 1126,
+  "recording_gap_days_left_out": 108,
+  "recording_gaps": [
+   "2020-08-03..2020-11-18"
+  ]
  },
  "daily_arrivals": {
   "weekday": {
-   "days": 747,
-   "mean": 20.19,
-   "var": 331.93,
-   "var_to_mean": 16.44,
-   "zero_days": 114,
+   "days": 669,
+   "mean": 22.54,
+   "var": 317.95,
+   "var_to_mean": 14.11,
+   "zero_days": 38,
    "p10_p50_p90": [
-    0.0,
-    13.0,
-    44.0
+    1.0,
+    21.0,
+    44.200000000000045
    ],
-   "negbin_r": 1.31,
-   "promodel_poisson_gamma": "P(G(1.31, 15.437))"
+   "negbin_r": 1.72,
+   "promodel_poisson_gamma": "P(G(1.72, 13.107))"
   },
   "weekend": {
-   "days": 300,
-   "mean": 6.9,
-   "var": 37.23,
-   "var_to_mean": 5.39,
-   "zero_days": 42,
+   "days": 270,
+   "mean": 7.67,
+   "var": 35.48,
+   "var_to_mean": 4.63,
+   "zero_days": 12,
    "p10_p50_p90": [
-    0.0,
-    6.0,
-    15.0
+    1.0,
+    6.5,
+    16.0
    ],
-   "negbin_r": 1.57,
-   "promodel_poisson_gamma": "P(G(1.57, 4.393))"
+   "negbin_r": 2.12,
+   "promodel_poisson_gamma": "P(G(2.12, 3.625))"
   }
  },
  "longest_run_without_sessions": {
-  "from": "2020-08-04",
-  "to": "2020-11-17",
-  "days": 106
+  "from": "2020-05-21",
+  "to": "2020-05-25",
+  "days": 5
  },
  "weekday_arrivals_before_after_pricing": {
   "pre_2018-11_mean": 78.68,
@@ -750,7 +754,7 @@
   "median_sessions_per_user": 7.5
  },
  "ports_in_service_by_month": {
-  "min": 5,
+  "min": 10,
   "max": 53,
   "median": 42.0
  }
