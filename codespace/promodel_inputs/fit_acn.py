@@ -1,6 +1,6 @@
 """Fit ProModel input distributions from the Caltech ACN sessions (post-2018-11 paid regime).
 
-Usage: python fit_acn.py acn_fits.json [--end YYYY-MM-DD | --end none]
+Usage: python fit_acn.py acn_fits.json [--end YYYY-MM-DD] [--keep-fast-charger]
 """
 import argparse
 import datetime as dt
@@ -22,9 +22,14 @@ from unobserved_behavior.data import load_sessions  # noqa: E402
 # (2020-02), 381, 24 (2020-04). No sessions were recorded from 2020-08-04 to 2020-11-17. From then to the
 # end of the data (2021-09) use was 8-22% of the earlier monthly level until 2021-02 and about two thirds
 # by 2021-08, the Level-2 ports had a median stay of about 3 h instead of 5-6 h, and a new fast charger
-# (2-39-81-4550) took a third of the sessions. The model is for normal operation, so the fit stops
-# before March 2020.
-FIT_END = '2020-03-01'
+# (2-39-81-4550) took a third of the sessions. The fit keeps every day by default; --end 2020-03-01
+# fits only the paid period before COVID. The before/after-pricing comparison always stops at
+# COVID_START, so the COVID drop is not counted as a pricing effect.
+COVID_START = dt.date(2020, 3, 1)
+# Station 2-39-81-4550 (from 2020-11-18) is a fast charger: 96% of its sessions average more than 7 kW
+# over the whole stay, which a 6.66 kW Level-2 port cannot do. The modeled ports are the garage's 54
+# Level-2 EVSEs, so its sessions are left out unless --keep-fast-charger is given.
+FAST_CHARGERS = {'2-39-81-4550'}
 
 
 def end_date(text):
@@ -38,12 +43,14 @@ def end_date(text):
 
 parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
 parser.add_argument('output')
-parser.add_argument('--end', type=end_date, default=FIT_END,
-                    help='first local day left out of the fit (default %(default)s); "none" keeps every day')
+parser.add_argument('--end', type=end_date, default=None,
+                    help='first local day left out of the fit (default: keep every day; 2020-03-01 = before COVID)')
+parser.add_argument('--keep-fast-charger', action='store_true', help='keep the fast-charger sessions (%s)' % ', '.join(FAST_CHARGERS))
 args = parser.parse_args()
 end = args.end
 
 df = load_sessions()
+source, cluster = df.attrs['source'], df.attrs['cluster']
 post = df[(df.regime == 'post_2018-11') & df.valid_interval].copy()
 post['claimed'] = post['has_input']
 data_last_day = post['date_local'].max()
@@ -52,13 +59,17 @@ after_end = int((post['date_local'] >= end).sum()) if end else 0
 post = post[post['date_local'] < data_last_day]
 if end:
     post = post[post['date_local'] < end]
+fast = post.station_id.isin(FAST_CHARGERS)
+fast_left_out = 0 if args.keep_fast_charger else int(fast.sum())
+if not args.keep_fast_charger:
+    post = post[~fast]
 if post.empty:
     raise SystemExit('No post-2018-11 sessions before --end %s' % end)
 first_day, last_day = post['date_local'].min(), post['date_local'].max()
-out = {'data': {'source': os.path.relpath(df.attrs['source'], REPO_ROOT), 'garage': 'California Garage 01 (site 0002, cluster %s, %d stations)' % (df.attrs['cluster'], post.station_id.nunique()), 'regime': 'post_2018-11 (paid charging)', 'first_day': str(first_day),
+out = {'data': {'source': os.path.relpath(source, REPO_ROOT), 'garage': 'California Garage 01 (site 0002, cluster %s, %d stations)' % (cluster, post.station_id.nunique()), 'regime': 'post_2018-11 (paid charging)', 'first_day': str(first_day),
                 'last_day': str(last_day), 'sessions': int(len(post)), 'claimed_share': round(post.claimed.mean(), 4),
                 'window_end_exclusive': str(end) if end else None, 'data_last_day': str(data_last_day),
-                'sessions_left_out_after_window': after_end}}
+                'sessions_left_out_after_window': after_end, 'fast_charger_sessions_left_out': fast_left_out}}
 
 # ---------- daily counts (calendar days, zeros included) ----------
 days = pd.DataFrame({'date': pd.date_range(first_day, last_day, freq='D')})
@@ -77,12 +88,22 @@ for name, g in days.groupby('weekend'):
         'negbin_r': round(r, 2) if r else None,
         'promodel_poisson_gamma': 'P(G(%.2f, %.3f))' % (r, m / r) if r else None}
 out['daily_arrivals'] = daily
+zero = days['n'] == 0
+runs = days[zero].groupby((~zero).cumsum()[zero])['date_local'].agg(['min', 'max', 'size'])
+longest = runs.sort_values('size').iloc[-1] if len(runs) else None
+out['longest_run_without_sessions'] = (None if longest is None else
+                                       {'from': str(longest['min']), 'to': str(longest['max']), 'days': int(longest['size'])})
 pre = df[(df.regime == 'pre_2018-11') & df.valid_interval]
 pre_days = pd.date_range(pre['date_local'].min(), pre['date_local'].max(), freq='D')
 pre_n = pre.groupby('date_local').size().reindex(pre_days.date, fill_value=0)
 pre_weekday = pre_n[pre_days.dayofweek < 5].mean()
-out['weekday_arrivals_before_after_pricing'] = {'pre_2018-11_mean': round(pre_weekday, 2), 'post_mean': daily['weekday']['mean'],
-                                                'ratio': round(daily['weekday']['mean'] / pre_weekday, 2)}
+paid = post[post['date_local'] < COVID_START]  # paid period before COVID, whatever the fit window
+paid_days = pd.date_range(paid['date_local'].min(), paid['date_local'].max(), freq='D')
+paid_n = paid.groupby('date_local').size().reindex(paid_days.date, fill_value=0)
+paid_weekday = paid_n[paid_days.dayofweek < 5].mean()
+out['weekday_arrivals_before_after_pricing'] = {
+    'pre_2018-11_mean': round(pre_weekday, 2), 'post_mean': round(paid_weekday, 2), 'ratio': round(paid_weekday / pre_weekday, 2),
+    'post_period': '%s..%s' % (paid_days[0].date(), paid_days[-1].date())}
 
 # ---------- arrival time-of-day profile ----------
 prof = {}

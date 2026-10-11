@@ -39,7 +39,13 @@ elif win['window_end_exclusive']:
     window_note = (f"只拟合 {win['window_end_exclusive']} 之前的会话（`fit_acn.py --end` 设定），"
                    f"之后的 {win['sessions_left_out_after_window']:,} 个会话没有用。")
 else:
-    window_note = '拟合用到数据的最后一个完整日，包括 2020 年 3 月以后 COVID 停课、用量骤降的时期。'
+    gap = A['longest_run_without_sessions']
+    window_note = ('拟合用到数据的最后一个完整日，包括 2020 年 3 月以后 COVID 停课、用量骤降的时期'
+                   + (f"；其中 {gap['from']} 至 {gap['to']} 连续 {gap['days']} 天没有任何会话记录，按 0 到达计入" if gap and gap['days'] >= 7 else '')
+                   + '。只要收费后、COVID 之前的时期，用 `fit_acn.py --end 2020-03-01` 重跑。')
+if win['fast_charger_sessions_left_out']:
+    window_note += (f"不含 2020-11 新增的一台快充桩（2-39-81-4550）的 {win['fast_charger_sessions_left_out']:,} 个会话，"
+                    '模型里的接口是 54 个 Level-2 桩（`--keep-fast-charger` 可保留）。')
 
 
 def to_total(values, total, nd):
@@ -200,7 +206,7 @@ KS 大于 0.1 的组改用经验表：用 User Distribution，选 Continuous 和
 | 输入 | 取值 | 来源 |
 |---|---|---|
 | 需求倍数 | 0.8–1.5 | proposal |
-| 收费对到达量的影响 | **首选 ACN 自身的数据**：收费前后工作日从 {pricing['pre_2018-11_mean']:.1f} 降到 {pricing['post_mean']:.1f} 次/天（×{pricing['ratio']:.2f}）。参照：Palo Alto 公共 L2 收费后下降 30–43%（×0.57–0.70，未经同行评审） | ACN 推导；文献 |
+| 收费对到达量的影响 | **首选 ACN 自身的数据**：收费前后工作日从 {pricing['pre_2018-11_mean']:.1f} 降到 {pricing['post_mean']:.1f} 次/天（×{pricing['ratio']:.2f}；收费后取 {pricing['post_period'].replace('..', ' 至 ')}，不含 COVID 时期）。参照：Palo Alto 公共 L2 收费后下降 30–43%（×0.57–0.70，未经同行评审） | ACN 推导；文献 |
 | 年增长率 | 每年 10–33%；33% 是美国 EV 保有量 2018–2024 的年均增长率 | 文献（已核实）：IEA。10% 是假设 |
 
 ---
