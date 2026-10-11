@@ -105,6 +105,9 @@ runs = calendar[zero].groupby((~zero).cumsum()[zero])['date_local'].agg(['min', 
 longest = runs.sort_values('size').iloc[-1] if len(runs) else None
 out['longest_run_without_sessions'] = (None if longest is None else
                                        {'from': str(longest['min']), 'to': str(longest['max']), 'days': int(longest['size'])})
+# observed daily counts (recording-gap days left out), for an empirical-bootstrap daily arrival distribution
+out['daily_count_empirical'] = {('weekend' if name else 'weekday'): {str(int(k)): int(v) for k, v in g['n'].value_counts().sort_index().items()}
+                                for name, g in days.groupby('weekend')}
 pre = df[(df.regime == 'pre_2018-11') & df.valid_interval]
 pre_days = pd.date_range(pre['date_local'].min(), pre['date_local'].max(), freq='D')
 pre_n = pre.groupby('date_local').size().reindex(pre_days.date, fill_value=0)
@@ -180,6 +183,13 @@ u = d[(~d.claimed) & (d.kwh > 0)]
 energy['unclaimed (30-min auto stop)'] = fit_all(u.kwh)
 out['energy_delivered_kwh'] = energy
 out['spearman_dwell_kwh_claimed'] = round(stats.spearmanr(c.dwell_h, c.kwh).statistic, 3)
+
+# ---------- effective charging rate (kWh / time from plug-in to done), for a constant-rate model ----------
+rated = post[(post.done_status != 'missing') & (post.charge_h >= 0.25) & (post.kwh > 0)]
+rate = rated.kwh / rated.charge_h
+out['effective_rate_kw'] = {'n': int(len(rate)), 'median': round(float(rate.median()), 2), 'mean': round(float(rate.mean()), 2),
+                            'p10_p90': [round(float(v), 2) for v in rate.quantile([0.1, 0.9])],
+                            'definition': 'kWh delivered / (doneChargingTime - connectionTime), sessions charging at least 15 min'}
 
 # ---------- announced inputs (first version) ----------
 a = d[d.claimed & d.dep_req_first.notna()].copy()

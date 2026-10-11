@@ -8,13 +8,16 @@ Inputs for the ProModel model in the team design document (sections 3.2 Attribut
   sessions. Only the 54 Level-2 EVSEs of California Garage 01 (site 0002, cluster 0039) are used, and
   only the post-2018-11-01 paid-charging period, to the end of the data (see below). Writes `acn_fits.json`.
 - `make_md.py`: rebuilds the Markdown table from `acn_fits.json`.
+- `export_promodel_tables.py`: writes `ProModel_tables.xlsx` from `acn_fits.json`: the two arrival cycles, the
+  user distributions (daily counts, empirical dwell and energy tables, user class), the dwell and energy expressions
+  and the scenario macros, one sheet each, with percent columns that total exactly 100.
 - `literature_review.json`: raw literature findings, each with a verbatim quote, the source URL and an
   independent re-check verdict (confirmed / corrected / not_found / source_unreachable).
 
-Rebuild from this folder (needs pandas, numpy, scipy):
+Rebuild from this folder (needs pandas, numpy, scipy, openpyxl):
 
 ```bash
-python fit_acn.py acn_fits.json && python make_md.py ProModel_inputs_draft.md
+python fit_acn.py acn_fits.json && python make_md.py ProModel_inputs_draft.md && python export_promodel_tables.py ProModel_tables.xlsx
 ```
 
 The numbers come from the complete download (`raw_acn/caltech_sessions.json`, 31,424 Caltech sessions,
