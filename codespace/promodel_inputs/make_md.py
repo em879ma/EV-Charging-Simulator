@@ -14,7 +14,7 @@ def dist_rows(section, unit):
     rows = []
     for k, v in A[section].items():
         pm, ks = best(v)
-        use = '拟合分布 ' + pm if ks <= 0.1 else '经验表（十分位数见附录）'
+        use = '拟合分布 ' + pm if ks <= 0.1 else '经验表（分位点见附录）'
         rows.append('| %s | %d | %.2f | %s | %.3f | %s |' % (k, v['n'], v['median'], pm, ks, use))
     return '\n'.join(rows)
 
@@ -94,7 +94,7 @@ md = f"""# ProModel 输入补充表（初稿）
 | aArrival | 到达时刻 | 每天的到达数加上 Arrival Cycle 的分时百分比，见 3.1–3.2 | ACN 拟合 |
 | aDwell | 停留时长 | 按日型和到达时段分组的条件分布，见 3.3 | ACN 拟合 |
 | aDeparture | 实际离开时刻 | = aArrival + aDwell，不单独抽样 | 设计规则 |
-| aEnergyNeed | **真实**电量需求 kWh | 按停留时长分档的条件分布（实际送出电量），见 3.4。另有约 30% 的会话拔枪时还没充完，基线把需求取为实际送出的电量，属于保守估计（R11） | ACN 拟合 |
+| aEnergyNeed | **真实**电量需求 kWh | 按停留时长分档的条件分布（实际送出电量），见 3.4。另有约 30% 的会话拔枪时还没充完，基线把需求取为实际送出的电量，属于保守估计（R11）。抽完后截到 6.66 kW × aDwell：档内电量和停留是分开抽的，不截的话约 6.6% 的会话要的电量在停留时间内用满功率也充不进去，数据里没有这种会话 | ACN 拟合 |
 | aEnergyDelivered | 已送电量 | 初始为 0，每个时间步累加 | 设计规则 |
 | aMaxRate | 车辆自身最大功率 | 离散分布：3.27 kW 概率 0.515，6.43 kW 概率 0.485，上限是接口的 6.66 kW | ACN 推导（电流曲线 n=198，R12） |
 | aCompatibility | 接口兼容性 | Caltech 全部是 J1772 Level-2，**全部兼容，基线可以不用这个属性**。多站点或多接口类型时再启用 | ACN（站点配置） |
@@ -156,7 +156,7 @@ md = f"""# ProModel 输入补充表（初稿）
 | 周末 % | {' | '.join(str(x) for x in prof['weekend'])} |
 
 ### 3.3 停留时长（小时，按日型 × 到达时段）
-KS 大于 0.1 的组改用经验表：用 User Distribution，选 Continuous 和 Cumulative，填入附录 A 的十分位数。超过 24 小时的会话（{A['dwell_excluded_over_24h_share']*100:.1f}%）没有参与拟合。
+KS 大于 0.1 的组改用经验表：用 User Distribution，选 Continuous 和 Cumulative，填入附录 A 的 13 个分位点（P0–P90 每 10% 一个，再加 P95、P99、P100）。只用十分位数时，最高 10% 一段线性插值到最大值，会把均值抬高（早上到达的停留 +6–8%，未登记电量 +38%）；加上 P95、P99 后偏差降到 0.2–3.6%。超过 24 小时的会话（{A['dwell_excluded_over_24h_share']*100:.1f}%）没有参与拟合。
 
 | 分组 | n | 中位数 | AIC 最优 | KS | 建议 |
 |---|---|---|---|---|---|
@@ -233,12 +233,12 @@ KS 大于 0.1 的组改用经验表：用 User Distribution，选 Continuous 和
 4. **CAPEX 和网络费**：沿用之前核实过的 R18，这次没能重新打开原文。
 5. **遵守率 γ** 和 **排队耐心** 是最弱的环节：一个是假设，一个来自不同场景的问卷，要做扫描，并把结果写进报告。
 
-## 附录 A：十分位数（P0, P10, …, P100），用于经验表
+## 附录 A：经验表的分位点（P0, P10, …, P90, P95, P99, P100）
 """
 for sec in ['dwell_hours', 'energy_delivered_kwh']:
-    md += '\n**%s**\n\n| 分组 | 十分位数 |\n|---|---|\n' % ('停留时长（小时）' if sec == 'dwell_hours' else '电量（kWh）')
+    md += '\n**%s**\n\n| 分组 | 分位点 |\n|---|---|\n' % ('停留时长（小时）' if sec == 'dwell_hours' else '电量（kWh）')
     for k, v in A[sec].items():
-        md += '| %s | %s |\n' % (k, ', '.join(str(x) for x in v['deciles_0_to_100']))
+        md += '| %s | %s |\n' % (k, ', '.join('P%d %s' % (p, x) for p, x in v['table_points']))
 md += f"""
 ## 附录 B：报的值与实际值的偏差（已登记会话，n={A['announced_departure_error_min']['n']:,}）
 | 分位数 | P5 | P10 | P25 | P50 | P75 | P90 | P95 |

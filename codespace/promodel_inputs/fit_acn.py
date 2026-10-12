@@ -35,6 +35,10 @@ RECORDING_GAPS = [(dt.date(2020, 8, 3), dt.date(2020, 11, 18))]
 # over the whole stay, which a 6.66 kW Level-2 port cannot do. The modeled ports are the garage's 54
 # Level-2 EVSEs, so its sessions are left out unless --keep-fast-charger is given.
 FAST_CHARGERS = {'2-39-81-4550'}
+# Cumulative percentages of the points written for an empirical (continuous, cumulative) user distribution.
+# With deciles alone, linear interpolation over the top 10% stretches to the maximum and inflates the table
+# mean (+6-8% for the morning dwell groups, +38% for unclaimed kWh); P95 and P99 bring that to 0.2-3.6%.
+TABLE_PCTS = list(range(0, 100, 10)) + [95, 99, 100]
 
 
 def end_date(text):
@@ -148,7 +152,7 @@ def fit_all(x):
         return 'L(%.3f, %.3f) [mean, sd of X]; ln X ~ N(%.3f, %.3f)' % (mean, sd, np.log(sc), s)
     return {'n': int(len(x)), 'mean': round(x.mean(), 3), 'median': round(float(np.median(x)), 3),
             'p10_p90': [round(float(v), 3) for v in np.percentile(x, [10, 90])], 'best_by_aic': best,
-            'deciles_0_to_100': [round(float(v), 2) for v in np.percentile(x, range(0, 101, 10))],
+            'table_points': [[p, round(float(v), 2)] for p, v in zip(TABLE_PCTS, np.percentile(x, TABLE_PCTS))],
             'fits': {k: {'promodel': promodel(k, v['params']), 'ks': round(v['ks'], 3), 'aic': round(v['aic'], 1)}
                      for k, v in res.items()}}
 

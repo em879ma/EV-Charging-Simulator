@@ -46,7 +46,7 @@ def empirical_rows(section, names):
         best = v['best_by_aic']
         if v['fits'][best]['ks'] <= 0.1:
             continue
-        for pct, value in zip(range(0, 101, 10), v['deciles_0_to_100']):
+        for pct, value in v['table_points']:
             rows.append({'User distribution': names[group], 'Group': group, 'Cumulative %': pct, 'Value': value})
     return pd.DataFrame(rows)
 
@@ -106,7 +106,7 @@ with pd.ExcelWriter(sys.argv[1], engine='openpyxl') as xl:
                                     'User distribution dDailyWE (discrete): observed arrivals per weekend day',
                                     'Dwell hours by day type and arrival period: expression or user distribution to use',
                                     'Energy kWh by dwell bin (claimed) and for unclaimed sessions',
-                                    'Continuous cumulative user distributions for the groups whose best fit has KS > 0.1',
+                                    'Continuous cumulative user distributions for the groups whose best fit has KS > 0.1 (P0-P90 by 10, P95, P99, P100)',
                                     'User distribution dUserClass (discrete): overall shares, for reference and stage 4',
                                     'Share of unclaimed sessions by dwell bin: aUserClass is drawn after aDwell from these',
                                     'Scenario macros with baseline and test values',
