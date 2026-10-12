@@ -81,6 +81,8 @@ macros = pd.DataFrame([
      'Source': 'median observed kWh per charging hour (n=%d); 4.8 = vehicle-rate mix mean; 6.66 = EVSE rating' % rate['n']},
     {'Macro': 'mDemand', 'Baseline': 1.0, 'Scenario values': '0.8 / 1.0 / 1.2 / 1.5', 'Unit': 'x daily arrivals',
      'Used in': 'Arrivals Qty Each', 'Source': 'proposal (R17)'},
+    {'Macro': 'mPBalk', 'Baseline': 1.0, 'Scenario values': '0.5 - 1.0', 'Unit': 'probability',
+     'Used in': 'leave at once when all EVSEs are busy (stage 5)', 'Source': 'assumption (R02)'},
     {'Macro': 'mSiteLimitkW', 'Baseline': 150, 'Scenario values': '20 - 150', 'Unit': 'kW',
      'Used in': 'site power cap (stage 5)', 'Source': 'Lee et al. 2021a; acnportal (150 kVA transformer)'},
     {'Macro': 'mPolicy', 'Baseline': 1, 'Scenario values': '1 uncontrolled / 2 equal share / 3 earliest departure first / 4 move after charge',
