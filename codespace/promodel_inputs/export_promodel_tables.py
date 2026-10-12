@@ -80,7 +80,7 @@ macros = pd.DataFrame([
     {'Macro': 'mPorts', 'Baseline': 54, 'Scenario values': '30 / 42 / 54 / 66', 'Unit': 'EVSEs',
      'Used in': 'EVSE_BANK capacity', 'Source': 'Garage 01 has 54 Level-2 EVSEs; proposal factor levels'},
     {'Macro': 'mRate', 'Baseline': rate['median'], 'Scenario values': '%s / 4.8 / 6.66' % rate['median'], 'Unit': 'kW',
-     'Used in': 'normal charging rate; at service start code B raises a car\'s rate to aEnergyNeed / remaining time when needed, up to 6.66 kW',
+     'Used in': 'normal charging rate: at service start code B sets aRate = aEnergyNeed / remaining time, at least mRate and at most aMaxRate (6.66 kW in stages 1-3)',
      'Source': 'median observed kWh per charging hour (n=%d); 4.8 = vehicle-rate mix mean; 6.66 = EVSE rating' % rate['n']},
     {'Macro': 'mDemand', 'Baseline': 1.0, 'Scenario values': '0.8 / 1.0 / 1.2 / 1.5', 'Unit': 'x daily arrivals',
      'Used in': 'Arrivals Qty Each', 'Source': 'proposal (R17)'},

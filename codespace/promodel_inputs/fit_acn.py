@@ -199,7 +199,7 @@ out['sessions_above_port_rating'] = {'port_kw': PORT_KW, 'share': round(float((a
                                      'max_avg_kw': round(float(avg_kw.max()), 2),
                                      'excess_energy_share': round(float((d.kwh - PORT_KW * d.dwell_h).clip(lower=0).sum() / d.kwh.sum()), 4)}
 
-# ---------- effective charging rate (kWh / time from plug-in to done), for a constant-rate model ----------
+# ---------- effective charging rate (kWh / time from plug-in to done): its median is mRate, the normal rate of the per-car rule ----------
 rated = post[(post.done_status != 'missing') & (post.charge_h >= 0.25) & (post.kwh > 0)]
 rate = rated.kwh / rated.charge_h
 out['effective_rate_kw'] = {'n': int(len(rate)), 'median': round(float(rate.median()), 2), 'mean': round(float(rate.mean()), 2),
