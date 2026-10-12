@@ -1,0 +1,25 @@
+row_id,parameter,baseline,low,high,used_by,basis
+R02,p_balk,1.0,0.0,1.0,BlockedDriverBehavior,modeling convention (Erlang-loss structure as in Aveklouris 2017; qualitative support Sutton 2022); p_balk itself is unmeasured
+R03,hold_min,15.0,15.0,30.0,BlockedDriverBehavior,source: ChargePoint Waitlist 15 min; Cal Poly 30 min
+R03,patience_mean_min,,10.0,60.0,BlockedDriverBehavior,baseline = own remaining dwell; impatient range is an assumption
+R04,p_retry,0.0,0.0,0.5,BlockedDriverBehavior,assumption (only qualitative evidence: Sutton 2022)
+R04,retry_delay_mean_min,180.0,60.0,240.0,BlockedDriverBehavior,"assumption: return around lunchtime (Sutton 2022, qualitative)"
+R05,arrival_shift_share,0.0,0.0,0.08,arrival model (Person B),source: Garg et al. 2024 WP timing effects (10% significance)
+R06,compliance,0.6,0.2,1.0,MoveAfterChargeResponse,assumption; no validated compliance estimate exists (long idle under a voluntary policy: INL 2014)
+R07,grace_min,15.0,5.0,30.0,MoveAfterChargeResponse,"assumption; 15/30 min are operator hold windows for the NEXT driver (ChargePoint, Cal Poly), not grace periods"
+R07,delay_median_min,10.0,0.0,60.0,MoveAfterChargeResponse,assumption; 0 = automated interchange only (Zeng 2019: human/valet takes minutes to hours)
+R08,responsive_share,0.031,0.0,0.062,DepartureResponse,ours: excess of ACN unplugs 2-12 min after completion over the background level
+R09,mnar_multiplier,1.0,0.8,1.2,EmpiricalInputErrors.requested_energy,method: delta adjustment (van Buuren 2018); range is an assumption
+R12,transition_soc,0.8,0.7,0.9,battery taper,source: ACN-Sim Linear2Stage battery (Lee et al. 2021)
+R12,vehicle_kw_class_1,3.27,,,VehicleRateMix (probability 0.515),"ours: random sample of post-2018-11 ACN sessions, periods with pilot >= 30 A (n = 198)"
+R12,vehicle_kw_class_2,6.43,,,VehicleRateMix (probability 0.485),"ours: random sample of post-2018-11 ACN sessions, periods with pilot >= 30 A (n = 198)"
+R15,site_limit_kw,150.0,20.0,150.0,network model,source: Caltech t1 150 kVA; ACN papers sweep ~20-150 kW (Lee et al. 2021)
+R16,availability,0.97,0.73,1.0,PortAvailability,"0.97 = NEVI floor for publicly funded chargers (23 CFR 680.116), not a measurement; 0.73 = DCFC field audit, a pessimistic analogue (Rempel 2024: 73.3% of 655 ports)"
+R16,mean_outage_days,7.0,1.0,30.0,PortAvailability,assumption
+R16,p_blocked_space,0.01,0.0,0.09,PortAvailability,source: TomTom Berlin snapshot via Guillet et al. 2022 (weakly transferable)
+R16,p_session_failure,0.0,0.0,0.03,PortAvailability,baseline 0 is an assumption (ACN records exclude failed sessions); high 0.03 = EV WATTS 2.9% of public Level-2 sessions <0.3 kWh
+R17,demand_factor,1.0,0.8,1.5,scale_demand,proposal design
+R18,capex_per_port_usd_2019,5500.0,3400.0,7300.0,cost model,source: ICCT (Nicholas 2019) hardware + CA installation; DOE EV Project workplace install
+R18,demand_charge_usd_per_kw_month,15.51,3.0,40.0,cost model,source: SCE TOU-EV-4 (Lee et al. 2021 Table III); range DOE (Smith & Castellano 2015)
+R18,network_fee_usd_per_port_year,300.0,100.0,900.0,cost model,source: Smith & Castellano 2015 range; baseline is an assumption
+R18,evse_life_years,10.0,7.0,12.0,cost model,some stakeholders assume at least 10 yr (Smith & Castellano 2015); range is an assumption
