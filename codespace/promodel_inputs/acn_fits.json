@@ -1357,6 +1357,12 @@
   }
  },
  "spearman_dwell_kwh_claimed": 0.31,
+ "sessions_above_port_rating": {
+  "port_kw": 6.66,
+  "share": 0.024,
+  "max_avg_kw": 7.17,
+  "excess_energy_share": 0.0007
+ },
  "effective_rate_kw": {
   "n": 16140,
   "median": 3.17,

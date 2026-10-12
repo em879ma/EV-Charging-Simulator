@@ -10,6 +10,22 @@ def best(v):
     return v['fits'][b]['promodel'].split(' [')[0].split(';')[0], v['fits'][b]['ks']
 
 
+def table_mean(points):
+    """Mean of the piecewise-linear inverse CDF through the (cumulative %, value) points, as ProModel samples it."""
+    return sum((p2 - p1) / 100 * (v1 + v2) / 2 for (p1, v1), (p2, v2) in zip(points, points[1:]))
+
+
+def table_bias(sections, points=None):
+    """Percent gap between table mean and sample mean for the empirical groups (KS > 0.1) of the given sections."""
+    out = []
+    for sec in sections:
+        for v in A[sec].values():
+            if best(v)[1] > 0.1:
+                pts = [pv for pv in v['table_points'] if points is None or pv[0] in points]
+                out.append(100 * (table_mean(pts) / v['mean'] - 1))
+    return out
+
+
 def dist_rows(section, unit):
     rows = []
     for k, v in A[section].items():
@@ -28,6 +44,19 @@ req = A['requested_energy_kwh']
 req_ln = req['fits']['lognorm']
 win = A['data']
 long4 = A['share_dwell_over_4h']
+above = A['sessions_above_port_rating']
+DECILES = set(range(0, 101, 10))
+dec_dwell, dec_energy = table_bias(['dwell_hours'], DECILES), table_bias(['energy_delivered_kwh'], DECILES)
+pts_all = table_bias(['dwell_hours', 'energy_delivered_kwh'])
+
+
+def pct_range(xs, sign=True):
+    if not xs:
+        return '无'
+    f = '%+.1f' if sign else '%.1f'
+    return (f + '%%') % xs[0] if len(xs) == 1 else (f + '–%.1f%%') % (min(xs), max(xs))
+
+
 stations = re.search(r'(\d+) stations', win['garage']).group(1)
 ASENSIO_WITHIN_4H = 0.887  # Asensio et al. 2022: sessions ending within the 4 free hours
 gamma = '%.2f–%.2f' % tuple(sorted(1 - (1 - ASENSIO_WITHIN_4H) / x for x in long4.values()))
@@ -94,7 +123,7 @@ md = f"""# ProModel 输入补充表（初稿）
 | aArrival | 到达时刻 | 每天的到达数加上 Arrival Cycle 的分时百分比，见 3.1–3.2 | ACN 拟合 |
 | aDwell | 停留时长 | 按日型和到达时段分组的条件分布，见 3.3 | ACN 拟合 |
 | aDeparture | 实际离开时刻 | = aArrival + aDwell，不单独抽样 | 设计规则 |
-| aEnergyNeed | **真实**电量需求 kWh | 按停留时长分档的条件分布（实际送出电量），见 3.4。另有约 30% 的会话拔枪时还没充完，基线把需求取为实际送出的电量，属于保守估计（R11）。抽完后截到 6.66 kW × aDwell：档内电量和停留是分开抽的，不截的话约 6.6% 的会话要的电量在停留时间内用满功率也充不进去，数据里没有这种会话 | ACN 拟合 |
+| aEnergyNeed | **真实**电量需求 kWh | 按停留时长分档的条件分布（实际送出电量），见 3.4。另有约 30% 的会话拔枪时还没充完，基线把需求取为实际送出的电量，属于保守估计（R11）。抽完后截到 {above['port_kw']} kW × aDwell：档内电量和停留是分开抽的，不截的话约 6% 的会话要的电量按桩的额定功率在停留时间内也充不进去。数据里只有 {above['share']*100:.1f}% 的会话平均功率略高于额定功率（最高 {above['max_avg_kw']} kW，多出的电量占 {above['excess_energy_share']*100:.2f}%） | ACN 拟合 |
 | aEnergyDelivered | 已送电量 | 初始为 0，每个时间步累加 | 设计规则 |
 | aMaxRate | 车辆自身最大功率 | 离散分布：3.27 kW 概率 0.515，6.43 kW 概率 0.485，上限是接口的 6.66 kW | ACN 推导（电流曲线 n=198，R12） |
 | aCompatibility | 接口兼容性 | Caltech 全部是 J1772 Level-2，**全部兼容，基线可以不用这个属性**。多站点或多接口类型时再启用 | ACN（站点配置） |
@@ -156,7 +185,7 @@ md = f"""# ProModel 输入补充表（初稿）
 | 周末 % | {' | '.join(str(x) for x in prof['weekend'])} |
 
 ### 3.3 停留时长（小时，按日型 × 到达时段）
-KS 大于 0.1 的组改用经验表：用 User Distribution，选 Continuous 和 Cumulative，填入附录 A 的 13 个分位点（P0–P90 每 10% 一个，再加 P95、P99、P100）。只用十分位数时，最高 10% 一段线性插值到最大值，会把均值抬高（早上到达的停留 +6–8%，未登记电量 +38%）；加上 P95、P99 后偏差降到 0.2–3.6%。超过 24 小时的会话（{A['dwell_excluded_over_24h_share']*100:.1f}%）没有参与拟合。
+KS 大于 0.1 的组改用经验表：用 User Distribution，选 Continuous 和 Cumulative，填入附录 A 的 13 个分位点（P0–P90 每 10% 一个，再加 P95、P99、P100）。只用十分位数时，最高 10% 一段线性插值到最大值，会把均值抬高（经验表里的停留 {pct_range(dec_dwell)}，未登记电量 {pct_range(dec_energy)}）；加上 P95、P99 后偏差在 {pct_range(pts_all, sign=False)}。超过 24 小时的会话（{A['dwell_excluded_over_24h_share']*100:.1f}%）没有参与拟合。
 
 | 分组 | n | 中位数 | AIC 最优 | KS | 建议 |
 |---|---|---|---|---|---|

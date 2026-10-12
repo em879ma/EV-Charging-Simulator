@@ -37,8 +37,11 @@ RECORDING_GAPS = [(dt.date(2020, 8, 3), dt.date(2020, 11, 18))]
 FAST_CHARGERS = {'2-39-81-4550'}
 # Cumulative percentages of the points written for an empirical (continuous, cumulative) user distribution.
 # With deciles alone, linear interpolation over the top 10% stretches to the maximum and inflates the table
-# mean (+6-8% for the morning dwell groups, +38% for unclaimed kWh); P95 and P99 bring that to 0.2-3.6%.
+# mean (full-window fit: +5.9-8.3% for the morning dwell groups, +38% for unclaimed kWh); P95 and P99 bring
+# that to 0.2-3.5%. make_md.py reports the figures for the current fit.
 TABLE_PCTS = list(range(0, 100, 10)) + [95, 99, 100]
+# Level-2 port rating (32 A x 208 V); the model caps a drawn energy need at PORT_KW x dwell
+PORT_KW = 6.66
 
 
 def end_date(text):
@@ -190,6 +193,11 @@ out['unclaimed_share_by_dwell'] = {lbl: round(1 - g.claimed.mean(), 3) for lbl, 
                                    d.groupby(pd.cut(d.dwell_h, e_bins, labels=e_lbl, right=False), observed=True)}
 out['energy_delivered_kwh'] = energy
 out['spearman_dwell_kwh_claimed'] = round(stats.spearmanr(c.dwell_h, c.kwh).statistic, 3)
+# observed sessions that average more than the port rating over the whole stay (what the energy cap cuts off)
+avg_kw = d.kwh / d.dwell_h
+out['sessions_above_port_rating'] = {'port_kw': PORT_KW, 'share': round(float((avg_kw > PORT_KW).mean()), 4),
+                                     'max_avg_kw': round(float(avg_kw.max()), 2),
+                                     'excess_energy_share': round(float((d.kwh - PORT_KW * d.dwell_h).clip(lower=0).sum() / d.kwh.sum()), 4)}
 
 # ---------- effective charging rate (kWh / time from plug-in to done), for a constant-rate model ----------
 rated = post[(post.done_status != 'missing') & (post.charge_h >= 0.25) & (post.kwh > 0)]
@@ -229,7 +237,7 @@ out['ports_in_service_by_month'] = {'min': int(monthly_ports.min()), 'max': int(
 json.dump(out, open(args.output, 'w'), indent=1, default=float)
 print(json.dumps({k: out[k] for k in ['data', 'daily_arrivals', 'weekday_arrivals_before_after_pricing', 'user_class',
                                      'ports_in_service_by_month', 'spearman_dwell_kwh_claimed', 'dwell_excluded_over_24h_share',
-                                     'share_dwell_over_4h']}, indent=1, default=float))
+                                     'share_dwell_over_4h', 'sessions_above_port_rating']}, indent=1, default=float))
 for sec in ['dwell_hours', 'energy_delivered_kwh']:
     print('\n==', sec)
     for k, v in out[sec].items():
