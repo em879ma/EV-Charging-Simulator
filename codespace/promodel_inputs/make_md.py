@@ -201,7 +201,7 @@ KS 大于 0.1 的组改用经验表：用 User Distribution，选 Continuous 和
 {dist_rows('energy_delivered_kwh', 'kWh')}
 
 ### 3.5 充电功率
-有效功率 = min(aMaxRate, vPortkW, 策略分配到的功率)。基线不考虑充满前的功率下降；需要时用"电量 80% 以后线性下降"（R12，ACN-Sim）。
+阶段 1–3：每辆车进桩时，功率 = 剩余电量 ÷ 离离开的剩余时间，不低于 mRate（{A['effective_rate_kw']['median']} kW，观测中位数），不高于 vPortkW（6.66 kW）。也就是平时按中位数充，要在离开前充满才提速，所以不排队时都能充满。之后的阶段：有效功率 = min(这个规则的功率, aMaxRate, 策略分配到的功率)。基线不考虑充满前的功率下降；需要时用"电量 80% 以后线性下降"（R12，ACN-Sim）。
 
 ### 3.6 司机行为（ACN 观测不到）
 | 输入 | 分布 | 参数 | 来源与说明 |
