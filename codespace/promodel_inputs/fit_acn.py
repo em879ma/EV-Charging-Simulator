@@ -181,6 +181,9 @@ for b, g in c.groupby('dbin', observed=True):
     energy['claimed, dwell ' + b] = fit_all(g.kwh)
 u = d[(~d.claimed) & (d.kwh > 0)]
 energy['unclaimed (30-min auto stop)'] = fit_all(u.kwh)
+# unclaimed sessions are mostly short stays, so the model draws the user class after dwell, from these shares
+out['unclaimed_share_by_dwell'] = {lbl: round(1 - g.claimed.mean(), 3) for lbl, g in
+                                   d.groupby(pd.cut(d.dwell_h, e_bins, labels=e_lbl, right=False), observed=True)}
 out['energy_delivered_kwh'] = energy
 out['spearman_dwell_kwh_claimed'] = round(stats.spearmanr(c.dwell_h, c.kwh).statistic, 3)
 

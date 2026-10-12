@@ -98,7 +98,7 @@ md = f"""# ProModel 输入补充表（初稿）
 | aEnergyDelivered | 已送电量 | 初始为 0，每个时间步累加 | 设计规则 |
 | aMaxRate | 车辆自身最大功率 | 离散分布：3.27 kW 概率 0.515，6.43 kW 概率 0.485，上限是接口的 6.66 kW | ACN 推导（电流曲线 n=198，R12） |
 | aCompatibility | 接口兼容性 | Caltech 全部是 J1772 Level-2，**全部兼容，基线可以不用这个属性**。多站点或多接口类型时再启用 | ACN（站点配置） |
-| aUserClass | 用户类型 | 离散分布：**登记的回头客 {uc_shares['repeat']:.3f}**；登记的一次性用户 {uc_shares['one_time']:.3f}；**未登记 {uc_shares['unclaimed']:.3f}**（收费后被 30 分钟规则截断，电量单独建模，见 3.4） | ACN 拟合 |
+| aUserClass | 用户类型 | 离散分布：**登记的回头客 {uc_shares['repeat']:.3f}**；登记的一次性用户 {uc_shares['one_time']:.3f}；**未登记 {uc_shares['unclaimed']:.3f}**（收费后被 30 分钟规则截断，电量单独建模，见 3.4）。未登记的车大多停得短，所以先抽停留、再按停留分档定是否未登记：{' / '.join(f'{k} {v:.0%}' for k, v in A['unclaimed_share_by_dwell'].items())} | ACN 拟合 |
 | aPatience | 最长愿意等多久 | 基线：等到自己的离开时刻为止（虚拟排队名单，R03）。"没耐心"情景：`G(1.70, 25.8)` 分钟，均值 43.8、标准差 33.6，扫描均值 15–60 分钟 | 文献（已核实）：Wang et al. 2024（中国高速公路快充的问卷，**可迁移性弱**）。分布形状是我们的假设 |
 | aOutcome | 结果 | full / partial / abandoned / balked / lost / interrupted | 设计规则 |
 

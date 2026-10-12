@@ -72,6 +72,9 @@ classes = pd.DataFrame({'Value (aUserClass)': [1, 2, 3], 'Class': ['claimed repe
                                              100 * uc['claimed_one_time_user_share_of_sessions'],
                                              100 * uc['unclaimed_share_of_sessions']], 100, 1)})
 
+unclaimed = pd.DataFrame({'Dwell (h)': [k.replace('h', '') for k in A['unclaimed_share_by_dwell']],
+                          'Unclaimed share %': [round(100 * v, 1) for v in A['unclaimed_share_by_dwell'].values()]})
+
 rate = A['effective_rate_kw']
 macros = pd.DataFrame([
     {'Macro': 'mPorts', 'Baseline': 54, 'Scenario values': '30 / 42 / 54 / 66', 'Unit': 'EVSEs',
@@ -97,14 +100,15 @@ announced = pd.DataFrame({'Quantile': ['P' + k for k in dep],
 
 with pd.ExcelWriter(sys.argv[1], engine='openpyxl') as xl:
     pd.DataFrame({'Sheet': ['Arrival cycles', 'Daily count weekday', 'Daily count weekend', 'Dwell', 'Energy',
-                            'Empirical tables', 'User class', 'Macros', 'Announced inputs'],
+                            'Empirical tables', 'User class', 'Unclaimed by dwell', 'Macros', 'Announced inputs'],
                   'What it holds': ['CYC_WEEKDAY and CYC_WEEKEND, percent of the day\'s arrivals per hour',
                                     'User distribution dDailyWD (discrete): observed arrivals per weekday',
                                     'User distribution dDailyWE (discrete): observed arrivals per weekend day',
                                     'Dwell hours by day type and arrival period: expression or user distribution to use',
                                     'Energy kWh by dwell bin (claimed) and for unclaimed sessions',
                                     'Continuous cumulative user distributions for the groups whose best fit has KS > 0.1',
-                                    'User distribution dUserClass (discrete)',
+                                    'User distribution dUserClass (discrete): overall shares, for reference and stage 4',
+                                    'Share of unclaimed sessions by dwell bin: aUserClass is drawn after aDwell from these',
                                     'Scenario macros with baseline and test values',
                                     'Announced-input error quantiles (for aDepAnnounced and aEnergyReq in later stages)'],
                   }).to_excel(xl, sheet_name='Contents', index=False)
@@ -118,6 +122,7 @@ with pd.ExcelWriter(sys.argv[1], engine='openpyxl') as xl:
     pd.concat([empirical_rows('dwell_hours', DWELL_TABLES), empirical_rows('energy_delivered_kwh', ENERGY_TABLES)]).to_excel(
         xl, sheet_name='Empirical tables', index=False)
     classes.to_excel(xl, sheet_name='User class', index=False)
+    unclaimed.to_excel(xl, sheet_name='Unclaimed by dwell', index=False)
     macros.to_excel(xl, sheet_name='Macros', index=False)
     announced.to_excel(xl, sheet_name='Announced inputs', index=False)
     for ws in xl.sheets.values():

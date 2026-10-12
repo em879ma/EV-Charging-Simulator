@@ -492,6 +492,14 @@
    }
   }
  },
+ "unclaimed_share_by_dwell": {
+  "0-2h": 0.271,
+  "2-4h": 0.182,
+  "4-6h": 0.134,
+  "6-8h": 0.098,
+  "8-10h": 0.09,
+  "10-24h": 0.07
+ },
  "energy_delivered_kwh": {
   "claimed, dwell 0-2h": {
    "n": 2915,
